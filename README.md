@@ -1,2 +1,0 @@
-# jumaiah
-Jumaiah App
