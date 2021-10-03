@@ -25,7 +25,7 @@ class _ViewPDFState extends State<ViewPDF> {
         //view PDF
         appBar: AppBar(
           title: new Center(
-              child: new Text('الجميعة العقارية', textAlign: TextAlign.center)),
+              child: new Text('الجميعة القابضة', textAlign: TextAlign.center)),
 
           backgroundColor: Colors.amber, // status bar color
           brightness: Brightness.dark, // status bar brightness

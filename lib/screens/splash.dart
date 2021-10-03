@@ -6,6 +6,7 @@ import 'package:flutter_animated_splash_screen/screens/home.dart';
 import 'package:flutter_animated_splash_screen/screens/details.dart';
 import 'package:flutter_animated_splash_screen/screens/signin.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Splashscreen extends StatefulWidget {
@@ -31,13 +32,21 @@ class _SplashscreenState extends State<Splashscreen> {
   }
 
   startTime() async {
-    var duration = new Duration(seconds: 8);
+    var duration = new Duration(seconds:4);
     return new Timer(duration, route);
   }
 
   route() {
+    var isLoggedIn=         sharedPrefs.checkLoggedIn()??false;
+if(isLoggedIn){
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => SignIn()));
+          context, MaterialPageRoute(builder: (context) => Home())); 
+
+} else {
+    Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => SignIn()));
+}
+
   }
 
   initScreen(BuildContext context) {

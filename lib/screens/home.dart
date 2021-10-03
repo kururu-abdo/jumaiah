@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_splash_screen/controllers/home_controller.dart';
+import 'package:flutter_animated_splash_screen/enums/widget_state.dart';
+import 'package:flutter_animated_splash_screen/main.dart';
+import 'package:flutter_animated_splash_screen/models/property.dart';
+import 'package:flutter_animated_splash_screen/screens/add_property.dart';
+import 'package:flutter_animated_splash_screen/utils/custom_transition.dart';
+import 'package:flutter_animated_splash_screen/utils/loader.dart';
+import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
+import 'package:flutter_animated_splash_screen/utils/theme.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -7,10 +16,12 @@ import 'package:flutter_animated_splash_screen/components/nav-drawer.dart';
 import 'package:flutter_animated_splash_screen/screens/details.dart';
 import 'package:flutter_animated_splash_screen/screens/signin.dart';
 import 'package:flutter_animated_splash_screen/screens/details.dart';
+import 'package:provider/provider.dart';
 
 final orpc = OdooClient('http://161.35.211.239:8069');
 
 class Home extends StatefulWidget {
+  static const String pageName= "/home";
   @override
   _HomeState createState() => _HomeState();
 }
@@ -20,7 +31,32 @@ class _HomeState extends State<Home> {
   String email, password;
   bool isLoading = false;
 
-  @override
+
+
+
+
+
+@override
+void initState() {
+  super.initState();
+  Future.microtask(()async{
+
+
+await context.read<HomeViewmode>().fetchContacts();
+
+
+  });
+}
+
+
+
+
+
+
+
+
+
+
   List data;
 
   // Function to get the JSON data
@@ -51,11 +87,12 @@ class _HomeState extends State<Home> {
     return result;
   }
 
-  Widget buildListItem(Map<String, dynamic> record) {
-    var name = record['property_name'];
-    var image = base64Decode(record['pt_image']);
+  Widget buildListItem(Property record) {
+    // var name = record['property_name'];
+    // var image = base64Decode(record['pt_image']);
 
-    return ListTile(
+    return 
+    ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
       title: new Card(
         elevation: 8.0,
@@ -69,7 +106,10 @@ class _HomeState extends State<Home> {
               Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  Image.memory(image),
+                  Hero(tag:record.id.toString(),
+                  
+                  
+                  child: Image.memory(base64Decode(record.ptImage))),
                   new Container(
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -84,7 +124,7 @@ class _HomeState extends State<Home> {
                         )
                       ],
                     ),
-                    child: Text(name[1],
+                    child: Text(record.propertyName[1].toString(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 30,
@@ -99,49 +139,162 @@ class _HomeState extends State<Home> {
       onTap: () {
         Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => Details(
-                  image: record['pt_image'],
-                  pt_id: record['id'],
-                  name: record['property_name'][1],
-                  location: record['pt_location'],
-                  certificate_no: record['pt_certificte_no'],
-                  certificate_date: record['pt_certificte_date'],
-                  owner: record['owner'][1],
-                  property_status: record['property_status']),
-            ));
+          CustomPageRoute(
+
+              Details(
+                record.id,
+                  image: record.ptImage,
+                  pt_id: record.id,
+                  name: record.propertyName[1].toString().trim(),
+                  location: record.ptLocation,
+                  certificate_no: record.ptCertificteNo,
+                  certificate_date: record.ptCertificteDate,
+                  owner: record.owner[1],
+                  property_status: record.propertyStatus),
+          )
+            
+            );
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        title: new Center(
-            child: new Text('الجميعة العقارية', textAlign: TextAlign.center)),
+    var model = Provider.of<HomeViewmode>(context);
+    return Directionality(
+      textDirection: TextDirection.rtl ,
+      child: SafeArea(
+        child: new Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: new Center(
+                child: new Text('الجميعة القابضة', textAlign: TextAlign.center)),
+          
+            backgroundColor: Colors.amber, // status bar color
+            brightness: Brightness.dark,
+            actions: [
+              IconButton(onPressed: ()async{
+      await model.fetchContacts();
+      
+              }, icon: Icon(Icons.refresh))
+            ], // status bar brightness
+          ),
+          drawer: NavDrawer(),
+          body: Column(
+            children: [
+          Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                child: TextField(
+                  onChanged: (val) => model.filter(val),
+                  decoration: InputDecoration(
+                      labelText: 'بحث', suffixIcon: Icon(Icons.search)),
+                ),
+              ),
+      
+      
+      
+              Container(
+               height: 
+               
+               //double.infinity,
+               
+              MediaQuery.of(context).size.height*2/3,
+                child:   Consumer<HomeViewmode>(builder: (context , model  ,  _){
+      
+         if (model.state==WidgetState.Loading) {
+      return    LoadingWidget();    
+         }
+      else if(model.state==WidgetState.Error){
+        return Center(child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+      IconButton(onPressed: ()async{
+      await model.fetchContacts();
+      }, icon: Icon(Icons.refresh ,  color: AppTheme.primaryColor,)) ,
+      Text("حاول مجددا")
+      ],
+        ),);
+      }
+      
+      
+      return   ListView.builder(
+        itemCount: model.filteredproperties.length,
+        itemBuilder: (BuildContext context, int index) {
+          return    buildListItem(model.filteredproperties[index]) ;
+        },
+      );
+      
+      
+      
+                })
+                
+                
+                // FutureBuilder(
+                //     future: fetchContacts(),
+                //     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                //       if (snapshot.hasData) {
+                //         return ListView.builder(
+                //             itemCount: snapshot.data.length,
+                //             itemBuilder: (context, index) {
+                //               final record =
+                //                   snapshot.data[index] as Map<String, dynamic>;
+                //               return buildListItem(record);
+                //             });
+                //       } else {
+                //         if (snapshot.hasError) return Text('Unable to fetch data');
+                //         return CircularProgressIndicator();
+                //       }
+                //     }),
+      
+      
+      
+      
+      
+              ),
+            ],
+          ),
+          
+          
+          
+            floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+             if(sharedPrefs.getUserType()=="GUEST"){
+ scaffoldMessangerKey.currentState.showSnackBar(
+                    SnackBar(
+                       action: SnackBarAction(
+                      label: 'حسنا',
+                      onPressed: () {
+                         sharedPrefs.setLogin(false);
+                        sharedPrefs.saveUserType(null);
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => SignIn()));
+                        preferences.clear();
 
-        backgroundColor: Colors.amber, // status bar color
-        brightness: Brightness.dark, // status bar brightness
-      ),
-      drawer: NavDrawer(),
-      body: Center(
-        child: FutureBuilder(
-            future: fetchContacts(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      final record =
-                          snapshot.data[index] as Map<String, dynamic>;
-                      return buildListItem(record);
-                    });
-              } else {
-                if (snapshot.hasError) return Text('Unable to fetch data');
-                return CircularProgressIndicator();
-              }
-            }),
+                      },
+                      textColor: Colors.white,
+                      disabledTextColor: Colors.grey,
+                    ),
+                         duration: const Duration(seconds: 8),
+ 
+                      
+                      content: Text("غير مصرح لك بإضافة عقار قم بالتسجيل "  ) )   ) ;
+                      
+                      
+                              }else{
+               ///TODO:  show snackbar
+                 Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddProperyScreen()));
+             }
+            
+            },
+            backgroundColor: AppTheme.primaryColor,
+            icon: Icon(Icons.add_a_photo),
+            label: Text('اضافة عقار'),
+          ),
+        ),
       ),
     );
   }

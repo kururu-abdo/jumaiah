@@ -2,9 +2,14 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_splash_screen/controllers/login_controller.dart';
+import 'package:flutter_animated_splash_screen/enums/login_state.dart';
+import 'package:flutter_animated_splash_screen/main.dart';
 import 'package:flutter_animated_splash_screen/screens/home.dart';
+import 'package:flutter_animated_splash_screen/utils/validations.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_animated_splash_screen/screens/details.dart';
@@ -23,10 +28,19 @@ class _SignInState extends State<SignIn> {
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
+  var emailFocus = FocusNode();
+  var passwordFocus = FocusNode();
+  bool isShow = false;
+
   @override
   Widget build(BuildContext context) {
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
+    
+    var controller = Provider.of<LoginController>(context);
     return Scaffold(
         key: _scaffoldKey,
+        resizeToAvoidBottomInset: false,
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -49,7 +63,7 @@ class _SignInState extends State<SignIn> {
                       Center(
                           child: Image.asset(
                         "assets/logo.png",
-                        height: 150,
+                        height: 130,
                         width: 200,
                         alignment: Alignment.center,
                       )),
@@ -67,72 +81,190 @@ class _SignInState extends State<SignIn> {
                           child: Container(
                             margin: EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 45),
-                            child: Column(
-                              children: <Widget>[
-                                TextFormField(
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                  controller: _emailController,
-                                  decoration: InputDecoration(
-                                    hintText: "البريد الالكتروني",
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.always,
-                                    hintStyle: TextStyle(
-                                        color: Colors.amber.shade800,
-                                        fontSize: 15),
-                                  ),
-                                  onSaved: (val) {
-                                    email = val;
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 16,
-                                ),
-                                TextFormField(
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                  controller: _passwordController,
-                                  decoration: InputDecoration(
-                                    enabledBorder: UnderlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black)),
-                                    hintText: "كلمة المرور",
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.always,
-                                    hintStyle: TextStyle(
-                                        color: Colors.amber.shade800,
-                                        fontSize: 15),
-                                  ),
-                                  onSaved: (val) {
-                                    password = val;
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Stack(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (isLoading) {
-                                          return;
+                            child: SingleChildScrollView(
+                              reverse: true,
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: bottom),
+                                child: Column(
+                                  children: <Widget>[
+                                    TextFormField(
+                                      onFieldSubmitted: (val) {
+                                        passwordFocus.requestFocus();
+                                      },
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      controller: _emailController,
+                                      focusNode: emailFocus,
+                                      decoration: InputDecoration(
+                                        hintText: "البريد الالكتروني",
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        hintStyle: TextStyle(
+                                            color: Colors.amber.shade800,
+                                            fontSize: 15),
+                                      ),
+                                      validator: (val) {
+                                        if (val.isEmpty) {
+                                          return "الرجاء  إدخال البريد الالكتروني";
                                         }
-                                        if (_emailController.text.isEmpty ||
-                                            _passwordController.text.isEmpty) {
-                                          _scaffoldKey.currentState
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      "يرجي تعبئة جميع الحقول")));
-                                          return;
+                                        if (!Validations.isValidEmail(val)) {
+                                          return "البريد الإلكتروني غير صالح";
                                         }
-                                        login(context, _emailController.text,
-                                            _passwordController.text);
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        //Navigator.pushReplacementNamed(context, "/home");
+
+                                        return null;
+                                      },
+                                      onSaved: (val) {
+                                        email = val;
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                    TextFormField(
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      obscureText: !isShow,
+                                      controller: _passwordController,
+                                      focusNode: passwordFocus,
+                                      decoration: InputDecoration(
+                                        suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              isShow = !isShow;
+                                            });
+                                          },
+                                          child: Icon(
+                                              isShow
+                                                  ? Icons.visibility
+                                                  : Icons.visibility_off,
+                                              color: Colors.black),
+                                        ),
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "كلمة المرور",
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        hintStyle: TextStyle(
+                                            color: Colors.amber.shade800,
+                                            fontSize: 15),
+                                      ),
+                                      onSaved: (val) {
+                                        password = val;
+                                      },
+                                      validator: (val) {
+                                        if (val == null || val == "") {
+                                          return "هذا الحقل مطلوب";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    Stack(
+                                      children: [
+                                        InkWell(
+                                          onTap: () async {
+                                            if (_formKey.currentState
+                                                .validate()) {
+                                              var response =
+                                                  await controller.login(
+                                                      context,
+                                                      _emailController.text
+                                                          .trim(),
+                                                      _passwordController.text
+                                                          .trim());
+
+                                              if (!response.error) {
+                                                Navigator.pushReplacementNamed(
+                                                    context, "/home");
+                                              } else {
+                                                scaffoldMessangerKey
+                                                    .currentState
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(response
+                                                            .errorMessage)));
+                                              }
+
+                                              // if (isLoading) {
+                                              //   return;
+                                              // }
+                                              // if (_emailController
+                                              //         .text.isEmpty ||
+                                              //     _passwordController
+                                              //         .text.isEmpty) {
+                                              //   _scaffoldKey.currentState
+                                              //       .showSnackBar(SnackBar(
+                                              //           content: Text(
+                                              //               "يرجي تعبئة جميع الحقول")));
+                                              //   return;
+                                              // }
+                                              // login(
+                                              //     context,
+                                              //     _emailController.text,
+                                              //     _passwordController.text);
+                                              // setState(() {
+                                              //   isLoading = true;
+                                              // });
+                                            }
+                                            //Navigator.pushReplacementNamed(context, "/home");
+                                          },
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            width: double.infinity,
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 0),
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.amber.shade800),
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                            ),
+                                            child: Text(
+                                              "دخول",
+                                              textAlign: TextAlign.center,
+                                              style: (TextStyle(
+                                                  fontFamily: 'RobotoMono',
+                                                  color: Colors.amber.shade800,
+                                                  fontSize: 16,
+                                                  letterSpacing: 1)),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          child: (controller.state ==
+                                                  LoginState.Loading)
+                                              ? Center(
+                                                  child: Container(
+                                                      height: 26,
+                                                      width: 26,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                      )))
+                                              : Container(),
+                                          right: 30,
+                                          bottom: 0,
+                                          top: 0,
+                                        )
+                                      ],
+                                    ) ,
+                                    SizedBox(height: 10,) , 
+                                    InkWell(
+                                      onTap: (){
+
+                                     controller.loginAsGuest(context).then((value){
+ Navigator.pushReplacementNamed(
+                                              context, "/home");
+
+                                     });
+
+
                                       },
                                       child: Container(
                                         alignment: Alignment.center,
@@ -143,11 +275,10 @@ class _SignInState extends State<SignIn> {
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                               color: Colors.amber.shade800),
-                                          borderRadius:
-                                              BorderRadius.circular(50),
+                                          borderRadius: BorderRadius.circular(50),
                                         ),
                                         child: Text(
-                                          "دخول",
+                                          "الدخول كزائر",
                                           textAlign: TextAlign.center,
                                           style: (TextStyle(
                                               fontFamily: 'RobotoMono',
@@ -157,41 +288,25 @@ class _SignInState extends State<SignIn> {
                                         ),
                                       ),
                                     ),
-                                    Positioned(
-                                      child: (isLoading)
-                                          ? Center(
-                                              child: Container(
-                                                  height: 26,
-                                                  width: 26,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    backgroundColor:
-                                                        Colors.green,
-                                                  )))
-                                          : Container(),
-                                      right: 30,
-                                      bottom: 0,
-                                      top: 0,
-                                    )
                                   ],
-                                )
-                              ],
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacementNamed(context, "/home");
-                        },
-                        child: Text("الجميعة",
-                            style: TextStyle(
-                                fontFamily: 'RobotoMono',
-                                color: Colors.black,
-                                fontSize: 13,
-                                decoration: TextDecoration.underline,
-                                letterSpacing: 0.5)),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Navigator.pushReplacementNamed(context, "/home");
+                      //   },
+                      //   child: Text("الجميعة",
+                      //       style: TextStyle(
+                      //           fontFamily: 'RobotoMono',
+                      //           color: Colors.black,
+                      //           fontSize: 13,
+                      //           decoration: TextDecoration.underline,
+                      //           letterSpacing: 0.5)),
+                      // ),
                     ],
                   ),
                 ),
