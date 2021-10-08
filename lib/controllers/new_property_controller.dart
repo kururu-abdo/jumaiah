@@ -12,7 +12,9 @@ import 'package:flutter_animated_splash_screen/main.dart';
 import 'package:flutter_animated_splash_screen/models/owner.dart';
 import 'package:flutter_animated_splash_screen/models/property_type.dart';
 import 'package:flutter_animated_splash_screen/utils/apiResponse.dart';
+import 'package:flutter_animated_splash_screen/utils/constants.dart';
 import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
+import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl.dart' as intl ;
@@ -153,6 +155,10 @@ updateFile(File file) {
       _setState(WidgetState.Error);
 
       _setException(UnknownException("خطأ غير متوقع"));
+    } catch (e) {
+      _setState(WidgetState.Error);
+
+      _setException(UnknownException("خطأ غير متوقع"));
     }
   }
 
@@ -165,8 +171,18 @@ updateFile(File file) {
   }
 
   Future<APIrespnse<int>> savePropertyName(String name) async {
+    OdooSession session;
     try {
-      await getClient();
+
+   
+ if (sharedPrefs.getUserType() == "GUEST") {
+        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
+      } else {
+        session = await Auth(sharedPrefs.getEmail().trim(),
+            sharedPrefs.getUserPassword().trim());
+      }
+
+
       var result = await client.callKw({
         'model': 'property.names',
         'method': 'create',
@@ -203,15 +219,28 @@ updateFile(File file) {
        _setState(WidgetState.Error);
       _setException(UnknownException(" خطأ غير معروف"));
       return APIrespnse<int>(error: true, errorMessage: "خطأ غير معروف");
+    } catch (e) {
+      _setState(WidgetState.Error);
+
+      _setException(UnknownException("خطأ غير متوقع"));
     }
   }
 
   fetchPropertyTyps() async {
+     OdooSession session;
 //http://161.35.211.239:8069/api/pt.owner/?query={id,owner_name}
     _updatePropertyTypes([]);
     _setState(WidgetState.Loading);
     try {
-      OdooSession session = await getClient();
+     
+    
+ if (sharedPrefs.getUserType() == "GUEST") {
+        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
+      } else {
+        session = await Auth(sharedPrefs.getEmail().trim(),
+            sharedPrefs.getUserPassword().trim());
+      }
+
 
       print("company" + session.companyId.toString());
       print("user" + session.userName.toString());
@@ -262,6 +291,10 @@ updateFile(File file) {
       _setException(UnknownException());
             setShow(false);
 
+    } catch (e) {
+      _setState(WidgetState.Error);
+
+      _setException(UnknownException("خطأ غير متوقع"));
     }
   }
 
@@ -270,9 +303,16 @@ updateFile(File file) {
     _updateOwners([]);
 
     //(http://161.35.211.239:8069/api/property.types/?query={id,property_type})
-
+   OdooSession session;
     try {
-      OdooSession session = await getClient();
+    
+ if (sharedPrefs.getUserType() == "GUEST") {
+        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
+      } else {
+        session = await Auth(sharedPrefs.getEmail().trim(),
+            sharedPrefs.getUserPassword().trim());
+      }
+
 
     
   
@@ -321,10 +361,22 @@ updateFile(File file) {
       _setState(WidgetState.Error);
       _setException(UnknownException());
       setShow(false);
+    } catch (e) {
+      _setState(WidgetState.Error);
+
+      _setException(UnknownException("خطأ غير متوقع"));
     }
     
   }
+ Future<OdooSession> Auth(String email, String password) async {
+    print(password);
+    final session = await client.authenticate(
+        'Jumaiah',
+        "${email.trim()}" ?? DEFAULT_USER,
+        password.toString().trim() ?? DEFAULT_PASSWORD);
 
+    return session;
+  }
   updateOwner(int owner) {
     _owner = owner;
     notifyListeners();
@@ -403,8 +455,22 @@ updateFile(File file) {
         setShow(false);
     _setState(WidgetState.Loading);
     print(property_status);
+     OdooSession session ;
     try {
-      OdooSession session = await getClient();
+     
+   
+ if (sharedPrefs.getUserType() == "GUEST") {
+        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
+      } else {
+        session = await Auth(sharedPrefs.getEmail().trim(),
+            sharedPrefs.getUserPassword().trim());
+      }
+
+
+
+
+
+
       print("company" + session.companyId.toString());
       print("user" + session.userId.toString());
 
@@ -455,6 +521,10 @@ updateFile(File file) {
       _setState(WidgetState.Error);
       _setException(UnknownException());
       setShow(false);
+    } catch (e) {
+      _setState(WidgetState.Error);
+
+      _setException(UnknownException("خطأ غير متوقع"));
     }
     
   

@@ -19,7 +19,7 @@ class SharedPrefs {
   String getName() {
   return  _sharedPrefs.getString(USER_NAME);
   }
-
+  
 
   void saveID(dynamic id) {
     _sharedPrefs.setString(USER_ID, id.toString());
@@ -87,6 +87,25 @@ class SharedPrefs {
   void saveUserType(dynamic type) {
     _sharedPrefs.setString(USER_TYPE, type.toString());
   }
+  void saveEmail(dynamic email) {
+    _sharedPrefs.setString(USER_EMAIL, email.toString());
+  }
+
+  String getEmail() {
+    return _sharedPrefs.getString(USER_EMAIL);
+  }
+
+ void saveUserPassword(dynamic password) {
+    _sharedPrefs.setString(USER_PASSWORD, password.toString());
+  }
+
+  String getUserPassword() {
+    return _sharedPrefs.getString(USER_PASSWORD);
+  }
+
+
+
+
 }
 
 var sharedPrefs = SharedPrefs();

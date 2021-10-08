@@ -4,7 +4,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_splash_screen/enums/attachment_state.dart';
+import 'package:flutter_animated_splash_screen/utils/constants.dart';
 import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
+import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
@@ -45,9 +47,18 @@ static const  GMAIL_SCHEMA = 'com.google.android.gm';
 
  fetchContacts(dynamic pt_id) async {
    _setState(AttachmentScreenState.Lading);
+   OdooSession session;
 try {
   
-    await orpc.authenticate('Jumaiah', 'admin', 'jumaiah!@##@!');
+   
+ if (sharedPrefs.getUserType() == "GUEST") {
+        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
+      } else {
+        session = await Auth(sharedPrefs.getEmail().trim(),
+            sharedPrefs.getUserPassword().trim());
+      }
+
+
 
       var result = await orpc.callKw({
         'model': 'ir.attachment',
@@ -87,13 +98,25 @@ _setException(NoData404Exception(
    _setException(UnknownException("خطأ  غير متوقع  "));
 
 
-}
+} catch (e) {
+      _setState(AttachmentScreenState.Error);
+
+      _setException(UnknownException("خطأ غير متوقع"));
+    }
     
   }
 
 
 
+ Future<OdooSession> Auth(String email, String password) async {
+    print(password);
+    final session = await orpc.authenticate(
+        'Jumaiah',
+        "${email.trim()}" ?? DEFAULT_USER,
+        password.toString().trim() ?? DEFAULT_PASSWORD);
 
+    return session;
+  }
 
 
 

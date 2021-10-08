@@ -205,6 +205,7 @@ await context.read<HomeViewmode>().fetchContacts();
       return    LoadingWidget();    
          }
       else if(model.state==WidgetState.Error){
+      
         return Center(child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,

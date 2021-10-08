@@ -75,8 +75,9 @@ class LoginController extends ChangeNotifier {
     _state = state;
     notifyListeners();
   }
-loginAsGuest(BuildContext context)async{
-sharedPrefs.saveName("Guest");
+
+  loginAsGuest(BuildContext context) async {
+    sharedPrefs.saveName("Guest");
     sharedPrefs.saveLogin("company");
     sharedPrefs.saveID("1");
     sharedPrefs.saveTZ("Africa");
@@ -84,9 +85,7 @@ sharedPrefs.saveName("Guest");
     sharedPrefs.saveUserType("GUEST");
 
     sharedPrefs.saveLogin(true);
-}
-
-
+  }
 
   Future<APIrespnse<dynamic>> login(
       BuildContext context, String email, String password) async {
@@ -96,7 +95,7 @@ sharedPrefs.saveName("Guest");
 
           // getClient();
           Auth(email, password);
-
+      print(session);
       if (session != null) {
         print(session.userName);
 
@@ -117,7 +116,9 @@ sharedPrefs.saveName("Guest");
           'kwargs': {
             'context': {'bin_size': false},
             'domain': [
-              ['password', '=', uid],
+              ["id", "=", uid]
+              // ['password', '=', password.trim() ,
+              // "email" ,"=",email.trim()],
             ],
             'fields': [
               // 'id',
@@ -143,13 +144,15 @@ sharedPrefs.saveName("Guest");
         }
 
         _setState(LoginState.Initial);
-       
+
         Iterable I = res;
         print("//////////////////////////////");
-  print(I.first['image']);
+        print(I.first['image']);
         OdooUser odooUser = OdooUser.fromJson(I.first);
         sharedPrefs.saveImage(odooUser.image);
         sharedPrefs.setLogin(true);
+        sharedPrefs.saveEmail(email);
+        sharedPrefs.saveUserPassword(password);
         return APIrespnse<dynamic>(error: false, data: odooUser);
       } else {
         return APIrespnse<dynamic>(
@@ -182,6 +185,10 @@ sharedPrefs.saveName("Guest");
       _setState(LoginState.Error);
       _setException(OdooServerException("خطأ في الخادم"));
       return APIrespnse<dynamic>(error: true, errorMessage: "خطأ في الخادم");
+    } catch (e) {
+      _setState(LoginState.Error);
+
+      _setException(UnknownException("خطأ غير متوقع"));
     }
   }
 }

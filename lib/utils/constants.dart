@@ -7,3 +7,9 @@ const String  IMAGE = "image";
 const String ISLOGGEDIN = "isloggedin";
 
 const String USER_TYPE = "user_type";
+const String USER_EMAIL = "email";
+const String USER_PASSWORD = "password";
+
+
+const String DEFAULT_USER ="admin";
+const String DEFAULT_PASSWORD="jumaiah!@##@!";

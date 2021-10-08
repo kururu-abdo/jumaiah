@@ -7,7 +7,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animated_splash_screen/enums/upload_file_state.dart';
+import 'package:flutter_animated_splash_screen/utils/constants.dart';
 import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
+import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class UploadFileControler extends ChangeNotifier {
@@ -132,12 +134,24 @@ _setState(UploadFileState.Deployded);
 _setException(UnknownException("خطأ غير متوقع"));
 
 
+    } catch(e){
+       _setState(UploadFileState.Error);
+
+      _setException(UnknownException("خطأ غير متوقع"));
     }
   }
 
 
 
+ Future<OdooSession> Auth(String email, String password) async {
+    print(password);
+    final session = await client.authenticate(
+        'Jumaiah',
+        "${email.trim()}" ?? DEFAULT_USER,
+        password.toString().trim() ?? DEFAULT_PASSWORD);
 
+    return session;
+  }
 
 
 
@@ -147,9 +161,17 @@ _setException(UnknownException("خطأ غير متوقع"));
    String model ,  dynamic res_id , Uint8List bytes ,   String fileName ) async {
  
  _setState(UploadFileState.Uploading);
- 
+ OdooSession session;
    try {
-      await getClient();
+     // await getClient();
+
+   
+ if (sharedPrefs.getUserType() == "GUEST") {
+        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
+      } else {
+        session = await Auth(sharedPrefs.getEmail().trim(),
+            sharedPrefs.getUserPassword().trim());
+      }
 
 
 //   var res=    await client.callKw({
@@ -233,7 +255,11 @@ _setState(UploadFileState.Error);
         _setException(FileException("حدثت مشكلة اثناء رفع الملف"));
 
 
-   }
+   } catch (e) {
+      _setState(UploadFileState.Error);
+
+      _setException(UnknownException("خطأ غير متوقع"));
+    }
      }
 
 

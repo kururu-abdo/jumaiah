@@ -3,7 +3,9 @@ import 'package:flutter_animated_splash_screen/enums/widget_state.dart';
 import 'package:flutter_animated_splash_screen/main.dart';
 import 'package:flutter_animated_splash_screen/models/owner.dart';
 import 'package:flutter_animated_splash_screen/models/property.dart';
+import 'package:flutter_animated_splash_screen/utils/constants.dart';
 import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
+import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class HomeViewmode extends ChangeNotifier{
@@ -89,19 +91,23 @@ void _setState(WidgetState state) {
 
 fetchOwners()async{
 //http://161.35.211.239:8069/api/pt.owner/?query={id,owner_name}
-
+  OdooSession session;
 try {
   
-  OdooSession session = await  getClient();
 
 
+ if (sharedPrefs.getUserType() == "GUEST") {
+        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
+      } else {
+        session = await Auth(sharedPrefs.getEmail().trim(),
+            sharedPrefs.getUserPassword().trim());
+      }
 
 
 
 
 
 } on Exception  {
-
 
 
 
@@ -149,11 +155,27 @@ try {
 //     }
 
 
+  Future<OdooSession> Auth(String email, String password) async {
+    print(password);
+    final session = await client.authenticate(
+        'Jumaiah',    email.trim() ??  DEFAULT_USER, password.toString().trim()?? DEFAULT_PASSWORD   );
+
+    return session;
+  }
  fetchContacts() async {
 _setState(WidgetState.Loading);
+ OdooSession session;
   try {
     print("BEFORE");
-    OdooSession session=    await getClient();
+    if(sharedPrefs.getUserType()=="GUEST"){
+    session = await    Auth(DEFAULT_USER ,
+           DEFAULT_PASSWORD);
+    }else{
+       
+   session = await Auth(sharedPrefs.getEmail().trim(),
+            sharedPrefs.getUserPassword().trim());
+    }
+    // getClient();
     print(session.dbName);
     print("AFTER");
 
@@ -188,10 +210,15 @@ _setState(WidgetState.Loading);
 _properties=properties;
 notifyListeners();
       _setState(WidgetState.Loaded);
-  } on Exception {
+  } on Exception catch (e) {
     print("exception");
+    print(e);
        _setState(WidgetState.Error);
-  }
+  } catch (e) {
+      _setState(WidgetState.Error);
+
+      _setException(UnknownException("خطأ غير متوقع"));
+    }
   
   }
 
