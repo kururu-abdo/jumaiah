@@ -11,5 +11,6 @@ const String USER_EMAIL = "email";
 const String USER_PASSWORD = "password";
 
 
-const String DEFAULT_USER ="admin";
-const String DEFAULT_PASSWORD="jumaiah!@##@!";
+const String DEFAULT_USER ="demo@jumaiah.com";
+const String DEFAULT_PASSWORD="123456";
+//jumaiah!@##@!

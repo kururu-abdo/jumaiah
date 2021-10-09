@@ -38,6 +38,7 @@ class _SplashscreenState extends State<Splashscreen> {
 
   route() {
     var isLoggedIn=         sharedPrefs.checkLoggedIn()??false;
+    print(isLoggedIn);
 if(isLoggedIn){
     Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Home())); 

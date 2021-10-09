@@ -84,7 +84,7 @@ class LoginController extends ChangeNotifier {
     sharedPrefs.saveLang("En");
     sharedPrefs.saveUserType("GUEST");
 
-    sharedPrefs.saveLogin(true);
+    sharedPrefs.setLogin(true);
   }
 
   Future<APIrespnse<dynamic>> login(

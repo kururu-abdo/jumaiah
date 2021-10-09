@@ -158,7 +158,8 @@ try {
   Future<OdooSession> Auth(String email, String password) async {
     print(password);
     final session = await client.authenticate(
-        'Jumaiah',    email.trim() ??  DEFAULT_USER, password.toString().trim()?? DEFAULT_PASSWORD   );
+        'Jumaiah',    email!=null? email.trim() :  DEFAULT_USER,
+         password != null? password.toString().trim(): DEFAULT_PASSWORD   );
 
     return session;
   }

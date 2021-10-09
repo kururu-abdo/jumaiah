@@ -58,6 +58,8 @@ class NavDrawer extends StatelessWidget {
               onTap: () {
                 sharedPrefs.setLogin(false);
                 sharedPrefs.saveUserType(null);
+                sharedPrefs.saveEmail(null);
+                sharedPrefs.saveUserPassword(null);
                 Navigator.pushReplacement(
                     context, MaterialPageRoute(builder: (context) => SignIn()));
                 preferences.clear();
