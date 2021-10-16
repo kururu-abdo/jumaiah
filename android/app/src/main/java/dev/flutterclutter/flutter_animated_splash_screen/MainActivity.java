@@ -1,4 +1,4 @@
-package dev.flutterclutter.flutter_animated_splash_screen;
+package com.jumaiah_app.www;
 
 import io.flutter.embedding.android.FlutterActivity;
 
