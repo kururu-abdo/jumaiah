@@ -8,124 +8,81 @@ import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
 import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
-class HomeViewmode extends ChangeNotifier{
-final orpc = OdooClient('http://142.93.55.190:8069/');
+class HomeViewmode extends ChangeNotifier {
+  final orpc = OdooClient('http://142.93.55.190:8069/');
   static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
   var subscription = client.sessionStream.listen(sessionChanged);
   var loginSubscription = client.loginStream.listen(loginStateChanged);
   var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
 
-
-List<Property> _filteredProperties = [];
+  List<Property> _filteredProperties = [];
 
   List<Property> get filteredproperties => _filteredProperties;
 
+  List<Property> _properties = [];
 
+  List<Property> get properties => _properties;
 
+  _setProperties(List<Property> probs) {
+    _filteredProperties = probs;
+    notifyListeners();
+  }
 
-List<Property>   _properties=[];
-
-List<Property>  get properties =>_properties;
-
-
-_setProperties( List<Property>
-probs   ){
-
-  _filteredProperties=probs;
-  notifyListeners();
-}
-
-
-filter(String str) {
+  filter(String str) {
     var list = [];
 
-    List <Property>  result   = [];
+    List<Property> result = [];
     if (str.isEmpty) {
       result = _properties;
-   _setProperties(result);
+      _setProperties(result);
     } else {
       list = _properties
-          .where((file) =>
-              file.propertyName.toString().toLowerCase().contains(str.toLowerCase()))
+          .where((file) => file.propertyName
+              .toString()
+              .toLowerCase()
+              .contains(str.toLowerCase()))
           .toList();
-          _setProperties(list);
+      _setProperties(list);
     }
   }
 
-
-WidgetState  _state;
+  WidgetState _state;
   WidgetState get state => _state;
   AppException _exception;
 
   AppException get exception => _exception;
 
-
-    
-
-
-
-
-
-
-
-
-
   void _setException(AppException exception) {
     _exception = exception;
     notifyListeners();
   }
-void _setState(WidgetState state) {
+
+  void _setState(WidgetState state) {
     _state = state;
     notifyListeners();
   }
 
-    Future<OdooSession> getClient() async {
-      //jumaiah!@##@!
+  Future<OdooSession> getClient() async {
+    //jumaiah!@##@!
     final session =
         await client.authenticate('Jumaiah', 'admin', 'jumaiah!@##@!');
 
     return session;
   }
 
-
-fetchOwners()async{
-//http://161.35.211.239:8069/api/pt.owner/?query={id,owner_name}
-  OdooSession session;
-try {
-  
-
-
- if (sharedPrefs.getUserType() == "GUEST") {
+  fetchOwners() async {
+//http://142.93.55.190:8069/api/pt.owner/?query={id,owner_name}
+    OdooSession session;
+    try {
+      if (sharedPrefs.getUserType() == "GUEST") {
         session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
       } else {
         session = await Auth(sharedPrefs.getEmail().trim(),
             sharedPrefs.getUserPassword().trim());
       }
-
-
-
-
-
-} on Exception  {
-
-
-
-}
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
+    } on Exception {}
+  }
 
 //     init() async  {
 
@@ -154,34 +111,32 @@ try {
 
 //     }
 
-
   Future<OdooSession> Auth(String email, String password) async {
     print(password);
     final session = await client.authenticate(
-        'Jumaiah',    email!=null? email.trim() :  DEFAULT_USER,
-         password != null? password.toString().trim(): DEFAULT_PASSWORD   );
+        'Jumaiah',
+        email != null ? email.trim() : DEFAULT_USER,
+        password != null ? password.toString().trim() : DEFAULT_PASSWORD);
 
     return session;
   }
- fetchContacts() async {
-_setState(WidgetState.Loading);
- OdooSession session;
-  try {
-    print("BEFORE");
-    if(sharedPrefs.getUserType()=="GUEST"){
-    session = await    Auth(DEFAULT_USER ,
-           DEFAULT_PASSWORD);
-    }else{
-       
-   session = await Auth(sharedPrefs.getEmail().trim(),
+
+  fetchContacts() async {
+    _setState(WidgetState.Loading);
+    OdooSession session;
+    try {
+      print("BEFORE");
+      if (sharedPrefs.getUserType() == "GUEST") {
+        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
+      } else {
+        session = await Auth(sharedPrefs.getEmail().trim(),
             sharedPrefs.getUserPassword().trim());
-    }
-    // getClient();
-    print(session.dbName);
-    print("AFTER");
+      }
+      // getClient();
+      print(session.dbName);
+      print("AFTER");
 
-
-          var res1 = await client.callKw({
+      var res1 = await client.callKw({
         'model': 'property.base',
         'method': 'search_read',
         'args': [],
@@ -190,7 +145,7 @@ _setState(WidgetState.Loading);
           'domain': [],
           'fields': [],
         },
-      }) as List ;
+      }) as List;
       print(res1);
       // var result = await orpc.callKw({
       //    'model': 'property.base',
@@ -202,28 +157,23 @@ _setState(WidgetState.Loading);
       //     'fields': [],
       //   },
       // })  as List ;
-    //   print(result);
-    //   print("//////////////////////////////////////////////");
-    //  print(result.length);
+      //   print(result);
+      //   print("//////////////////////////////////////////////");
+      //  print(result.length);
       List<Property> properties =
           res1.map((p) => Property.fromJson(p)).toList();
-     _setProperties(properties);
-_properties=properties;
-notifyListeners();
+      _setProperties(properties);
+      _properties = properties;
+      notifyListeners();
       _setState(WidgetState.Loaded);
-  } on Exception catch (e) {
-    print("exception");
-    print(e);
-       _setState(WidgetState.Error);
-  } catch (e) {
+    } on Exception catch (e) {
+      print("exception");
+      print(e);
+      _setState(WidgetState.Error);
+    } catch (e) {
       _setState(WidgetState.Error);
 
       _setException(UnknownException("خطأ غير متوقع"));
     }
-  
   }
-
-
-
-
 }

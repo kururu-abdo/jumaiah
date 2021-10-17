@@ -18,10 +18,10 @@ import 'package:flutter_animated_splash_screen/screens/signin.dart';
 import 'package:flutter_animated_splash_screen/screens/details.dart';
 import 'package:provider/provider.dart';
 
-final orpc = OdooClient('http://161.35.211.239:8069');
+final orpc = OdooClient('http://142.93.55.190:8069');
 
 class Home extends StatefulWidget {
-  static const String pageName= "/home";
+  static const String pageName = "/home";
   @override
   _HomeState createState() => _HomeState();
 }
@@ -31,31 +31,13 @@ class _HomeState extends State<Home> {
   String email, password;
   bool isLoading = false;
 
-
-
-
-
-
-@override
-void initState() {
-  super.initState();
-  Future.microtask(()async{
-
-
-await context.read<HomeViewmode>().fetchContacts();
-
-
-  });
-}
-
-
-
-
-
-
-
-
-
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+      await context.read<HomeViewmode>().fetchContacts();
+    });
+  }
 
   List data;
 
@@ -83,7 +65,8 @@ await context.read<HomeViewmode>().fetchContacts();
         'limit': 1000000,
       },
     });
-    print(result);
+    print("this is the result " + result);
+    print("this is the status code");
     return result;
   }
 
@@ -91,8 +74,7 @@ await context.read<HomeViewmode>().fetchContacts();
     // var name = record['property_name'];
     // var image = base64Decode(record['pt_image']);
 
-    return 
-    ListTile(
+    return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
       title: new Card(
         elevation: 8.0,
@@ -106,10 +88,9 @@ await context.read<HomeViewmode>().fetchContacts();
               Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  Hero(tag:record.id.toString(),
-                  
-                  
-                  child: Image.memory(base64Decode(record.ptImage))),
+                  Hero(
+                      tag: record.id.toString(),
+                      child: Image.memory(base64Decode(record.ptImage))),
                   new Container(
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -139,10 +120,8 @@ await context.read<HomeViewmode>().fetchContacts();
       onTap: () {
         Navigator.push(
             context,
-          CustomPageRoute(
-
-              Details(
-                record.id,
+            CustomPageRoute(
+              Details(record.id,
                   image: record.ptImage,
                   pt_id: record.id,
                   name: record.propertyName[1].toString().trim(),
@@ -151,9 +130,7 @@ await context.read<HomeViewmode>().fetchContacts();
                   certificate_date: record.ptCertificteDate,
                   owner: record.owner[1],
                   property_status: record.propertyStatus),
-          )
-            
-            );
+            ));
       },
     );
   }
@@ -162,27 +139,29 @@ await context.read<HomeViewmode>().fetchContacts();
   Widget build(BuildContext context) {
     var model = Provider.of<HomeViewmode>(context);
     return Directionality(
-      textDirection: TextDirection.rtl ,
+      textDirection: TextDirection.rtl,
       child: SafeArea(
         child: new Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: new Center(
-                child: new Text('الجميعة القابضة', textAlign: TextAlign.center)),
-          
+                child:
+                    new Text('الجميعة القابضة', textAlign: TextAlign.center)),
+
             backgroundColor: Colors.amber, // status bar color
             brightness: Brightness.dark,
             actions: [
-              IconButton(onPressed: ()async{
-      await model.fetchContacts();
-      
-              }, icon: Icon(Icons.refresh))
+              IconButton(
+                  onPressed: () async {
+                    await model.fetchContacts();
+                  },
+                  icon: Icon(Icons.refresh))
             ], // status bar brightness
           ),
           drawer: NavDrawer(),
           body: Column(
             children: [
-          Container(
+              Container(
                 margin: EdgeInsets.only(left: 10, right: 10),
                 child: TextField(
                   onChanged: (val) => model.filter(val),
@@ -190,106 +169,88 @@ await context.read<HomeViewmode>().fetchContacts();
                       labelText: 'بحث', suffixIcon: Icon(Icons.search)),
                 ),
               ),
-      
-      
-      
               Container(
-               height: 
-               
-               //double.infinity,
-               
-              MediaQuery.of(context).size.height*2/3,
-                child:   Consumer<HomeViewmode>(builder: (context , model  ,  _){
-      
-         if (model.state==WidgetState.Loading) {
-      return    LoadingWidget();    
-         }
-      else if(model.state==WidgetState.Error){
-      
-        return Center(child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-      IconButton(onPressed: ()async{
-      await model.fetchContacts();
-      }, icon: Icon(Icons.refresh ,  color: AppTheme.primaryColor,)) ,
-      Text("حاول مجددا")
-      ],
-        ),);
-      }
-      
-      
-      return   ListView.builder(
-        itemCount: model.filteredproperties.length,
-        itemBuilder: (BuildContext context, int index) {
-          return    buildListItem(model.filteredproperties[index]) ;
-        },
-      );
-      
-      
-      
-                })
-                
-                
-                // FutureBuilder(
-                //     future: fetchContacts(),
-                //     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                //       if (snapshot.hasData) {
-                //         return ListView.builder(
-                //             itemCount: snapshot.data.length,
-                //             itemBuilder: (context, index) {
-                //               final record =
-                //                   snapshot.data[index] as Map<String, dynamic>;
-                //               return buildListItem(record);
-                //             });
-                //       } else {
-                //         if (snapshot.hasError) return Text('Unable to fetch data');
-                //         return CircularProgressIndicator();
-                //       }
-                //     }),
-      
-      
-      
-      
-      
-              ),
+                  height:
+
+                      //double.infinity,
+
+                      MediaQuery.of(context).size.height * 2 / 3,
+                  child: Consumer<HomeViewmode>(builder: (context, model, _) {
+                    if (model.state == WidgetState.Loading) {
+                      return LoadingWidget();
+                    } else if (model.state == WidgetState.Error) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            IconButton(
+                                onPressed: () async {
+                                  await model.fetchContacts();
+                                },
+                                icon: Icon(
+                                  Icons.refresh,
+                                  color: AppTheme.primaryColor,
+                                )),
+                            Text("حاول مجددا")
+                          ],
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: model.filteredproperties.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return buildListItem(model.filteredproperties[index]);
+                      },
+                    );
+                  })
+
+                  // FutureBuilder(
+                  //     future: fetchContacts(),
+                  //     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  //       if (snapshot.hasData) {
+                  //         return ListView.builder(
+                  //             itemCount: snapshot.data.length,
+                  //             itemBuilder: (context, index) {
+                  //               final record =
+                  //                   snapshot.data[index] as Map<String, dynamic>;
+                  //               return buildListItem(record);
+                  //             });
+                  //       } else {
+                  //         if (snapshot.hasError) return Text('Unable to fetch data');
+                  //         return CircularProgressIndicator();
+                  //       }
+                  //     }),
+
+                  ),
             ],
           ),
-          
-          
-          
-            floatingActionButton: FloatingActionButton.extended(
+          floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
-             if(sharedPrefs.getUserType()=="GUEST"){
- scaffoldMessangerKey.currentState.showSnackBar(
-                    SnackBar(
-                       action: SnackBarAction(
+              if (sharedPrefs.getUserType() == "GUEST") {
+                scaffoldMessangerKey.currentState.showSnackBar(SnackBar(
+                    action: SnackBarAction(
                       label: 'حسنا',
                       onPressed: () {
-                         sharedPrefs.setLogin(false);
+                        sharedPrefs.setLogin(false);
                         sharedPrefs.saveUserType(null);
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) => SignIn()));
                         preferences.clear();
-
                       },
                       textColor: Colors.white,
                       disabledTextColor: Colors.grey,
                     ),
-                         duration: const Duration(seconds: 8),
- 
-                      
-                      content: Text("غير مصرح لك بإضافة عقار قم بالتسجيل "  ) )   ) ;
-                      
-                      
-                              }else{
-               ///TODO:  show snackbar
-                 Navigator.push(
+                    duration: const Duration(seconds: 8),
+                    content: Text("غير مصرح لك بإضافة عقار قم بالتسجيل ")));
+              } else {
+                ///TODO:  show snackbar
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => AddProperyScreen()));
-             }
-            
+              }
             },
             backgroundColor: AppTheme.primaryColor,
             icon: Icon(Icons.add_a_photo),

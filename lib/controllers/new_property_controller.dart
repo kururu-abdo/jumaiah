@@ -17,7 +17,7 @@ import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
 import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/intl.dart' as intl ;
+import 'package:intl/intl.dart' as intl;
 
 import 'package:odoo_rpc/odoo_rpc.dart';
 
@@ -29,12 +29,11 @@ class NewPropertyController extends ChangeNotifier {
   var loginSubscription = client.loginStream.listen(loginStateChanged);
   var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
   String fileName;
- bool isShow=true;
-  setShow(bool value){
+  bool isShow = true;
+  setShow(bool value) {
     isShow = value;
     notifyListeners();
   }
-
 
   List<PlatformFile> paths;
 
@@ -107,10 +106,12 @@ class NewPropertyController extends ChangeNotifier {
     _owners = owners;
     notifyListeners();
   }
-updateFile(File file) {
+
+  updateFile(File file) {
     _file = file;
     notifyListeners();
   }
+
   _updatePropertyTypes(List<ProprtyType> types) {
     _types = types;
     notifyListeners();
@@ -173,15 +174,12 @@ updateFile(File file) {
   Future<APIrespnse<int>> savePropertyName(String name) async {
     OdooSession session;
     try {
-
-   
- if (sharedPrefs.getUserType() == "GUEST") {
+      if (sharedPrefs.getUserType() == "GUEST") {
         session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
       } else {
         session = await Auth(sharedPrefs.getEmail().trim(),
             sharedPrefs.getUserPassword().trim());
       }
-
 
       var result = await client.callKw({
         'model': 'property.names',
@@ -216,7 +214,7 @@ updateFile(File file) {
           error: true, errorMessage: " انتهت مهلة الإتصال بالخادم ");
     } on Exception {
       print("exception");
-       _setState(WidgetState.Error);
+      _setState(WidgetState.Error);
       _setException(UnknownException(" خطأ غير معروف"));
       return APIrespnse<int>(error: true, errorMessage: "خطأ غير معروف");
     } catch (e) {
@@ -227,20 +225,17 @@ updateFile(File file) {
   }
 
   fetchPropertyTyps() async {
-     OdooSession session;
-//http://161.35.211.239:8069/api/pt.owner/?query={id,owner_name}
+    OdooSession session;
+//http://142.93.55.190:8069/api/pt.owner/?query={id,owner_name}
     _updatePropertyTypes([]);
     _setState(WidgetState.Loading);
     try {
-     
-    
- if (sharedPrefs.getUserType() == "GUEST") {
+      if (sharedPrefs.getUserType() == "GUEST") {
         session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
       } else {
         session = await Auth(sharedPrefs.getEmail().trim(),
             sharedPrefs.getUserPassword().trim());
       }
-
 
       print("company" + session.companyId.toString());
       print("user" + session.userName.toString());
@@ -268,29 +263,24 @@ updateFile(File file) {
       _updatePropertyTypes(list);
       setShow(true);
       _setState(WidgetState.Loaded);
-    }
-    on OdooException {
+    } on OdooException {
       print("odoo server error");
-          setShow(false);
-        _setState(WidgetState.Error);
-          _setException(OdooServerException(" خطأ في الخادم"));
+      setShow(false);
+      _setState(WidgetState.Error);
+      _setException(OdooServerException(" خطأ في الخادم"));
     } on SocketException {
       print("socket");
       _setState(WidgetState.Error);
       _setException(ConnectionException(" مشكلة في الاتصال بالانترنت"));
-         setShow(false);
+      setShow(false);
     } on TimeoutException {
       _setState(WidgetState.Error);
       _setException(MyTimeOutException(" انتهت مهلة الإتصال بالخادم"));
-         setShow(false);
-    } 
-    
-    
-     on Exception {
+      setShow(false);
+    } on Exception {
       _setState(WidgetState.Error);
       _setException(UnknownException());
-            setShow(false);
-
+      setShow(false);
     } catch (e) {
       _setState(WidgetState.Error);
 
@@ -302,20 +292,16 @@ updateFile(File file) {
     _setState(WidgetState.Loading);
     _updateOwners([]);
 
-    //(http://161.35.211.239:8069/api/property.types/?query={id,property_type})
-   OdooSession session;
+    //(http://142.93.55.190:8069/api/property.types/?query={id,property_type})
+    OdooSession session;
     try {
-    
- if (sharedPrefs.getUserType() == "GUEST") {
+      if (sharedPrefs.getUserType() == "GUEST") {
         session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
       } else {
         session = await Auth(sharedPrefs.getEmail().trim(),
             sharedPrefs.getUserPassword().trim());
       }
 
-
-    
-  
       print("///////////////////////////////////////////");
 
       var res = await client.callKw({
@@ -341,9 +327,7 @@ updateFile(File file) {
       _updateOwners(list);
       _setState(WidgetState.Loaded);
       setShow(true);
-    }
-    
-     on OdooException {
+    } on OdooException {
       print("odoo server error");
       setShow(false);
       _setState(WidgetState.Error);
@@ -366,9 +350,9 @@ updateFile(File file) {
 
       _setException(UnknownException("خطأ غير متوقع"));
     }
-    
   }
- Future<OdooSession> Auth(String email, String password) async {
+
+  Future<OdooSession> Auth(String email, String password) async {
     print(password);
     final session = await client.authenticate(
         'Jumaiah',
@@ -377,6 +361,7 @@ updateFile(File file) {
 
     return session;
   }
+
   updateOwner(int owner) {
     _owner = owner;
     notifyListeners();
@@ -449,27 +434,20 @@ updateFile(File file) {
       String pt_location,
       String property_status,
       String pt_certificte_no,
-      HijriCalendar  pt_certificte_date,
+      HijriCalendar pt_certificte_date,
       int property_type,
       Uint8List fileBytes2) async {
-        setShow(false);
+    setShow(false);
     _setState(WidgetState.Loading);
     print(property_status);
-     OdooSession session ;
+    OdooSession session;
     try {
-     
-   
- if (sharedPrefs.getUserType() == "GUEST") {
+      if (sharedPrefs.getUserType() == "GUEST") {
         session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
       } else {
         session = await Auth(sharedPrefs.getEmail().trim(),
             sharedPrefs.getUserPassword().trim());
       }
-
-
-
-
-
 
       print("company" + session.companyId.toString());
       print("user" + session.userId.toString());
@@ -483,14 +461,14 @@ updateFile(File file) {
             "name": "New",
 
             "user_name": 1,
-            'date':
-             this.getFormattedDateOfToday(),
-            'pt_certificte_date': this.getFormattedDateOfToday2(pt_certificte_date),
+            'date': this.getFormattedDateOfToday(),
+            'pt_certificte_date':
+                this.getFormattedDateOfToday2(pt_certificte_date),
             'pt_location': pt_location.trim(),
             'property_type': property_type,
             'pt_certificte_no': pt_certificte_no.trim(),
             'property_status': property_status.trim(),
-          'property_name': property_name,
+            'property_name': property_name,
             //	"property_name[1]": "hany",
             'owner': 1,
             'pt_image': base64Encode(fileBytes2),
@@ -500,10 +478,9 @@ updateFile(File file) {
       });
       print("/////////////////////////////////////////");
       print(res.toString());
-      
+
       _setState(WidgetState.Done);
-    } 
-     on OdooException {
+    } on OdooException {
       print("odoo server error");
       setShow(false);
       _setState(WidgetState.Error);
@@ -526,22 +503,24 @@ updateFile(File file) {
 
       _setException(UnknownException("خطأ غير متوقع"));
     }
-    
-  
   }
-  String fromHijriToGoergian(){
+
+  String fromHijriToGoergian() {
     var g_date = HijriCalendar();
     g_date.hijriToGregorian(1415, 7, 27);
   }
+
   String getFormattedDateOfToday() {
     DateTime now = DateTime.now();
     return DateFormat("yyyy-MM-dd").format(now);
   }
+
   String getFormattedHijriDateOfToday() {
     //DateTime now = DateTime.now();
     return HijriCalendar.now().toFormat("MM-dd-yyyy");
   }
- String getFormattedDateOfToday2(HijriCalendar selectedHijri) {
+
+  String getFormattedDateOfToday2(HijriCalendar selectedHijri) {
     DateTime now = DateTime.now();
     var g_date = HijriCalendar();
 
@@ -550,11 +529,11 @@ updateFile(File file) {
 
     return intl.DateFormat("yyyy-MM-dd").format(mydate);
   }
+
   @override
   void dispose() {
-
-_setException(null);
-      setShow(true);
+    _setException(null);
+    setShow(true);
 
     super.dispose();
   }

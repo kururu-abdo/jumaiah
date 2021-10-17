@@ -30,7 +30,7 @@ class _SearchViewState extends State<SearchView> {
   //TextEditingController, the text field updates value and the
   //controller notifies its listeners.
   var _searchview = new TextEditingController();
-  final orpc = OdooClient('http://161.35.211.239:8069');
+  final orpc = OdooClient('http://142.93.55.190:8069');
   bool _firstSearch = true;
   String _query = "";
 

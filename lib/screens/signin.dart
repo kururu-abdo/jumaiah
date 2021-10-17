@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_animated_splash_screen/screens/details.dart';
 
-final orpc = OdooClient('http://161.35.211.239:8069');
+final orpc = OdooClient('http://142.93.55.190:8069');
 
 class SignIn extends StatefulWidget {
   @override
@@ -110,10 +110,11 @@ class _SignInState extends State<SignIn> {
                                             if (val.isEmpty) {
                                               return "الرجاء  إدخال البريد الالكتروني";
                                             }
-                                            if (!Validations.isValidEmail(val)) {
+                                            if (!Validations.isValidEmail(
+                                                val)) {
                                               return "البريد الإلكتروني غير صالح";
                                             }
-                    
+
                                             return null;
                                           },
                                           onSaved: (val) {
@@ -177,12 +178,14 @@ class _SignInState extends State<SignIn> {
                                                           context,
                                                           _emailController.text
                                                               .trim(),
-                                                          _passwordController.text
+                                                          _passwordController
+                                                              .text
                                                               .trim());
-                    
+
                                                   if (!response.error) {
-                                                    Navigator.pushReplacementNamed(
-                                                        context, "/home");
+                                                    Navigator
+                                                        .pushReplacementNamed(
+                                                            context, "/home");
                                                   } else {
                                                     scaffoldMessangerKey
                                                         .currentState
@@ -190,7 +193,7 @@ class _SignInState extends State<SignIn> {
                                                             content: Text(response
                                                                 .errorMessage)));
                                                   }
-                    
+
                                                   // if (isLoading) {
                                                   //   return;
                                                   // }
@@ -218,11 +221,13 @@ class _SignInState extends State<SignIn> {
                                                 alignment: Alignment.center,
                                                 width: double.infinity,
                                                 padding: EdgeInsets.symmetric(
-                                                    vertical: 10, horizontal: 0),
+                                                    vertical: 10,
+                                                    horizontal: 0),
                                                 height: 50,
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
-                                                      color: Colors.amber.shade800),
+                                                      color: Colors
+                                                          .amber.shade800),
                                                   borderRadius:
                                                       BorderRadius.circular(50),
                                                 ),
@@ -231,7 +236,8 @@ class _SignInState extends State<SignIn> {
                                                   textAlign: TextAlign.center,
                                                   style: (TextStyle(
                                                       fontFamily: 'RobotoMono',
-                                                      color: Colors.amber.shade800,
+                                                      color:
+                                                          Colors.amber.shade800,
                                                       fontSize: 16,
                                                       letterSpacing: 1)),
                                                 ),
