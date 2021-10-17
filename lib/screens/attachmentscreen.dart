@@ -29,11 +29,10 @@ const GMAIL_SCHEMA = 'com.google.android.gm';
 final Future<bool> gmailinstalled = FlutterMailer.isAppInstalled(GMAIL_SCHEMA);
 
 class AttachScreen extends StatefulWidget {
-  final  name, res_model, res_id, pt_id, blob, blobimage, main_id;
+  final name, res_model, res_id, pt_id, blob, blobimage, main_id;
 
   AttachScreen({
     Key key,
-  
     this.pt_id,
     this.res_id,
     this.name,
@@ -47,25 +46,23 @@ class AttachScreen extends StatefulWidget {
   _AttachScreenState createState() => _AttachScreenState();
 }
 
-class _AttachScreenState extends State<AttachScreen>   {
+class _AttachScreenState extends State<AttachScreen> {
   String email, password;
   bool isLoading = false;
 
-
- @override
- void initState() { 
-   Future.microtask(()async{
-    await   context.read<AttachmentScreenCOntroller>().fetchContacts(widget.pt_id);
-
-
-   });
-   super.initState();
-   
- }
+  @override
+  void initState() {
+    Future.microtask(() async {
+      await context
+          .read<AttachmentScreenCOntroller>()
+          .fetchContacts(widget.pt_id);
+    });
+    super.initState();
+  }
 
   // Function to get the JSON data
   Future<dynamic> fetchContacts() async {
-    await orpc.authenticate('Jumaiah', 'admin', '123456');
+    await orpc.authenticate('Jumaiah', 'admin', 'bcool1984');
 
     var result = await orpc.callKw({
       'model': 'ir.attachment',
@@ -152,104 +149,76 @@ class _AttachScreenState extends State<AttachScreen>   {
 
   @override
   Widget build(BuildContext context) {
-    var model  = Provider.of<AttachmentScreenCOntroller>(context);
+    var model = Provider.of<AttachmentScreenCOntroller>(context);
     return SafeArea(
-      child: Directionality(textDirection: TextDirection.rtl, 
+      child: Directionality(
+        textDirection: TextDirection.rtl,
         child: new Scaffold(
           appBar: AppBar(
             title: new Center(
                 child: new Text('المرفقات', textAlign: TextAlign.center)),
-      
+
             backgroundColor: AppTheme.primaryColor, // status bar color
-            brightness: Brightness.dark, 
+            brightness: Brightness.dark,
             actions: [
-              IconButton(onPressed: ()async{
-  await model.fetchContacts(widget.pt_id);
-
-
-              }, icon: Icon(Icons.refresh ))
-            ],// status bar brightness
+              IconButton(
+                  onPressed: () async {
+                    await model.fetchContacts(widget.pt_id);
+                  },
+                  icon: Icon(Icons.refresh))
+            ], // status bar brightness
           ),
           drawer: NavDrawer(),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-           
               Container(
-                margin: EdgeInsets.only(left:10 , right: 10),
+                margin: EdgeInsets.only(left: 10, right: 10),
                 child: TextField(
-                onChanged: (val)=> model.filter(val),
+                  onChanged: (val) => model.filter(val),
                   decoration: InputDecoration(
                       labelText: 'بحث', suffixIcon: Icon(Icons.search)),
                 ),
               ),
 
-
-
-
-
-
-
-
-Consumer<AttachmentScreenCOntroller>(
+              Consumer<AttachmentScreenCOntroller>(
                 builder: (context, model, child) {
-                  if(model.state==AttachmentScreenState.Lading){
-                   return  SizedBox(
-                     height: MediaQuery.of(context).size.height/2,
-                     
-                     child: LoadingWidget());
+                  if (model.state == AttachmentScreenState.Lading) {
+                    return SizedBox(
+                        height: MediaQuery.of(context).size.height / 2,
+                        child: LoadingWidget());
+                  } else if (model.state == AttachmentScreenState.Loaded) {
+                    return Expanded(
+                        child: ListView.builder(
+                            itemCount: model.filterRecodes.length,
+                            itemBuilder: (context, index) {
+                              final record = model.filterRecodes[index]
+                                  as Map<String, dynamic>;
 
-                  } else if (model.state==AttachmentScreenState.Loaded){
-
-
-
-                    return   
- Expanded(
-                          child: ListView.builder(
-                              itemCount:model.filterRecodes.length,
-                              itemBuilder: (context, index) {
-                                final record =
-                                   model.filterRecodes[index] as Map<String, dynamic>;
-      
-      print(record);
-                                return buildListItem(record);
-                              }));
-
-                  }  else {
-                    if(model.exception is OdooServerException){
-
- return error(context, model.exception.toString(),
+                              print(record);
+                              return buildListItem(record);
+                            }));
+                  } else {
+                    if (model.exception is OdooServerException) {
+                      return error(context, model.exception.toString(),
                           "assets/server.png");
-
-                    } 
-                    else if(model.exception is ConnectionException){
- return error(context, model.exception.toString(),
+                    } else if (model.exception is ConnectionException) {
+                      return error(context, model.exception.toString(),
                           "assets/server.png");
-
+                    } else if (model.exception is MyTimeOutException) {
+                      return error(context, model.exception.toString(),
+                          "assets/server.png");
+                    } else if (model.exception is NoData404Exception) {
+                      return noResult(
+                        context,
+                        model.exception.toString(),
+                      );
                     }
-                      else if (model.exception is MyTimeOutException) {
-                         return error(context, model.exception.toString(),
-                          "assets/server.png");
-
-                      }
-                      else if (model.exception is NoData404Exception) {
-                      return noResult(context, model.exception.toString(),
-                     );
-                    }
-    return error(context, model.exception.toString(),
+                    return error(context, model.exception.toString(),
                         "assets/unknown.png");
-
                   }
-             
-
-
                 },
               ),
-  
-
-
-
-
 
               // FutureBuilder(
               //     future: fetchContacts(),
@@ -261,7 +230,7 @@ Consumer<AttachmentScreenCOntroller>(
               //                 itemBuilder: (context, index) {
               //                   final record =
               //                       snapshot.data[index] as Map<String, dynamic>;
-      
+
               //                   return buildListItem(record);
               //                 }));
               //       } else {
@@ -273,49 +242,40 @@ Consumer<AttachmentScreenCOntroller>(
           ),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
-  //  print(model.recorders.toString());
-  //      print(model.recorders[0]["res_id"].toString());
-    
+              //  print(model.recorders.toString());
+              //      print(model.recorders[0]["res_id"].toString());
 
-
-
-
-
-    if (sharedPrefs.getUserType() == "GUEST") {
-      ///TODO: addSnackBar
+              if (sharedPrefs.getUserType() == "GUEST") {
+                ///TODO: addSnackBar
                 print("not allowed");
-                  scaffoldMessangerKey.currentState.showSnackBar(
-                    SnackBar(
-                       action: SnackBarAction(
+                scaffoldMessangerKey.currentState.showSnackBar(SnackBar(
+                    action: SnackBarAction(
                       label: 'حسنا',
                       onPressed: () {
-                         sharedPrefs.setLogin(false);
+                        sharedPrefs.setLogin(false);
                         sharedPrefs.saveUserType(null);
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) => SignIn()));
                         preferences.clear();
-
                       },
                       textColor: Colors.white,
                       disabledTextColor: Colors.grey,
                     ),
-                         duration: const Duration(seconds: 8),
- 
-                      
-                      content: Text("غير مصرح لك بإضافة ملفات قم بالتسجيل")));
-              } else{
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FilePickerDemo(
-                      pt_id: widget.pt_id.toString(),
-                      name: widget.name,
-                      res_id:widget.pt_id,
-                      // model.recorders[0]["res_id"].toString(),
-                      res_model:"property.base"
-                      //model.recorders[0]["res_model"].toString(),
-                    ),
-                  ));
+                    duration: const Duration(seconds: 8),
+                    content: Text("غير مصرح لك بإضافة ملفات قم بالتسجيل")));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FilePickerDemo(
+                          pt_id: widget.pt_id.toString(),
+                          name: widget.name,
+                          res_id: widget.pt_id,
+                          // model.recorders[0]["res_id"].toString(),
+                          res_model: "property.base"
+                          //model.recorders[0]["res_model"].toString(),
+                          ),
+                    ));
               }
             },
             backgroundColor: AppTheme.primaryColor,
@@ -326,7 +286,8 @@ Consumer<AttachmentScreenCOntroller>(
       ),
     );
   }
- Widget error(BuildContext context, String message, String img) {
+
+  Widget error(BuildContext context, String message, String img) {
     var model = Provider.of<AttachmentScreenCOntroller>(context);
 
     return Center(
@@ -335,38 +296,6 @@ Consumer<AttachmentScreenCOntroller>(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(img),
-
-          Text(message),
-
-          // Spacer(),
-
-          Container(
-            // margin: EdgeInsets.all(10),
-
-            width: double.infinity,
-
-            child: FlatButton.icon(
-                onPressed: () async {
-                  await model.fetchContacts(widget.pt_id
-                    );
-                },
-                icon: Icon(Icons.refresh),
-                label: Text("حاول مرة أخرى")),
-          )
-        ],
-      ),
-    );
-  }
-Widget noResult(BuildContext context, String message) {
-    var model = Provider.of<AttachmentScreenCOntroller>(context);
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-         SvgPicture.asset("assets/ResultsMagnifyingGlass.svg",
-              color: Colors.red, semanticsLabel: 'A red up arrow'),
 
           Text(message),
 
@@ -389,4 +318,35 @@ Widget noResult(BuildContext context, String message) {
     );
   }
 
+  Widget noResult(BuildContext context, String message) {
+    var model = Provider.of<AttachmentScreenCOntroller>(context);
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SvgPicture.asset("assets/ResultsMagnifyingGlass.svg",
+              color: Colors.red, semanticsLabel: 'A red up arrow'),
+
+          Text(message),
+
+          // Spacer(),
+
+          Container(
+            // margin: EdgeInsets.all(10),
+
+            width: double.infinity,
+
+            child: FlatButton.icon(
+                onPressed: () async {
+                  await model.fetchContacts(widget.pt_id);
+                },
+                icon: Icon(Icons.refresh),
+                label: Text("حاول مرة أخرى")),
+          )
+        ],
+      ),
+    );
+  }
 }

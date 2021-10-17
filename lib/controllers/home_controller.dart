@@ -147,6 +147,7 @@ class HomeViewmode extends ChangeNotifier {
         },
       }) as List;
       print(res1);
+      print("this is the result" + res1.toString());
       // var result = await orpc.callKw({
       //    'model': 'property.base',
       //   'method': 'search_read',

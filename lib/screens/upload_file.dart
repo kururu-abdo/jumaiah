@@ -125,7 +125,7 @@ class _FilePickerDemoState extends State<FilePickerDemo>
   }
 
   Future<dynamic> fetchContacts() async {
-    await orpc.authenticate('Jumaiah', 'admin', '123456');
+    await orpc.authenticate('Jumaiah', 'admin', 'bcool1984');
 
     var result = await orpc.callKw({
       'model': 'ir.attachment',
