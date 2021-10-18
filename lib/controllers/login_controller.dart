@@ -158,7 +158,7 @@ class LoginController extends ChangeNotifier {
         _setState(LoginState.Initial);
 
         Iterable I = res;
-        print("//////////////////////////////");
+        print("|||||||||||||||||||||||||||||||||||||||||||||||||||");
         print(I.first['image']);
         OdooUser odooUser = OdooUser.fromJson(I.first);
         sharedPrefs.saveImage(odooUser.image);
@@ -198,9 +198,12 @@ class LoginController extends ChangeNotifier {
       _setException(OdooServerException("خطأ في الخادم"));
       return APIrespnse<dynamic>(error: true, errorMessage: "خطأ في الخادم");
     } catch (e) {
+      print("DATA...."+e.toString());
       _setState(LoginState.Error);
 
       _setException(UnknownException("خطأ غير متوقع"));
+       return APIrespnse<dynamic>(
+          error: true, errorMessage: "تأكد من البريد الإلكتروني أو كلمة السر");
     }
   }
 }

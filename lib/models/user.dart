@@ -1,10 +1,10 @@
 class OdooUser {
-  int id;
+  dynamic id;
   dynamic tz;
-  String login;
-  String password;
-  String name;
-  String image;
+  dynamic login;
+  dynamic password;
+  dynamic name;
+  dynamic image;
 
   OdooUser(
       {this.id, this.tz, this.login, this.password, this.name, this.image});
