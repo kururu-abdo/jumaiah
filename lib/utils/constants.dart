@@ -10,6 +10,7 @@ const String USER_TYPE = "user_type";
 const String USER_EMAIL = "email";
 const String USER_PASSWORD = "password";
 
+const String DEFAULT_DB="admin";
 const String DEFAULT_USER = "demo@jumaiah.com";
 const String DEFAULT_PASSWORD = "bcool1984";
 //jumaiah!@##@!

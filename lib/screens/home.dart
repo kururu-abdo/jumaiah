@@ -105,7 +105,14 @@ class _HomeState extends State<Home> {
                         )
                       ],
                     ),
-                    child: Text(record.propertyName[1].toString(),
+                    child: Text(
+                     // "",
+                    //  record.propertyName.toString(),
+                    
+record.propertyName.last.toString(),
+                    
+
+                    
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 30,
@@ -118,13 +125,14 @@ class _HomeState extends State<Home> {
         ),
       ),
       onTap: () {
+        print(record.owner);
         Navigator.push(
             context,
             CustomPageRoute(
               Details(record.id,
                   image: record.ptImage,
                   pt_id: record.id,
-                  name: record.propertyName[1].toString().trim(),
+                  name: record.propertyName.last.toString().trim(),
                   location: record.ptLocation,
                   certificate_no: record.ptCertificteNo,
                   certificate_date: record.ptCertificteDate,

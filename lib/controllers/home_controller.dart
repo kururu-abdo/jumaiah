@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_splash_screen/enums/widget_state.dart';
 import 'package:flutter_animated_splash_screen/main.dart';
@@ -66,7 +68,7 @@ class HomeViewmode extends ChangeNotifier {
   Future<OdooSession> getClient() async {
     //jumaiah!@##@!
     final session =
-        await client.authenticate('Jumaiah', 'admin', 'jumaiah!@##@!');
+        await client.authenticate('Jumaiah', 'admin', 'bcool1984');
 
     return session;
   }
@@ -125,13 +127,13 @@ class HomeViewmode extends ChangeNotifier {
     _setState(WidgetState.Loading);
     OdooSession session;
     try {
-      print("BEFORE");
-      if (sharedPrefs.getUserType() == "GUEST") {
-        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
-      } else {
-        session = await Auth(sharedPrefs.getEmail().trim(),
-            sharedPrefs.getUserPassword().trim());
-      }
+      // print("BEFORE");
+      // if (sharedPrefs.getUserType() == "GUEST") {
+        session = await Auth(DEFAULT_DB, DEFAULT_PASSWORD);
+      // } else {
+      //   session = await Auth(sharedPrefs.getEmail().trim(),
+      //       sharedPrefs.getUserPassword().trim());
+      // }
       // getClient();
       print(session.dbName);
       print("AFTER");
@@ -146,8 +148,10 @@ class HomeViewmode extends ChangeNotifier {
           'fields': [],
         },
       }) as List;
-      print(res1);
-      print("this is the result" + res1.toString());
+     log(res1.toString());
+    //  print(res1);
+    //  printWrapped(res1.toString());
+     // print("this is the result" + res1.toString());
       // var result = await orpc.callKw({
       //    'model': 'property.base',
       //   'method': 'search_read',
@@ -168,13 +172,21 @@ class HomeViewmode extends ChangeNotifier {
       notifyListeners();
       _setState(WidgetState.Loaded);
     } on Exception catch (e) {
+            debugPrint("unexpected||||||||||||||||||" + e.toString());
+
       print("exception");
       print(e);
       _setState(WidgetState.Error);
-    } catch (e) {
+    }
+     catch (e) {
+      debugPrint("unexpected"+  e.toString());
       _setState(WidgetState.Error);
 
       _setException(UnknownException("خطأ غير متوقع"));
     }
+  }
+  void printWrapped(String text) {
+    final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+    pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 }

@@ -52,7 +52,7 @@ try {
   
    
  if (sharedPrefs.getUserType() == "GUEST") {
-        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
+        session = await Auth(DEFAULT_DB, DEFAULT_PASSWORD);
       } else {
         session = await Auth(sharedPrefs.getEmail().trim(),
             sharedPrefs.getUserPassword().trim());
@@ -112,8 +112,12 @@ _setException(NoData404Exception(
     print(password);
     final session = await orpc.authenticate(
         'Jumaiah',
-        "${email.trim()}" ?? DEFAULT_USER,
-        password.toString().trim() ?? DEFAULT_PASSWORD);
+        DEFAULT_DB
+       // "${email.trim()}" ?? DEFAULT_USER
+        ,
+        DEFAULT_PASSWORD
+        //password.toString().trim() ?? DEFAULT_PASSWORD
+        );
 
     return session;
   }

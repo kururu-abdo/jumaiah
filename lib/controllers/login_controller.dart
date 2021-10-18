@@ -7,6 +7,7 @@ import 'package:flutter_animated_splash_screen/enums/login_state.dart';
 import 'package:flutter_animated_splash_screen/main.dart';
 import 'package:flutter_animated_splash_screen/models/user.dart';
 import 'package:flutter_animated_splash_screen/utils/apiResponse.dart';
+import 'package:flutter_animated_splash_screen/utils/constants.dart';
 import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
 import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
@@ -66,7 +67,18 @@ class LoginController extends ChangeNotifier {
   Future<OdooSession> Auth(String email, String password) async {
     print(password);
     final session = await client.authenticate(
-        'Jumaiah', "${email.trim()}", "${password.toString().trim()}");
+        'Jumaiah',
+        DEFAULT_DB
+        
+        // "${email.trim()}"
+         , 
+         
+         DEFAULT_PASSWORD
+         
+         //"${password.toString().trim()}"
+         
+         
+         );
 
     return session;
   }

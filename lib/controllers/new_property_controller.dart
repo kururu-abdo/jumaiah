@@ -356,8 +356,12 @@ class NewPropertyController extends ChangeNotifier {
     print(password);
     final session = await client.authenticate(
         'Jumaiah',
-        "${email.trim()}" ?? DEFAULT_USER,
-        password.toString().trim() ?? DEFAULT_PASSWORD);
+        DEFAULT_DB,
+        //"${email.trim()}" ?? DEFAULT_USER,
+     //   password.toString().trim() ??
+        
+        
+         DEFAULT_PASSWORD);
 
     return session;
   }

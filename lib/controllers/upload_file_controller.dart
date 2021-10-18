@@ -34,7 +34,7 @@ void initState() {
 
  Future<OdooSession> getClient() async {
    //jumaiah!@##@!
-    final session = await client.authenticate('Jumaiah', 'admin', 'jumaiah!@##@!');
+    final session = await client.authenticate('Jumaiah', DEFAULT_DB, DEFAULT_PASSWORD);
 
     return session;
   }
@@ -147,8 +147,8 @@ _setException(UnknownException("خطأ غير متوقع"));
     print(password);
     final session = await client.authenticate(
         'Jumaiah',
-        "${email.trim()}" ?? DEFAULT_USER,
-        password.toString().trim() ?? DEFAULT_PASSWORD);
+        DEFAULT_DB,
+      DEFAULT_PASSWORD);
 
     return session;
   }
