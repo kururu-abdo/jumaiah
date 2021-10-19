@@ -44,9 +44,9 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - SDWebImage (5.12.0):
-    - SDWebImage/Core (= 5.12.0)
-  - SDWebImage/Core (5.12.0)
+  - SDWebImage (5.12.1):
+    - SDWebImage/Core (= 5.12.1)
+  - SDWebImage/Core (5.12.1)
   - shared_preferences (0.0.1):
     - Flutter
   - SwiftyGif (5.4.0)
@@ -96,10 +96,10 @@ SPEC CHECKSUMS:
   flutter_mailer: 2ef5a67087bc8c6c4cefd04a178bf1ae2c94cd83
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  SDWebImage: 4ea20cca2986adc5aacde07aa686742fd4c67a37
+  SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
 
 PODFILE CHECKSUM: 124871c13717f2388253dcfb709d8627f84a282d
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
