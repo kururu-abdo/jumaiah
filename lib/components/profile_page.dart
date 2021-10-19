@@ -114,10 +114,22 @@ class _PofilePageState extends State<ProfilePage> {
   Uint8List _bytesImage;
 
   Base64ToImage(String image) {
-    print(image);
-    setState(() {
-      _bytesImage = base64Decode(image);
-    });
+    print(image.runtimeType);
+    if(image=="false"){
+setState(() {
+  try {
+            _bytesImage = base64Decode("");
+
+  } catch (e) {
+    
+  }
+      });
+    }
+    else{
+      setState(() {
+        _bytesImage = base64Decode(image);
+      });
+    }
   }
 
   Widget profileView() {
