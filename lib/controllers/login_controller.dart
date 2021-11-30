@@ -33,7 +33,7 @@ class LoginController extends ChangeNotifier {
 
   Future<OdooSession> getClient() async {
     final session =
-        await client.authenticate('Jumaiah', 'admin', 'jumaiah!@##@!');
+        await client.authenticate(DEFAULT_DB2, 'admin', 'jumaiah!@##@!');
 
     return session;
   }
@@ -67,7 +67,7 @@ class LoginController extends ChangeNotifier {
   Future<OdooSession> Auth(String email, String password) async {
     print(password);
     final session = await client.authenticate(
-        'Jumaiah',
+        DEFAULT_DB2,
         DEFAULT_DB
         
         // "${email.trim()}"
@@ -94,7 +94,7 @@ class LoginController extends ChangeNotifier {
     sharedPrefs.saveID("1");
     sharedPrefs.saveTZ("Africa");
     sharedPrefs.saveLang("En");
-    sharedPrefs.saveUserType("GUEST");
+    sharedPrefs.saveUserType(GUEST);
 
     sharedPrefs.setLogin(true);
   }

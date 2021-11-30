@@ -355,13 +355,13 @@ class NewPropertyController extends ChangeNotifier {
   Future<OdooSession> Auth(String email, String password) async {
     print(password);
     final session = await client.authenticate(
-        'Jumaiah',
-        DEFAULT_DB,
+        DEFAULT_DB2,
+        email.trim(),
         //"${email.trim()}" ?? DEFAULT_USER,
      //   password.toString().trim() ??
         
         
-         DEFAULT_PASSWORD);
+         password.trim());
 
     return session;
   }

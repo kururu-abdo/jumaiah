@@ -4,6 +4,7 @@ import 'package:flutter_animated_splash_screen/enums/widget_state.dart';
 import 'package:flutter_animated_splash_screen/main.dart';
 import 'package:flutter_animated_splash_screen/models/property.dart';
 import 'package:flutter_animated_splash_screen/screens/add_property.dart';
+import 'package:flutter_animated_splash_screen/utils/constants.dart';
 import 'package:flutter_animated_splash_screen/utils/custom_transition.dart';
 import 'package:flutter_animated_splash_screen/utils/loader.dart';
 import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
@@ -90,7 +91,10 @@ class _HomeState extends State<Home> {
                 children: <Widget>[
                   Hero(
                       tag: record.id.toString(),
-                      child: Image.memory(base64Decode(record.ptImage))),
+                      child: Image.memory(base64Decode(
+                        record.ptImage.toString().trim()=="false"?
+                        DEFAULT_IMG:
+                        record.ptImage.toString()))),
                   new Container(
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -109,7 +113,7 @@ class _HomeState extends State<Home> {
                      // "",
                     //  record.propertyName.toString(),
                     
-record.propertyName.last.toString(),
+record.propertyName,
                     
 
                     
@@ -125,18 +129,17 @@ record.propertyName.last.toString(),
         ),
       ),
       onTap: () {
-        print(record.owner);
         Navigator.push(
             context,
             CustomPageRoute(
               Details(record.id,
-                  image: record.ptImage,
+                  image: record.ptImage.toString(),
                   pt_id: record.id,
-                  name: record.propertyName.last.toString().trim(),
+                  name: record.propertyName,
                   location: record.ptLocation,
                   certificate_no: record.ptCertificteNo,
-                  certificate_date: record.ptCertificteDate,
-                  owner: record.owner[1],
+                  certificate_date: record.ptCertificteDate.toString(),
+                  owner: record.owner,
                   property_status: record.propertyStatus),
             ));
       },
