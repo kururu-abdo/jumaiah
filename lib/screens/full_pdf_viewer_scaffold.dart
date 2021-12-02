@@ -128,7 +128,7 @@ class _ViewPDFState extends State<ViewPDF> {
     if (!mounted) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(platformResponse),
     ));
   }

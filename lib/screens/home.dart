@@ -27,6 +27,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final _formKey = GlobalKey<FormState>();
   String email, password;
   bool isLoading = false;
@@ -106,13 +108,10 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                     child: Text(
-                     // "",
-                    //  record.propertyName.toString(),
-                    
-record.propertyName.last.toString(),
-                    
+                        // "",
+                        //  record.propertyName.toString(),
 
-                    
+                        record.propertyName.last.toString(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 30,
@@ -150,6 +149,7 @@ record.propertyName.last.toString(),
       textDirection: TextDirection.rtl,
       child: SafeArea(
         child: new Scaffold(
+          key: _scaffoldKey,
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: new Center(
@@ -237,7 +237,7 @@ record.propertyName.last.toString(),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
               if (sharedPrefs.getUserType() == "GUEST") {
-                scaffoldMessangerKey.currentState.showSnackBar(SnackBar(
+                _scaffoldKey.currentState.showSnackBar(SnackBar(
                     action: SnackBarAction(
                       label: 'حسنا',
                       onPressed: () {

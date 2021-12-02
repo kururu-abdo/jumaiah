@@ -248,7 +248,7 @@ class _AttachScreenState extends State<AttachScreen> {
               if (sharedPrefs.getUserType() == "GUEST") {
                 ///TODO: addSnackBar
                 print("not allowed");
-                scaffoldMessangerKey.currentState.showSnackBar(SnackBar(
+                _scaffoldKey.currentState.showSnackBar(SnackBar(
                     action: SnackBarAction(
                       label: 'حسنا',
                       onPressed: () {

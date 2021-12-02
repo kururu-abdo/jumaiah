@@ -26,8 +26,8 @@ class NewPropertyController extends ChangeNotifier {
   static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
   var subscription = client.sessionStream.listen(sessionChanged);
-  var loginSubscription = client.loginStream.listen(loginStateChanged);
-  var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
+  // var loginSubscription = client.loginStream.listen(loginStateChanged);
+  // var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
   String fileName;
   bool isShow = true;
   setShow(bool value) {
@@ -358,10 +358,9 @@ class NewPropertyController extends ChangeNotifier {
         'Jumaiah',
         DEFAULT_DB,
         //"${email.trim()}" ?? DEFAULT_USER,
-     //   password.toString().trim() ??
-        
-        
-         DEFAULT_PASSWORD);
+        //   password.toString().trim() ??
+
+        DEFAULT_PASSWORD);
 
     return session;
   }

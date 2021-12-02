@@ -14,9 +14,9 @@ class HomeViewmode extends ChangeNotifier {
   final orpc = OdooClient('http://142.93.55.190:8069/');
   static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
-  var subscription = client.sessionStream.listen(sessionChanged);
-  var loginSubscription = client.loginStream.listen(loginStateChanged);
-  var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
+  // var subscription = client.sessionStream.listen(sessionChanged);
+  // var loginSubscription = client..loginStream.listen(loginStateChanged);
+  // var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
 
   List<Property> _filteredProperties = [];
 
@@ -67,8 +67,7 @@ class HomeViewmode extends ChangeNotifier {
 
   Future<OdooSession> getClient() async {
     //jumaiah!@##@!
-    final session =
-        await client.authenticate('Jumaiah', 'admin', 'bcool1984');
+    final session = await client.authenticate('Jumaiah', 'admin', 'bcool1984');
 
     return session;
   }
@@ -129,7 +128,7 @@ class HomeViewmode extends ChangeNotifier {
     try {
       // print("BEFORE");
       // if (sharedPrefs.getUserType() == "GUEST") {
-        session = await Auth(DEFAULT_DB, DEFAULT_PASSWORD);
+      session = await Auth(DEFAULT_DB, DEFAULT_PASSWORD);
       // } else {
       //   session = await Auth(sharedPrefs.getEmail().trim(),
       //       sharedPrefs.getUserPassword().trim());
@@ -148,10 +147,10 @@ class HomeViewmode extends ChangeNotifier {
           'fields': [],
         },
       }) as List;
-     log(res1.toString());
-    //  print(res1);
-    //  printWrapped(res1.toString());
-     // print("this is the result" + res1.toString());
+      log(res1.toString());
+      //  print(res1);
+      //  printWrapped(res1.toString());
+      // print("this is the result" + res1.toString());
       // var result = await orpc.callKw({
       //    'model': 'property.base',
       //   'method': 'search_read',
@@ -172,19 +171,19 @@ class HomeViewmode extends ChangeNotifier {
       notifyListeners();
       _setState(WidgetState.Loaded);
     } on Exception catch (e) {
-            debugPrint("unexpected||||||||||||||||||" + e.toString());
+      debugPrint("unexpected||||||||||||||||||" + e.toString());
 
       print("exception");
       print(e);
       _setState(WidgetState.Error);
-    }
-     catch (e) {
-      debugPrint("unexpected"+  e.toString());
+    } catch (e) {
+      debugPrint("unexpected" + e.toString());
       _setState(WidgetState.Error);
 
       _setException(UnknownException("خطأ غير متوقع"));
     }
   }
+
   void printWrapped(String text) {
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
     pattern.allMatches(text).forEach((match) => print(match.group(0)));
