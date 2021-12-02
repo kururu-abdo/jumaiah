@@ -146,9 +146,9 @@ _setException(UnknownException("خطأ غير متوقع"));
  Future<OdooSession> Auth(String email, String password) async {
     print(password);
     final session = await client.authenticate(
-        'Jumaiah',
-        DEFAULT_DB,
-      DEFAULT_PASSWORD);
+        DEFAULT_DB2,
+        email.trim(),
+      password.trim());
 
     return session;
   }

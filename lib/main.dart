@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animated_splash_screen/controllers/add_photo_controller.dart';
 import 'package:flutter_animated_splash_screen/controllers/attachments_controller.dart';
 import 'package:flutter_animated_splash_screen/controllers/home_controller.dart';
 import 'package:flutter_animated_splash_screen/controllers/login_controller.dart';
 import 'package:flutter_animated_splash_screen/controllers/new_property_controller.dart';
+import 'package:flutter_animated_splash_screen/controllers/photos_page_viewmodel.dart';
 import 'package:flutter_animated_splash_screen/controllers/upload_file_controller.dart';
 import 'package:flutter_animated_splash_screen/screens/animation_screen.dart';
 import 'package:flutter_animated_splash_screen/screens/home.dart';
@@ -41,6 +43,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefs().init();
   runApp(
+<<<<<<< HEAD
     MultiProvider(providers: [
       ChangeNotifierProvider.value(value: LoginController()),
       ChangeNotifierProvider.value(value: AttachmentScreenCOntroller()),
@@ -49,6 +52,26 @@ void main() async {
       ChangeNotifierProvider.value(value: NewPropertyController())
     ], child: HomePage()),
   );
+=======
+    MultiProvider(
+      providers:[
+ChangeNotifierProvider.value(value: LoginController()) ,
+ChangeNotifierProvider.value(value: AttachmentScreenCOntroller()),
+ChangeNotifierProvider.value(value: UploadFileControler()),
+ChangeNotifierProvider.value(value: HomeViewmode()),
+ChangeNotifierProvider.value(value: NewPropertyController()),
+
+
+ChangeNotifierProvider.value(value: AddPhotoController()),
+ChangeNotifierProvider.value(value: PhotosPageViewModel())
+
+
+
+
+      ],
+      child: HomePage()),
+);
+>>>>>>> 62a0f4a47cbe6ad59a0f635a240242de87b8399e
 }
 
 class HomePage extends StatefulWidget {

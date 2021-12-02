@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_splash_screen/screens/add_photo.dart';
 import 'package:flutter_animated_splash_screen/screens/attachmentscreen.dart';
+import 'package:flutter_animated_splash_screen/screens/photo_view.dart';
 import 'package:flutter_animated_splash_screen/screens/searchview.dart';
+import 'package:flutter_animated_splash_screen/utils/constants.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -59,7 +62,10 @@ class _DetailsState extends State<Details> {
                   background: 
                  Hero(
                 tag: widget.use_id.toString().trim(),
-                child: Image.memory(base64Decode(widget.image)   ,
+                child: Image.memory(base64Decode(
+                  widget.image.toString().trim()=="false"?
+                  DEFAULT_IMG:
+                  widget.image    )   ,
                 
                 fit: BoxFit.cover,
                 )
@@ -172,36 +178,108 @@ class _DetailsState extends State<Details> {
                     textDirection: TextDirection.rtl,
                   ),
                 ),
-                Container(
-                  height: 50,
-                  margin: EdgeInsets.all(8.0),
-                        width:double.infinity , 
-                      decoration: BoxDecoration(
+              
+              
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                   
+                   
+                   
+                    Container(
+                      height: 50,
+                    //  margin: EdgeInsets.all(8.0),
+                            // width:80 , 
+                          decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(15))
-                      ),
-                        child: RaisedButton(
-                          
-                          onPressed: () {
+                          ),
+                            child: RaisedButton(
+                              
+                              onPressed: () {
           
           
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      AttachScreen(pt_id: widget.pt_id.toString(),
-                                     
-                                      ),
-                                ));
-                          },
-                          color: Colors.amber,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Text("المرفقات" , style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),),
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          AttachScreen(pt_id: widget.pt_id.toString(),
+                                         
+                                          ),
+                                    ));
+                              },
+                              color: Colors.amber,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Text("المرفقات" , style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),),
+                            ),
+                          ),
+
+
+                           
+                   
+                    Container(
+                      height: 50,
+                      // margin: EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PhotoPage(
+                                ),
+                              ));
+                        },
+                        color: Colors.amber,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          "معرض الصور",
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
+                    ) ,
+
+
+                     
+                   
+                    Container(
+                      height: 50,
+                      // margin: EdgeInsets.all(8.0),
+                      // width: 50,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddPhoto(
+                               
+                                ),
+                              ));
+                        },
+                        color: Colors.amber,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          "إضافة صور",
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                   
               ],
             ),

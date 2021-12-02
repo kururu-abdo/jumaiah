@@ -66,8 +66,20 @@ class HomeViewmode extends ChangeNotifier {
   }
 
   Future<OdooSession> getClient() async {
+    var session;
     //jumaiah!@##@!
+<<<<<<< HEAD
     final session = await client.authenticate('Jumaiah', 'admin', 'bcool1984');
+=======
+    if(sharedPrefs.getUserType()==GUEST){
+          session =
+          await client.authenticate(DEFAULT_DB2, 'admin', 'bcool1984');
+    }else {
+           session =
+          await client.authenticate(DEFAULT_DB2, sharedPrefs.getEmail().trim(),sharedPrefs.getUserPassword().trim());
+    }
+
+>>>>>>> 62a0f4a47cbe6ad59a0f635a240242de87b8399e
 
     return session;
   }
@@ -115,7 +127,7 @@ class HomeViewmode extends ChangeNotifier {
   Future<OdooSession> Auth(String email, String password) async {
     print(password);
     final session = await client.authenticate(
-        'Jumaiah',
+       DEFAULT_DB2,
         email != null ? email.trim() : DEFAULT_USER,
         password != null ? password.toString().trim() : DEFAULT_PASSWORD);
 

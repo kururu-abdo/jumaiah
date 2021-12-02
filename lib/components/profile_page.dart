@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_splash_screen/utils/constants.dart';
 import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -115,17 +116,17 @@ class _PofilePageState extends State<ProfilePage> {
 
   Base64ToImage(String image) {
     print(image.runtimeType);
-    if(image=="false"){
+    if(image=="false" || image ==null || image=="" ){
 setState(() {
   try {
-            _bytesImage = base64Decode("");
+            _bytesImage = base64Decode(DEFAULT_IMG);
 
   } catch (e) {
     
   }
       });
     }
-    else{
+    else{ 
       setState(() {
         _bytesImage = base64Decode(image);
       });

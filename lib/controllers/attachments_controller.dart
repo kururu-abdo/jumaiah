@@ -111,11 +111,11 @@ _setException(NoData404Exception(
  Future<OdooSession> Auth(String email, String password) async {
     print(password);
     final session = await orpc.authenticate(
-        'Jumaiah',
-        DEFAULT_DB
+       DEFAULT_DB2,
+        email.toString() ,
        // "${email.trim()}" ?? DEFAULT_USER
-        ,
-        DEFAULT_PASSWORD
+        
+        password.toString()
         //password.toString().trim() ?? DEFAULT_PASSWORD
         );
 
