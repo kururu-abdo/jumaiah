@@ -12,6 +12,7 @@ import 'package:hijri/hijri_calendar.dart';
 import 'package:hijri_picker/hijri_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
+
 class AddProperyScreen extends StatefulWidget {
   final res_model, res_id, pt_id;
 

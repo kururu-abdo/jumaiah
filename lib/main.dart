@@ -20,19 +20,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'example_start_screen.dart';
 
+
 void sessionChanged(OdooSession sessionId) async {
   print('We got new session ID: ' + sessionId.id);
   // write to persistent storage
 }
 
-// void loginStateChanged(OdooLoginEvent event) async {
-//   if (event == OdooLoginEvent.loggedIn) {
-//     print('Logged in');
-//   }
-//   if (event == OdooLoginEvent.loggedOut) {
-//     print('Logged out');
-//   }
-// }
+void loginStateChanged(OdooLoginEvent event) async {
+  if (event == OdooLoginEvent.loggedIn) {
+    print('Logged in');
+  }
+  if (event == OdooLoginEvent.loggedOut) {
+    print('Logged out');
+  }
+}
 
 void inRequestChanged(bool event) async {
   if (event) print('Request is executing'); // draw progress indicator
@@ -53,28 +54,6 @@ void main() async {
       ChangeNotifierProvider.value(value: PhotosPageViewModel())
     ], child: HomePage()),
   );
-
-     
-  
-
-//     MultiProvider(
-//       providers:[
-// ChangeNotifierProvider.value(value: LoginController()) ,
-// ChangeNotifierProvider.value(value: AttachmentScreenCOntroller()),
-// ChangeNotifierProvider.value(value: UploadFileControler()),
-// ChangeNotifierProvider.value(value: HomeViewmode()),
-// ChangeNotifierProvider.value(value: NewPropertyController()),
-
-
-// ChangeNotifierProvider.value(value: AddPhotoController()),
-// ChangeNotifierProvider.value(value: PhotosPageViewModel())
-
-
-
-
-//       ],
-//       child: HomePage()),
-//);
 }
 
 class HomePage extends StatefulWidget {
@@ -108,9 +87,6 @@ class _HomeState extends State<HomePage> implements WidgetsBindingObserver {
       ],
       supportedLocales: [const Locale('ar', 'SA'), const Locale('en', '')],
       scaffoldMessengerKey: scaffoldMessangerKey,
-
-
-      // scaffoldKey: scaffoldMessangerKey,
       title: "Al Jumaiah",
       theme:
           ThemeData(fontFamily: 'Cairo', primaryColor: AppTheme.primaryColor),
@@ -179,4 +155,3 @@ class _HomeState extends State<HomePage> implements WidgetsBindingObserver {
 
 var navigatorKey = GlobalKey<NavigatorState>();
 var scaffoldMessangerKey = GlobalKey<ScaffoldMessengerState>();
-// var scaffoldMessangerKey = GlobalKey<Scaffold>();

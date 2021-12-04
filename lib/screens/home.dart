@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
                           record.ptImage.toString().trim() == "false"
                               ? DEFAULT_IMG
                               : record.ptImage.toString()))),
-                  new Container(
+                   Container(
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
@@ -113,25 +113,20 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                     child: Text(
-<<<<<<< HEAD
                         // "",
                         //  record.propertyName.toString(),
 
                         record.propertyName,
-=======
-<<<<<<< HEAD
+
                         // "",
                         //  record.propertyName.toString(),
-=======
                      // "",
                     //  record.propertyName.toString(),
                     
-record.propertyName,
+// record.propertyName,
                     
->>>>>>> 62a0f4a47cbe6ad59a0f635a240242de87b8399e
 
-                        record.propertyName.last.toString(),
->>>>>>> 254a560c33efdf6b40bfd95de749fe91ee316bb8
+                 //       record.propertyName.last.toString(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 30,
