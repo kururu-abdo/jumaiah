@@ -14,9 +14,9 @@ class HomeViewmode extends ChangeNotifier {
   final orpc = OdooClient('http://142.93.55.190:8069/');
   static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
-  var subscription = client.sessionStream.listen(sessionChanged);
-  var loginSubscription = client.loginStream.listen(loginStateChanged);
-  var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
+  // var subscription = client.sessionStream.listen(sessionChanged);
+  // var loginSubscription = client..loginStream.listen(loginStateChanged);
+  // var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
 
   List<Property> _filteredProperties = [];
 
@@ -75,6 +75,8 @@ class HomeViewmode extends ChangeNotifier {
       session = await client.authenticate(DEFAULT_DB,
           sharedPrefs.getEmail().trim(), sharedPrefs.getUserPassword().trim());
     }
+
+    // session = await client.authenticate('Jumaiah', 'admin', 'bcool1984');
 
     return session;
   }
@@ -136,6 +138,7 @@ class HomeViewmode extends ChangeNotifier {
       // print("BEFORE");
       // if (sharedPrefs.getUserType() == "GUEST") {
       session = await getClient();
+      session = await Auth(DEFAULT_DB, DEFAULT_PASSWORD);
       // } else {
       //   session = await Auth(sharedPrefs.getEmail().trim(),
       //       sharedPrefs.getUserPassword().trim());

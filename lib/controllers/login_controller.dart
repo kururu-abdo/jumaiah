@@ -17,8 +17,8 @@ class LoginController extends ChangeNotifier {
   static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
   var subscription = client.sessionStream.listen(sessionChanged);
-  var loginSubscription = client.loginStream.listen(loginStateChanged);
-  var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
+  // var loginSubscription = client.loginStream.listen(loginStateChanged);
+  // var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
 
   LoginState _state;
   LoginState get state => _state;
@@ -69,10 +69,23 @@ class LoginController extends ChangeNotifier {
         DEFAULT_DB,
         // DEFAULT_DB3,
         "${email.trim()}",
+      //  DEFAULT_DB2,
+        //DEFAULT_DB,
+
+        // "${email.trim()}"
+        
+        //DEFAULT_PASSWORD
+
+        //"${password.toString().trim()}"
+
+        //);
 
         //  DEFAULT_PASSWORD
 
-        "${password.toString().trim()}");
+        "${password.toString().trim()}"
+        
+        
+        );
     print(session);
     return session;
   }
@@ -200,6 +213,9 @@ class LoginController extends ChangeNotifier {
 
       _setException(UnknownException("خطأ غير متوقع"));
       return APIrespnse<dynamic>(error: true, errorMessage: "خطأ غير متوقع");
+
+      return APIrespnse<dynamic>(
+          error: true, errorMessage: "تأكد من البريد الإلكتروني أو كلمة السر");
     }
   }
 }

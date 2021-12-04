@@ -187,8 +187,7 @@ class _SignInState extends State<SignIn> {
                                                         .pushReplacementNamed(
                                                             context, "/home");
                                                   } else {
-                                                    scaffoldMessangerKey
-                                                        .currentState
+                                                    _scaffoldKey.currentState
                                                         .showSnackBar(SnackBar(
                                                             content: Text(response
                                                                 .errorMessage)));

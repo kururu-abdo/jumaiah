@@ -17,7 +17,7 @@ class AddPhotoController extends ChangeNotifier {
   static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
   var subscription = client.sessionStream.listen(sessionChanged);
-  var loginSubscription = client.loginStream.listen(loginStateChanged);
+  // var loginSubscription = client.loginStream.listen(loginStateChanged);
   var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
 
   List<PhotoItem> _photos = [];

@@ -174,7 +174,7 @@ class _FilePickerDemoState extends State<FilePickerDemo>
 
   void _clearCachedFiles() {
     FilePicker.platform.clearTemporaryFiles().then((result) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      Scaffold.of(context).showSnackBar(
         SnackBar(
           backgroundColor: result ? Colors.green : Colors.red,
           content: Text((result
@@ -520,7 +520,7 @@ class _FilePickerDemoState extends State<FilePickerDemo>
             IconButton(
                 onPressed: () {},
                 icon: Icon(
-                  Icons.file_upload_rounded,
+                  Icons.file_upload,
                   // size: 40,
                   color: Colors.green[500],
                 ))
