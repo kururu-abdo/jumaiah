@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_splash_screen/components/profile_page.dart';
-import 'package:flutter_animated_splash_screen/screens/signin.dart';
-import 'package:flutter_animated_splash_screen/utils/custom_transition.dart';
-import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
+import 'package:jumaiah/components/profile_page.dart';
+import 'package:jumaiah/screens/signin.dart';
+import 'package:jumaiah/utils/custom_transition.dart';
+import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences preferences;

@@ -1,13 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_splash_screen/enums/widget_state.dart';
-import 'package:flutter_animated_splash_screen/main.dart';
-import 'package:flutter_animated_splash_screen/models/owner.dart';
-import 'package:flutter_animated_splash_screen/models/property.dart';
-import 'package:flutter_animated_splash_screen/utils/constants.dart';
-import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
-import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
+import 'package:jumaiah/enums/widget_state.dart';
+import 'package:jumaiah/main.dart';
+import 'package:jumaiah/models/owner.dart';
+import 'package:jumaiah/models/property.dart';
+import 'package:jumaiah/utils/constants.dart';
+import 'package:jumaiah/utils/exceptions.dart';
+import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class HomeViewmode extends ChangeNotifier {
@@ -68,14 +68,13 @@ class HomeViewmode extends ChangeNotifier {
   Future<OdooSession> getClient() async {
     var session;
     //jumaiah!@##@!
-    if(sharedPrefs.getUserType()==GUEST){
-          session =
-          await client.authenticate(DEFAULT_DB2, 'admin', 'bcool1984');
-    }else {
-           session =
-          await client.authenticate(DEFAULT_DB2, sharedPrefs.getEmail().trim(),sharedPrefs.getUserPassword().trim());
+    if (sharedPrefs.getUserType() == GUEST) {
+      session = await client.authenticate(
+          DEFAULT_DB, DEFAULT_USER2, DEFAULT_PASSWORD);
+    } else {
+      session = await client.authenticate(DEFAULT_DB,
+          sharedPrefs.getEmail().trim(), sharedPrefs.getUserPassword().trim());
     }
-
 
     return session;
   }
@@ -123,7 +122,7 @@ class HomeViewmode extends ChangeNotifier {
   Future<OdooSession> Auth(String email, String password) async {
     print(password);
     final session = await client.authenticate(
-       DEFAULT_DB2,
+        DEFAULT_DB,
         email != null ? email.trim() : DEFAULT_USER,
         password != null ? password.toString().trim() : DEFAULT_PASSWORD);
 
@@ -136,7 +135,7 @@ class HomeViewmode extends ChangeNotifier {
     try {
       // print("BEFORE");
       // if (sharedPrefs.getUserType() == "GUEST") {
-        session = await Auth(DEFAULT_DB, DEFAULT_PASSWORD);
+      session = await getClient();
       // } else {
       //   session = await Auth(sharedPrefs.getEmail().trim(),
       //       sharedPrefs.getUserPassword().trim());
@@ -155,10 +154,10 @@ class HomeViewmode extends ChangeNotifier {
           'fields': [],
         },
       }) as List;
-     log(res1.toString());
-    //  print(res1);
-    //  printWrapped(res1.toString());
-     // print("this is the result" + res1.toString());
+      log(res1.toString());
+      //  print(res1);
+      //  printWrapped(res1.toString());
+      // print("this is the result" + res1.toString());
       // var result = await orpc.callKw({
       //    'model': 'property.base',
       //   'method': 'search_read',
@@ -179,19 +178,19 @@ class HomeViewmode extends ChangeNotifier {
       notifyListeners();
       _setState(WidgetState.Loaded);
     } on Exception catch (e) {
-            debugPrint("unexpected||||||||||||||||||" + e.toString());
+      debugPrint("unexpected||||||||||||||||||" + e.toString());
 
       print("exception");
       print(e);
       _setState(WidgetState.Error);
-    }
-     catch (e) {
-      debugPrint("unexpected"+  e.toString());
+    } catch (e) {
+      debugPrint("unexpected" + e.toString());
       _setState(WidgetState.Error);
 
       _setException(UnknownException("خطأ غير متوقع"));
     }
   }
+
   void printWrapped(String text) {
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
     pattern.allMatches(text).forEach((match) => print(match.group(0)));

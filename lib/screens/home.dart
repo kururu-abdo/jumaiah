@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_splash_screen/controllers/home_controller.dart';
-import 'package:flutter_animated_splash_screen/enums/widget_state.dart';
-import 'package:flutter_animated_splash_screen/main.dart';
-import 'package:flutter_animated_splash_screen/models/property.dart';
-import 'package:flutter_animated_splash_screen/screens/add_property.dart';
-import 'package:flutter_animated_splash_screen/utils/constants.dart';
-import 'package:flutter_animated_splash_screen/utils/custom_transition.dart';
-import 'package:flutter_animated_splash_screen/utils/loader.dart';
-import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
-import 'package:flutter_animated_splash_screen/utils/theme.dart';
+import 'package:jumaiah/controllers/home_controller.dart';
+import 'package:jumaiah/enums/widget_state.dart';
+import 'package:jumaiah/main.dart';
+import 'package:jumaiah/models/property.dart';
+import 'package:jumaiah/screens/add_property.dart';
+import 'package:jumaiah/utils/constants.dart';
+import 'package:jumaiah/utils/custom_transition.dart';
+import 'package:jumaiah/utils/error_widget.dart';
+import 'package:jumaiah/utils/loader.dart';
+import 'package:jumaiah/utils/shared_prefs.dart';
+import 'package:jumaiah/utils/theme.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:odoo_rpc/odoo_rpc.dart';
-import 'package:flutter_animated_splash_screen/components/nav-drawer.dart';
-import 'package:flutter_animated_splash_screen/screens/details.dart';
-import 'package:flutter_animated_splash_screen/screens/signin.dart';
-import 'package:flutter_animated_splash_screen/screens/details.dart';
+import 'package:jumaiah/components/nav-drawer.dart';
+import 'package:jumaiah/screens/details.dart';
+import 'package:jumaiah/screens/signin.dart';
+import 'package:jumaiah/screens/details.dart';
 import 'package:provider/provider.dart';
 
 final orpc = OdooClient('http://142.93.55.190:8069');
@@ -92,9 +93,9 @@ class _HomeState extends State<Home> {
                   Hero(
                       tag: record.id.toString(),
                       child: Image.memory(base64Decode(
-                        record.ptImage.toString().trim()=="false"?
-                        DEFAULT_IMG:
-                        record.ptImage.toString()))),
+                          record.ptImage.toString().trim() == "false"
+                              ? DEFAULT_IMG
+                              : record.ptImage.toString()))),
                   new Container(
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -110,13 +111,10 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                     child: Text(
-                     // "",
-                    //  record.propertyName.toString(),
-                    
-record.propertyName,
-                    
+                        // "",
+                        //  record.propertyName.toString(),
 
-                    
+                        record.propertyName,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 30,
@@ -191,22 +189,12 @@ record.propertyName,
                       return LoadingWidget();
                     } else if (model.state == WidgetState.Error) {
                       return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            IconButton(
-                                onPressed: () async {
-                                  await model.fetchContacts();
-                                },
-                                icon: Icon(
-                                  Icons.refresh,
-                                  color: AppTheme.primaryColor,
-                                )),
-                            Text("حاول مجددا")
-                          ],
-                        ),
-                      );
+                          child: CustomErrorWidget(
+                        error: model.exception,
+                        onPressBtn: () async {
+                          await model.fetchContacts();
+                        },
+                      ));
                     }
 
                     return ListView.builder(

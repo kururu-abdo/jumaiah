@@ -6,16 +6,16 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animated_splash_screen/enums/upload_file_state.dart';
-import 'package:flutter_animated_splash_screen/utils/constants.dart';
-import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
-import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
+import 'package:jumaiah/enums/upload_file_state.dart';
+import 'package:jumaiah/utils/constants.dart';
+import 'package:jumaiah/utils/exceptions.dart';
+import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class UploadFileControler extends ChangeNotifier {
 
-final orpc = OdooClient('http://142.93.55.190:8069/');
-  static String baseUrl = 'http://142.93.55.190:8069/';
+final orpc = OdooClient('http://161.93.55.190:8069/');
+  static String baseUrl = 'http://161.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
 
 

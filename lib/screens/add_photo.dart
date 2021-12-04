@@ -1,65 +1,137 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_splash_screen/controllers/add_photo_controller.dart';
+import 'package:jumaiah/controllers/add_photo_controller.dart';
+import 'package:jumaiah/enums/widget_state.dart';
+import 'package:jumaiah/utils/theme.dart';
 import 'package:provider/provider.dart';
 
 class AddPhoto extends StatefulWidget {
-  AddPhoto({Key key}) : super(key: key);
+  final int propertyId;
+  AddPhoto(this.propertyId, {Key key}) : super(key: key);
 
   @override
   _AddPhotoState createState() => _AddPhotoState();
 }
 
 class _AddPhotoState extends State<AddPhoto> {
-
-
   @override
   Widget build(BuildContext context) {
-        var controller=  Provider.of<AddPhotoController>(context);
+    var controller = Provider.of<AddPhotoController>(context);
 
-      return  Directionality(
-      textDirection: TextDirection.rtl,
-     
-      child: SafeArea(
-        child: Scaffold(
+    return Directionality(
+        textDirection: TextDirection.rtl,
+        child: SafeArea(
+            child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: new Center(
-                child:
-                    new Text('إضافة صور', textAlign: TextAlign.center)),
+                child: new Text('إضافة صور', textAlign: TextAlign.center)),
 
             backgroundColor: Colors.amber, // status bar color
             brightness: Brightness.dark,
             actions: [
-            IconButton(onPressed: ()async{
-
-await controller.picImage(1);
-
-            }, icon: Icon(Icons.add_a_photo))
+              IconButton(
+                  onPressed: () async {
+                    await controller.picImage(widget.propertyId);
+                  },
+                  icon: Icon(Icons.add_a_photo))
             ],
-            leading:  IconButton(onPressed: (){
-              Navigator.of(context).pop();
-            },
-          
-            icon: Icon(Icons.arrow_back  , color:Colors.black),
+            leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(Icons.arrow_back, color: Colors.white),
             ),
-           // status bar brightness
+            // status bar brightness
           ),
-          body:  ListView.builder(
-            itemCount: controller.photos.length,
-            itemBuilder: (BuildContext context, int index) {
-              return     Image.file(File(controller.photos[index].image) ,   height:150 , width: 150,)   ;
-            },
-          ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: controller.filesToShow.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return
+                          //Container();
+                          Stack(
+                        children: [
+                          Container(
+                            child: Center(
+                              child: Image.file(
+                                File(controller.filesToShow[index].path),
+                                height: 150,
+                                width: 150,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                              right: 0.0,
+                              top: 8,
+                              child: IconButton(
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    controller.deletImage(context, index);
+                                  })),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 10.0),
+                InkWell(
+                  onTap: () async {
+                    if (controller.photos.length > 0) {
+                      await controller.uploadPhotos();
+                    }
 
+                    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+                        content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                          Text("الرجاء اختيار صورة"),
+                          Container(
+                              decoration: BoxDecoration(
+                                  // color: AppTheme.primaryColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                              child: RaisedButton(
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentSnackBar();
+                                },
+                                child: Text("حسناً"),
+                              ))
+                        ])));
+                  },
+                  child: Container(
+                      width: 250,
+                      padding: EdgeInsets.all(20),
+                      margin: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Colors.amber,
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("رفع الصور",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                          Visibility(
+                              visible: controller.state == WidgetState.Loading,
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 1.5, color: Colors.white))
+                        ],
+                      )),
+                )
+              ],
+            ),
+          ),
         )));
   }
-
-  Widget addPhotoWidget(BuildContext context){
-    var controller=  Provider.of<AddPhotoController>(context);
-  }
-
-
 }
-

@@ -1,4 +1,4 @@
-import 'package:flutter_animated_splash_screen/utils/constants.dart';
+import 'package:jumaiah/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {

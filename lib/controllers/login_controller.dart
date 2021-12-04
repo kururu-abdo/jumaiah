@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_animated_splash_screen/enums/login_state.dart';
-import 'package:flutter_animated_splash_screen/main.dart';
-import 'package:flutter_animated_splash_screen/models/user.dart';
-import 'package:flutter_animated_splash_screen/utils/apiResponse.dart';
-import 'package:flutter_animated_splash_screen/utils/constants.dart';
-import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
-import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
+import 'package:jumaiah/enums/login_state.dart';
+import 'package:jumaiah/main.dart';
+import 'package:jumaiah/models/user.dart';
+import 'package:jumaiah/utils/apiResponse.dart';
+import 'package:jumaiah/utils/constants.dart';
+import 'package:jumaiah/utils/exceptions.dart';
+import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class LoginController extends ChangeNotifier {
@@ -64,22 +64,16 @@ class LoginController extends ChangeNotifier {
 
 //     }
 
-  Future<OdooSession> Auth(String email, String password) async {
-    print(password);
+  Future<OdooSession> auth(String email, String password) async {
     final session = await client.authenticate(
-        DEFAULT_DB2,
-        DEFAULT_DB
-        
-        // "${email.trim()}"
-         , 
-         
-         DEFAULT_PASSWORD
-         
-         //"${password.toString().trim()}"
-         
-         
-         );
+        DEFAULT_DB,
+        // DEFAULT_DB3,
+        "${email.trim()}",
 
+        //  DEFAULT_PASSWORD
+
+        "${password.toString().trim()}");
+    print(session);
     return session;
   }
 
@@ -103,10 +97,11 @@ class LoginController extends ChangeNotifier {
       BuildContext context, String email, String password) async {
     _setState(LoginState.Loading);
     try {
+      print("INSIDE LOGIN");
       OdooSession session = await
-
-          // getClient();
-          Auth(email, password);
+          //get client
+          //getClient();
+          auth(email, password);
       print(session);
       if (session != null) {
         print(session.userName);
@@ -195,15 +190,16 @@ class LoginController extends ChangeNotifier {
     } on Exception {
       print("----------------Unknown EXCEPTION-----------------");
       _setState(LoginState.Error);
-      _setException(OdooServerException("خطأ في الخادم"));
-      return APIrespnse<dynamic>(error: true, errorMessage: "خطأ في الخادم");
+
+      _setException(UnknownException("خطأ غير متوقع"));
+      return APIrespnse<dynamic>(error: true, errorMessage: "خطأ غير متوقع");
+      //    return APIrespnse<dynamic>(error: true, errorMessage: "خطأ في الخادم");
     } catch (e) {
-      print("DATA...."+e.toString());
+      print("DATA...." + e.toString());
       _setState(LoginState.Error);
 
       _setException(UnknownException("خطأ غير متوقع"));
-       return APIrespnse<dynamic>(
-          error: true, errorMessage: "تأكد من البريد الإلكتروني أو كلمة السر");
+      return APIrespnse<dynamic>(error: true, errorMessage: "خطأ غير متوقع");
     }
   }
 }

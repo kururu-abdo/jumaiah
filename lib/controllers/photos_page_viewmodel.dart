@@ -1,28 +1,29 @@
-
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_splash_screen/enums/widget_state.dart';
-import 'package:flutter_animated_splash_screen/main.dart';
-import 'package:flutter_animated_splash_screen/utils/constants.dart';
-import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
+import 'package:jumaiah/enums/widget_state.dart';
+import 'package:jumaiah/main.dart';
+import 'package:jumaiah/utils/constants.dart';
+import 'package:jumaiah/utils/exceptions.dart';
+import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class PhotosPageViewModel extends ChangeNotifier {
-
-    final orpc = OdooClient('http://142.93.55.190:8069/');
+  final orpc = OdooClient('http://142.93.55.190:8069/');
   static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
   var subscription = client.sessionStream.listen(sessionChanged);
   var loginSubscription = client.loginStream.listen(loginStateChanged);
   var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
 
-  WidgetState  _state;
+  WidgetState _state;
   WidgetState get state => _state;
 
-   List<String> _photos;
-       List<String>  get photos =>_photos;
- AppException _exception;
+  List<String> _photos = [];
+  List<String> get photos => _photos;
+  AppException _exception;
 
   AppException get exception => _exception;
 
@@ -30,51 +31,70 @@ class PhotosPageViewModel extends ChangeNotifier {
     _exception = exception;
     notifyListeners();
   }
-_setPhotos(   List<String> photos){
-  _photos = photos;
-  notifyListeners();
-}
 
-_setState(WidgetState newState){
-  _state = newState;
-  notifyListeners();
+  _setPhotos(List<String> photos) {
+    _photos = photos;
+    notifyListeners();
+  }
 
-}
- Future<OdooSession> Auth(String email, String password) async {
-    print(password);
-    final session = await client.authenticate(
-        DEFAULT_DB2,
-        email != null ? email.trim() : DEFAULT_USER,
-        password != null ? password.toString().trim() : DEFAULT_PASSWORD);
+  _setState(WidgetState newState) {
+    _state = newState;
+    notifyListeners();
+  }
+
+  Future<OdooSession> getClient() async {
+    var session;
+    //jumaiah!@##@!
+    if (sharedPrefs.getUserType() == GUEST) {
+      session =
+          await client.authenticate(DEFAULT_DB, DEFAULT_USER2, 'bcool1984');
+    } else {
+      session = await client.authenticate(DEFAULT_DB,
+          sharedPrefs.getEmail().trim(), sharedPrefs.getUserPassword().trim());
+    }
 
     return session;
   }
-fetchPhotos() async{
- _setState(WidgetState.Loading);
+
+  // Future<OdooSession> Auth(String email, String password) async {
+  //   print(password);
+  //   final session = await client.authenticate(
+  //       DEFAULT_DB2,
+  //       email != null ? email.trim() : DEFAULT_USER,
+  //       password != null ? password.toString().trim() : DEFAULT_PASSWORD);
+
+  //   return session;
+  // }
+
+  fetchPhotos(int id) async {
+    _setState(WidgetState.Loading);
     OdooSession session;
     try {
       // print("BEFORE");
       // if (sharedPrefs.getUserType() == "GUEST") {
-      session = await Auth(DEFAULT_DB, DEFAULT_PASSWORD);
+      session = await getClient();
       // } else {
       //   session = await Auth(sharedPrefs.getEmail().trim(),
       //       sharedPrefs.getUserPassword().trim());
       // }
       // getClient();
+
       print(session.dbName);
       print("AFTER");
 
       var res1 = await client.callKw({
-         'model': 'multi.images',
+        'model': 'multi.images',
         'method': 'search_read',
         'args': [],
         'kwargs': {
           'context': {'bin_size': false},
-          'domain': [],
+          'domain': [
+            ["product_template_id", "=", id]
+          ],
           'fields': [],
         },
       }) as List;
-      log(res1.toString());
+      log(res1.runtimeType.toString());
       //  print(res1);
       //  printWrapped(res1.toString());
       // print("this is the result" + res1.toString());
@@ -91,7 +111,18 @@ fetchPhotos() async{
       //   print(result);
       //   print("//////////////////////////////////////////////");
       //  print(result.length);
-      List<String> photos =[];
+      List<String> photos = [];
+
+      for (var i = 0; i < res1.length; i++) {
+        print("ooooooooooooooooooooooooooooooooooooooooooo");
+        print(res1[i]);
+
+        print("ooooooooooooooooooooooooooooooooooooooooooo");
+
+        photos.add(res1[i]['image']);
+      }
+      _setPhotos(photos);
+      _setState(WidgetState.Done);
       //     res1.map((p) => Property.fromJson(p)).toList();
       // _setProperties(properties);
       // _properties = properties;
@@ -109,7 +140,12 @@ fetchPhotos() async{
 
       _setException(UnknownException("خطأ غير متوقع"));
     }
-}
+  }
 
-
+  Uint8List convertImageFromBase64(String base64Image) {
+    print("IMGE");
+    print(base64Image);
+    return base64Decode(
+        (base64Image == "" || base64Image == null) ? DEFAULT_IMG : base64Image);
+  }
 }

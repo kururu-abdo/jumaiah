@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_animated_splash_screen/components/nav-drawer.dart';
-import 'package:flutter_animated_splash_screen/screens/signin.dart';
-import 'package:flutter_animated_splash_screen/screens/home.dart';
+import 'package:jumaiah/components/nav-drawer.dart';
+import 'package:jumaiah/screens/signin.dart';
+import 'package:jumaiah/screens/home.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_animated_splash_screen/components/hole_painter.dart';
-import 'package:flutter_animated_splash_screen/components/nav-drawer.dart';
+import 'package:jumaiah/components/hole_painter.dart';
+import 'package:jumaiah/components/nav-drawer.dart';
 
 class ExampleStartScreen extends StatefulWidget {
   @override

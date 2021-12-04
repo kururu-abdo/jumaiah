@@ -6,15 +6,15 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animated_splash_screen/enums/upload_file_state.dart';
-import 'package:flutter_animated_splash_screen/enums/widget_state.dart';
-import 'package:flutter_animated_splash_screen/main.dart';
-import 'package:flutter_animated_splash_screen/models/owner.dart';
-import 'package:flutter_animated_splash_screen/models/property_type.dart';
-import 'package:flutter_animated_splash_screen/utils/apiResponse.dart';
-import 'package:flutter_animated_splash_screen/utils/constants.dart';
-import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
-import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
+import 'package:jumaiah/enums/upload_file_state.dart';
+import 'package:jumaiah/enums/widget_state.dart';
+import 'package:jumaiah/main.dart';
+import 'package:jumaiah/models/owner.dart';
+import 'package:jumaiah/models/property_type.dart';
+import 'package:jumaiah/utils/apiResponse.dart';
+import 'package:jumaiah/utils/constants.dart';
+import 'package:jumaiah/utils/exceptions.dart';
+import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl.dart' as intl;
@@ -163,23 +163,10 @@ class NewPropertyController extends ChangeNotifier {
     }
   }
 
-  Future<OdooSession> getClient() async {
-    //jumaiah!@##@!
-    final session =
-        await client.authenticate('Jumaiah', 'admin', 'jumaiah!@##@!');
-
-    return session;
-  }
-
   Future<APIrespnse<int>> savePropertyName(String name) async {
     OdooSession session;
     try {
-      if (sharedPrefs.getUserType() == "GUEST") {
-        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
-      } else {
-        session = await Auth(sharedPrefs.getEmail().trim(),
-            sharedPrefs.getUserPassword().trim());
-      }
+      session = await getClient();
 
       var result = await client.callKw({
         'model': 'property.names',
@@ -230,12 +217,7 @@ class NewPropertyController extends ChangeNotifier {
     _updatePropertyTypes([]);
     _setState(WidgetState.Loading);
     try {
-      if (sharedPrefs.getUserType() == "GUEST") {
-        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
-      } else {
-        session = await Auth(sharedPrefs.getEmail().trim(),
-            sharedPrefs.getUserPassword().trim());
-      }
+      session = await getClient();
 
       print("company" + session.companyId.toString());
       print("user" + session.userName.toString());
@@ -295,12 +277,7 @@ class NewPropertyController extends ChangeNotifier {
     //(http://142.93.55.190:8069/api/property.types/?query={id,property_type})
     OdooSession session;
     try {
-      if (sharedPrefs.getUserType() == "GUEST") {
-        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
-      } else {
-        session = await Auth(sharedPrefs.getEmail().trim(),
-            sharedPrefs.getUserPassword().trim());
-      }
+      session = await getClient();
 
       print("///////////////////////////////////////////");
 
@@ -319,6 +296,7 @@ class NewPropertyController extends ChangeNotifier {
           ],
         },
       }) as List;
+      print("OWENERS------");
       _updateOwners([]);
 
       print(res.toString());
@@ -352,16 +330,16 @@ class NewPropertyController extends ChangeNotifier {
     }
   }
 
-  Future<OdooSession> Auth(String email, String password) async {
-    print(password);
-    final session = await client.authenticate(
-        DEFAULT_DB2,
-        email.trim(),
-        //"${email.trim()}" ?? DEFAULT_USER,
-     //   password.toString().trim() ??
-        
-        
-         password.trim());
+  Future<OdooSession> getClient() async {
+    var session;
+    //jumaiah!@##@!
+    if (sharedPrefs.getUserType() == GUEST) {
+      session = await client.authenticate(
+          DEFAULT_DB, DEFAULT_USER2, DEFAULT_PASSWORD);
+    } else {
+      session = await client.authenticate(DEFAULT_DB,
+          sharedPrefs.getEmail().trim(), sharedPrefs.getUserPassword().trim());
+    }
 
     return session;
   }
@@ -446,12 +424,7 @@ class NewPropertyController extends ChangeNotifier {
     print(property_status);
     OdooSession session;
     try {
-      if (sharedPrefs.getUserType() == "GUEST") {
-        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
-      } else {
-        session = await Auth(sharedPrefs.getEmail().trim(),
-            sharedPrefs.getUserPassword().trim());
-      }
+      session = await getClient();
 
       print("company" + session.companyId.toString());
       print("user" + session.userId.toString());

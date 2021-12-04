@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_splash_screen/utils/theme.dart';
+import 'package:jumaiah/utils/theme.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingWidget extends StatelessWidget {

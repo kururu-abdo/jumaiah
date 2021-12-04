@@ -1,10 +1,16 @@
-# flutter_animated_splash_screen
+# jumaiah
 
-An animated splash screen that mimics a falling raindrop that removes the virtual surface covering the first screen of our app.
+A new Flutter project.
 
-![The splash screen animation in action](https://www.flutterclutter.dev/wp-content/uploads/2020/07/flutter-splash-animation-rain-drop-red.gif)
+## Getting Started
 
-# Article
+This project is a starting point for a Flutter application.
 
-Find the respective tutorial about how everything was created and how it's to be used on https://www.flutterclutter.dev/flutter/tutorials/beautiful-animated-splash-screen/2020/1108/ "# jumaiah" 
-"# Jumaiah" 
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

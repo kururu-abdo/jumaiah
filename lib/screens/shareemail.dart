@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_animated_splash_screen/components/text_fields.dart';
+import 'package:jumaiah/components/text_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 

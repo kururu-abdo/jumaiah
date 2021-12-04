@@ -2,17 +2,17 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_splash_screen/controllers/login_controller.dart';
-import 'package:flutter_animated_splash_screen/enums/login_state.dart';
-import 'package:flutter_animated_splash_screen/main.dart';
-import 'package:flutter_animated_splash_screen/screens/home.dart';
-import 'package:flutter_animated_splash_screen/utils/validations.dart';
+import 'package:jumaiah/controllers/login_controller.dart';
+import 'package:jumaiah/enums/login_state.dart';
+import 'package:jumaiah/main.dart';
+import 'package:jumaiah/screens/home.dart';
+import 'package:jumaiah/utils/validations.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_animated_splash_screen/screens/details.dart';
+import 'package:jumaiah/screens/details.dart';
 
 final orpc = OdooClient('http://142.93.55.190:8069');
 

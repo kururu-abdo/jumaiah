@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animated_splash_screen/components/nav-drawer.dart';
+import 'package:jumaiah/components/nav-drawer.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';

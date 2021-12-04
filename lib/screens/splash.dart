@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_splash_screen/screens/home.dart';
+import 'package:jumaiah/screens/home.dart';
 
-import 'package:flutter_animated_splash_screen/screens/details.dart';
-import 'package:flutter_animated_splash_screen/screens/signin.dart';
+import 'package:jumaiah/screens/details.dart';
+import 'package:jumaiah/screens/signin.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
+import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Splashscreen extends StatefulWidget {

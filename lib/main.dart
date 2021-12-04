@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animated_splash_screen/controllers/add_photo_controller.dart';
-import 'package:flutter_animated_splash_screen/controllers/attachments_controller.dart';
-import 'package:flutter_animated_splash_screen/controllers/home_controller.dart';
-import 'package:flutter_animated_splash_screen/controllers/login_controller.dart';
-import 'package:flutter_animated_splash_screen/controllers/new_property_controller.dart';
-import 'package:flutter_animated_splash_screen/controllers/photos_page_viewmodel.dart';
-import 'package:flutter_animated_splash_screen/controllers/upload_file_controller.dart';
-import 'package:flutter_animated_splash_screen/screens/animation_screen.dart';
-import 'package:flutter_animated_splash_screen/screens/home.dart';
-import 'package:flutter_animated_splash_screen/screens/splash.dart';
-import 'package:flutter_animated_splash_screen/utils/shared_prefs.dart';
-import 'package:flutter_animated_splash_screen/utils/theme.dart';
+import 'package:jumaiah/controllers/add_photo_controller.dart';
+import 'package:jumaiah/controllers/attachments_controller.dart';
+import 'package:jumaiah/controllers/home_controller.dart';
+import 'package:jumaiah/controllers/login_controller.dart';
+import 'package:jumaiah/controllers/new_property_controller.dart';
+import 'package:jumaiah/controllers/photos_page_viewmodel.dart';
+import 'package:jumaiah/controllers/upload_file_controller.dart';
+import 'package:jumaiah/screens/animation_screen.dart';
+import 'package:jumaiah/screens/home.dart';
+import 'package:jumaiah/screens/splash.dart';
+import 'package:jumaiah/utils/shared_prefs.dart';
+import 'package:jumaiah/utils/theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:provider/provider.dart';
@@ -39,30 +39,22 @@ void inRequestChanged(bool event) async {
   if (!event) print('Request is finished'); // hide progress indicator
 }
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefs().init();
   runApp(
-    MultiProvider(
-      providers:[
-ChangeNotifierProvider.value(value: LoginController()) ,
-ChangeNotifierProvider.value(value: AttachmentScreenCOntroller()),
-ChangeNotifierProvider.value(value: UploadFileControler()),
-ChangeNotifierProvider.value(value: HomeViewmode()),
-ChangeNotifierProvider.value(value: NewPropertyController()),
-
-
-ChangeNotifierProvider.value(value: AddPhotoController()),
-ChangeNotifierProvider.value(value: PhotosPageViewModel())
-
-
-
-
-      ],
-      child: HomePage()),
-);
+    MultiProvider(providers: [
+      ChangeNotifierProvider.value(value: LoginController()),
+      ChangeNotifierProvider.value(value: AttachmentScreenCOntroller()),
+      ChangeNotifierProvider.value(value: UploadFileControler()),
+      ChangeNotifierProvider.value(value: HomeViewmode()),
+      ChangeNotifierProvider.value(value: NewPropertyController()),
+      ChangeNotifierProvider.value(value: AddPhotoController()),
+      ChangeNotifierProvider.value(value: PhotosPageViewModel())
+    ], child: HomePage()),
+  );
 }
+
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
@@ -70,35 +62,95 @@ class HomePage extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<HomePage> {
+class _HomeState extends State<HomePage> implements WidgetsBindingObserver {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return    MaterialApp(
-      
+    return MaterialApp(
       navigatorKey: navigatorKey,
-       localizationsDelegates: [
-       GlobalMaterialLocalizations.delegate,
-       GlobalWidgetsLocalizations.delegate,
-       
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('ar', 'SA'),
-        const   Locale('en', '')
-      ],
+      supportedLocales: [const Locale('ar', 'SA'), const Locale('en', '')],
       scaffoldMessengerKey: scaffoldMessangerKey,
       title: "Al Jumaiah",
-      theme: ThemeData(fontFamily: 'Cairo' ,
-      primaryColor: AppTheme.primaryColor
-      
-    
-      ),
-     debugShowCheckedModeBanner: false,
-     routes: {
-       Home.pageName:(context)=>Home()
-     },
+      theme:
+          ThemeData(fontFamily: 'Cairo', primaryColor: AppTheme.primaryColor),
+      debugShowCheckedModeBanner: false,
+      routes: {Home.pageName: (context) => Home()},
       home: Splashscreen(),
     );
   }
+
+  @override
+  void didChangeAccessibilityFeatures() {
+    // TODO: implement didChangeAccessibilityFeatures
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+    } else if (state == AppLifecycleState.paused) {
+    } else {}
+  }
+
+  @override
+  void didChangeLocales(List<Locale> locales) {
+    // TODO: implement didChangeLocales
+  }
+
+  @override
+  void didChangeMetrics() {
+    // TODO: implement didChangeMetrics
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    // TODO: implement didChangePlatformBrightness
+  }
+
+  @override
+  void didChangeTextScaleFactor() {
+    // TODO: implement didChangeTextScaleFactor
+  }
+
+  @override
+  void didHaveMemoryPressure() {
+    // TODO: implement didHaveMemoryPressure
+  }
+
+  @override
+  Future<bool> didPopRoute() {
+    // TODO: implement didPopRoute
+
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> didPushRoute(String route) {
+    // TODO: implement didPushRoute
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
+    // TODO: implement didPushRouteInformation
+    throw UnimplementedError();
+  }
 }
-var navigatorKey  = GlobalKey<NavigatorState>();
-var scaffoldMessangerKey =  GlobalKey<ScaffoldMessengerState>();
+
+var navigatorKey = GlobalKey<NavigatorState>();
+var scaffoldMessangerKey = GlobalKey<ScaffoldMessengerState>();

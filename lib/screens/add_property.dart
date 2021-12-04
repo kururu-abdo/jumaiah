@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_splash_screen/controllers/new_property_controller.dart';
-import 'package:flutter_animated_splash_screen/enums/widget_state.dart';
-import 'package:flutter_animated_splash_screen/models/owner.dart';
-import 'package:flutter_animated_splash_screen/models/property_type.dart';
-import 'package:flutter_animated_splash_screen/utils/exceptions.dart';
-import 'package:flutter_animated_splash_screen/utils/loader.dart';
-import 'package:flutter_animated_splash_screen/utils/theme.dart';
+import 'package:jumaiah/controllers/new_property_controller.dart';
+import 'package:jumaiah/enums/widget_state.dart';
+import 'package:jumaiah/models/owner.dart';
+import 'package:jumaiah/models/property_type.dart';
+import 'package:jumaiah/utils/exceptions.dart';
+import 'package:jumaiah/utils/loader.dart';
+import 'package:jumaiah/utils/theme.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:hijri_picker/hijri_picker.dart';
 import 'package:intl/intl.dart' as intl;

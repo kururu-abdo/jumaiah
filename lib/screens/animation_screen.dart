@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_splash_screen/components/hole_painter.dart';
-import 'package:flutter_animated_splash_screen/components/staggered_raindrop_animation.dart';
+import 'package:jumaiah/components/hole_painter.dart';
+import 'package:jumaiah/components/staggered_raindrop_animation.dart';
 
 class AnimationScreen extends StatefulWidget {
   AnimationScreen({this.color});
