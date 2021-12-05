@@ -14,8 +14,8 @@ import 'package:odoo_rpc/odoo_rpc.dart';
 
 class UploadFileControler extends ChangeNotifier {
 
-final orpc = OdooClient('http://161.93.55.190:8069/');
-  static String baseUrl = 'http://161.93.55.190:8069/';
+final orpc = OdooClient('http://142.93.55.190:8069/');
+  static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
 
 
@@ -32,12 +32,7 @@ void initState() {
     notifyListeners();
   }
 
- Future<OdooSession> getClient() async {
-   //jumaiah!@##@!
-    final session = await client.authenticate('Jumaiah', DEFAULT_DB, DEFAULT_PASSWORD);
 
-    return session;
-  }
   String fileName;
 
   List<PlatformFile> paths;
@@ -143,16 +138,21 @@ _setException(UnknownException("خطأ غير متوقع"));
 
 
 
- Future<OdooSession> Auth(String email, String password) async {
-    print(password);
-    final session = await client.authenticate(
-        DEFAULT_DB2,
-        email.trim(),
-      password.trim());
+  Future<OdooSession> getClient() async {
+    var session;
+    //jumaiah!@##@!
+    if (sharedPrefs.getUserType() == GUEST) {
+      session = await client.authenticate(
+          DEFAULT_DB, DEFAULT_USER2, DEFAULT_PASSWORD);
+    } else {
+      session = await client.authenticate(DEFAULT_DB,
+          sharedPrefs.getEmail().trim(), sharedPrefs.getUserPassword().trim());
+    }
+
+    // session = await client.authenticate('Jumaiah', 'admin', 'bcool1984');
 
     return session;
   }
-
 
 
  Future<dynamic> fetchContacts(
@@ -166,13 +166,8 @@ _setException(UnknownException("خطأ غير متوقع"));
      // await getClient();
 
    
- if (sharedPrefs.getUserType() == "GUEST") {
-        session = await Auth(DEFAULT_USER, DEFAULT_PASSWORD);
-      } else {
-        session = await Auth(sharedPrefs.getEmail().trim(),
-            sharedPrefs.getUserPassword().trim());
-      }
-
+        session = await getClient();
+     
 
 //   var res=    await client.callKw({
 //         'model': 'ir.attachment',
