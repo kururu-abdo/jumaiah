@@ -38,6 +38,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    print("EMAIL:-----" + "   " + sharedPrefs.getEmail());
+    print("PASSWORD:-----" + "   " + sharedPrefs.getUserPassword());
     Future.microtask(() async {
       await context.read<HomeViewmode>().fetchContacts();
     });
@@ -98,7 +100,7 @@ class _HomeState extends State<Home> {
                           record.ptImage.toString().trim() == "false"
                               ? DEFAULT_IMG
                               : record.ptImage.toString()))),
-                   Container(
+                  Container(
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
@@ -120,13 +122,12 @@ class _HomeState extends State<Home> {
 
                         // "",
                         //  record.propertyName.toString(),
-                     // "",
-                    //  record.propertyName.toString(),
-                    
-// record.propertyName,
-                    
+                        // "",
+                        //  record.propertyName.toString(),
 
-                 //       record.propertyName.last.toString(),
+// record.propertyName,
+
+                        //       record.propertyName.last.toString(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 30,

@@ -20,7 +20,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'example_start_screen.dart';
 
-
 void sessionChanged(OdooSession sessionId) async {
   print('We got new session ID: ' + sessionId.id);
   // write to persistent storage

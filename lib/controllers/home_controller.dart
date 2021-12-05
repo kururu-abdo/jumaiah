@@ -138,7 +138,7 @@ class HomeViewmode extends ChangeNotifier {
       // print("BEFORE");
       // if (sharedPrefs.getUserType() == "GUEST") {
       session = await getClient();
-      session = await Auth(DEFAULT_DB, DEFAULT_PASSWORD);
+     // session = await Auth(DEFAULT_DB, DEFAULT_PASSWORD);
       // } else {
       //   session = await Auth(sharedPrefs.getEmail().trim(),
       //       sharedPrefs.getUserPassword().trim());

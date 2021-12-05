@@ -153,13 +153,17 @@ class _AttachScreenState extends State<AttachScreen> {
     return SafeArea(
       child: Directionality(
         textDirection: TextDirection.rtl,
-        child: new Scaffold(
+        child: Scaffold(
           appBar: AppBar(
-            title: new Center(
-                child: new Text('المرفقات', textAlign: TextAlign.center)),
-
+            title: Text('المرفقات', textAlign: TextAlign.center),
+            centerTitle: true,
             backgroundColor: AppTheme.primaryColor, // status bar color
             brightness: Brightness.dark,
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.arrow_back, color: Colors.white)),
             actions: [
               IconButton(
                   onPressed: () async {

@@ -13,16 +13,15 @@ import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class UploadFileControler extends ChangeNotifier {
-
-final orpc = OdooClient('http://142.93.55.190:8069/');
+  final orpc = OdooClient('http://142.93.55.190:8069/');
   static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
 
+  void initState() {
+    _state = UploadFileState.Initial;
+    notifyListeners();
+  }
 
-void initState() {
-  _state = UploadFileState.Initial;
-  notifyListeners();
-}
   AppException _exception;
 
   AppException get exception => _exception;
@@ -31,7 +30,6 @@ void initState() {
     _exception = exception;
     notifyListeners();
   }
-
 
   String fileName;
 
@@ -49,94 +47,69 @@ void initState() {
 
   FileType pickingType = FileType.any;
 
+  UploadFileState _state = UploadFileState.Initial;
+  UploadFileState get state => _state;
 
+  File _file;
+  File get file => _file;
 
-
-
-
-
-
-
-
-
-
-
-
-
-  UploadFileState _state=  UploadFileState.Initial;
-  UploadFileState  get state =>_state;
-  
-
-File _file;
-File get file =>_file;
-
-  _setState(UploadFileState state){
+  _setState(UploadFileState state) {
     print('/////////////////////////////////////////////////');
     print(_state);
-    _state=state;
+    _state = state;
     notifyListeners();
-
   }
-updateFile(File file){
-  _file=file;
-  notifyListeners();
-}
 
-  openFileExplorer()async{
+  updateFile(File file) {
+    _file = file;
+    notifyListeners();
+  }
 
+  openFileExplorer() async {
     try {
       FilePickerResult result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
-        allowedExtensions: [ 'pdf'],
-     onFileLoading: (FilePickerStatus status) {
-       if(status==FilePickerStatus.done){
-         _setState(UploadFileState.Deployded);
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+        onFileLoading: (FilePickerStatus status) {
+          if (status == FilePickerStatus.done) {
+            _setState(UploadFileState.Deployded);
+          } else {
+            _setState(UploadFileState.Uploading);
+          }
+        },
+      );
 
-       }else {
-             _setState(UploadFileState.Uploading);
+      if (result != null) {
+        File file = File(result.files.single.path);
+        _file = file;
+        fileBytes2 = file.readAsBytesSync();
 
-       }
-     },
-    
-    );
+        notifyListeners();
+        fileName = result.files.first.name;
+        notifyListeners();
+        directoryPath = result.files.first.path;
 
-if(result != null) {
-   File file = File(result.files.single.path);
-     _file = file;
-           fileBytes2 = file.readAsBytesSync();
+        notifyListeners();
+        _setState(UploadFileState.Deployded);
+      } else {
+        _setState(UploadFileState.Error);
+        _setException(UnknownException("خطأ غير متوقع"));
+        // User canceled the picker
+      }
+    } on PlatformException {
+      ;
+      _setState(UploadFileState.Error);
+      _setException(FileException("حدثت مشكلة اثناء رفع الملف"));
+    } on Exception {
+      _setState(UploadFileState.Error);
 
-     notifyListeners();
-fileName =  result.files.first.name;
-notifyListeners();
-directoryPath =   result.files.first.path;
-
-notifyListeners();
-_setState(UploadFileState.Deployded);
-       
-
-} else {
-  _setState(UploadFileState.Error);
-  _setException(UnknownException("خطأ غير متوقع"));
-   // User canceled the picker
-}
-    } on  PlatformException {
-       ; _setState(UploadFileState.Error);
-        _setException(FileException("حدثت مشكلة اثناء رفع الملف"));
-
-    } on Exception{
-  _setState(UploadFileState.Error);
-
-_setException(UnknownException("خطأ غير متوقع"));
-
-
-    } catch(e){
-       _setState(UploadFileState.Error);
+      _setException(UnknownException("خطأ غير متوقع"));
+    } catch (e) {
+      _setState(UploadFileState.Error);
 
       _setException(UnknownException("خطأ غير متوقع"));
     }
   }
-
-
 
   Future<OdooSession> getClient() async {
     var session;
@@ -154,20 +127,14 @@ _setException(UnknownException("خطأ غير متوقع"));
     return session;
   }
 
+  Future<dynamic> fetchContacts(String name, String model, dynamic res_id,
+      Uint8List bytes, String fileName) async {
+    _setState(UploadFileState.Uploading);
+    OdooSession session;
+    try {
+      // await getClient();
 
- Future<dynamic> fetchContacts(
-   
-   String name ,
-   String model ,  dynamic res_id , Uint8List bytes ,   String fileName ) async {
- 
- _setState(UploadFileState.Uploading);
- OdooSession session;
-   try {
-     // await getClient();
-
-   
-        session = await getClient();
-     
+      session = await getClient();
 
 //   var res=    await client.callKw({
 //         'model': 'ir.attachment',
@@ -182,8 +149,6 @@ _setException(UnknownException("خطأ غير متوقع"));
 //         },
 //       });
 // print(res.toString());
-  
-
 
       var result = await client.callKw({
         'model': 'ir.attachment',
@@ -192,10 +157,10 @@ _setException(UnknownException("خطأ غير متوقع"));
           {
             'name': name,
             'res_id': res_id,
-            'res_model':model,
+            'res_model': model,
             'type': 'binary',
             'datas': base64Encode(fileBytes2),
-            // 'datas_fname': fileName,
+            'datas_fname': fileName,
             'mimetype': 'application/pdf',
           },
         ],
@@ -225,52 +190,30 @@ _setException(UnknownException("خطأ غير متوقع"));
         // });
       } else {
         _setState(UploadFileState.Error);
-               _setException(FileException("حدثت مشكلة اثناء رفع الملف"));
-
+        _setException(FileException("حدثت مشكلة اثناء رفع الملف"));
       }
+    } on SocketException {
+      _setState(UploadFileState.Error);
+      _setException(ConnectionException("مشكلة في الاتصال بالانترنت"));
+    } on TimeoutException {
+      _setState(UploadFileState.Error);
 
-   } on SocketException {
-     _setState(UploadFileState.Error);
-     _setException(ConnectionException("مشكلة في الاتصال بالانترنت"));
-
-   }  on TimeoutException{
-_setState(UploadFileState.Error);
-
-_setException(MyTimeOutException("استغرق الخادم وقتا طويلا"));
-
-   }on OdooException{
-_setState(UploadFileState.Error);
-_setException(OdooServerException("مشكلة في الخادم"));
-   } on PlatformException{
-     _setState(UploadFileState.Error);
-        _setException(FileException("حدثت مشكلة اثناء رفع الملف"));
-
-   } on Exception{
-_setState(UploadFileState.Error);
-        _setException(FileException("حدثت مشكلة اثناء رفع الملف"));
-
-
-   } catch (e) {
+      _setException(MyTimeOutException("استغرق الخادم وقتا طويلا"));
+    } on OdooException {
+      _setState(UploadFileState.Error);
+      _setException(OdooServerException("مشكلة في الخادم"));
+    } on PlatformException {
+      _setState(UploadFileState.Error);
+      _setException(FileException("حدثت مشكلة اثناء رفع الملف"));
+    } on Exception {
+      _setState(UploadFileState.Error);
+      _setException(FileException("حدثت مشكلة اثناء رفع الملف"));
+    } catch (e) {
       _setState(UploadFileState.Error);
 
       _setException(UnknownException("خطأ غير متوقع"));
     }
-     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  }
 
 // void _openFileExplorer() async {
 //   //  setState(() => _loadingPath = true);
@@ -306,8 +249,6 @@ _setState(UploadFileState.Error);
 //       print('hany' + base64Encode(fileBytes2));
 //     });
 //   }
-
-
 
   @override
   void dispose() {

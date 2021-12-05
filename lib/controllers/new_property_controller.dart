@@ -22,8 +22,8 @@ import 'package:intl/intl.dart' as intl;
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class NewPropertyController extends ChangeNotifier {
-  final orpc = OdooClient('http://161.93.55.190:8069/');
-  static String baseUrl = 'http://161.93.55.190:8069/';
+  final orpc = OdooClient('http://142.93.55.190:8069/');
+  static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
   var subscription = client.sessionStream.listen(sessionChanged);
   var loginSubscription = client.loginStream.listen(loginStateChanged);
@@ -419,24 +419,41 @@ class NewPropertyController extends ChangeNotifier {
     }
   }
 
+  refresh() {
+    _setState(WidgetState.Loaded);
+  }
+
   addPropery(
-      int property_name,
-      int owener,
+      String property_name,
+      String ownerName,
       String pt_location,
       String property_status,
       String pt_certificte_no,
-      HijriCalendar pt_certificte_date,
-      int property_type,
-      Uint8List fileBytes2) async {
+      String property_type,
+      Uint8List fileBytes2,
+      String ceriticateDate,
+      String website) async {
     setShow(false);
     _setState(WidgetState.Loading);
-    print(property_status);
+    print(owner);
     OdooSession session;
     try {
       session = await getClient();
 
-      print("company" + session.companyId.toString());
-      print("user" + session.userId.toString());
+      print({
+        "company_id": 1,
+        "name": "New",
+        "user_name": 1,
+        'date': getFormattedDateOfToday(),
+        'pt_certificte_date': ceriticateDate,
+        'pt_location': pt_location.trim(),
+        'property_type': property_type,
+        'pt_certificte_no': pt_certificte_no.trim(),
+        'property_status': property_status.trim(),
+        'property_name': property_name,
+        'owner': ownerName,
+        'pt_image': base64Encode(fileBytes2),
+      });
 
       var res = await client.callKw({
         'model': 'property.base',
@@ -445,19 +462,18 @@ class NewPropertyController extends ChangeNotifier {
           {
             "company_id": 1,
             "name": "New",
-
             "user_name": 1,
-            'date': this.getFormattedDateOfToday(),
-            'pt_certificte_date':
-                this.getFormattedDateOfToday2(pt_certificte_date),
+            // 'date': getFormattedDateOfToday(),
+            'pt_certificte_date': ceriticateDate,
             'pt_location': pt_location.trim(),
             'property_type': property_type,
             'pt_certificte_no': pt_certificte_no.trim(),
             'property_status': property_status.trim(),
             'property_name': property_name,
-            //	"property_name[1]": "hany",
-            'owner': 1,
+            'owner': ownerName,
             'pt_image': base64Encode(fileBytes2),
+            "website": website,
+            "prop_lat": pt_location
           },
         ],
         'kwargs': {},
@@ -466,8 +482,9 @@ class NewPropertyController extends ChangeNotifier {
       print(res.toString());
 
       _setState(WidgetState.Done);
-    } on OdooException {
+    } on OdooException catch (e) {
       print("odoo server error");
+      print(e.message);
       setShow(false);
       _setState(WidgetState.Error);
       _setException(OdooServerException(" خطأ في الخادم"));
@@ -502,8 +519,10 @@ class NewPropertyController extends ChangeNotifier {
   }
 
   String getFormattedHijriDateOfToday() {
-    //DateTime now = DateTime.now();
-    return HijriCalendar.now().toFormat("MM-dd-yyyy");
+    // DateTime now = DateTime.now();
+    // return DateFormat("yyyy-MM-dd").format(now);
+
+    return HijriCalendar.now().toFormat("yyyy/MM/dd");
   }
 
   String getFormattedDateOfToday2(HijriCalendar selectedHijri) {
@@ -518,9 +537,9 @@ class NewPropertyController extends ChangeNotifier {
 
   @override
   void dispose() {
+    super.dispose();
+    refresh();
     _setException(null);
     setShow(true);
-
-    super.dispose();
   }
 }
