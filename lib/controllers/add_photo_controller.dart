@@ -11,8 +11,9 @@ import 'package:jumaiah/utils/exceptions.dart';
 import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
+import 'package:stacked/stacked.dart';
 
-class AddPhotoController extends ChangeNotifier {
+class AddPhotoController extends BaseViewModel {
   final orpc = OdooClient('http://142.93.55.190:8069/');
   static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);
@@ -131,7 +132,7 @@ class AddPhotoController extends ChangeNotifier {
     return strFile;
   }
 
-  uploadPhotos() async {
+  uploadPhotos(BuildContext context) async {
     _setState(WidgetState.Loading);
     OdooSession session;
 
@@ -146,6 +147,51 @@ class AddPhotoController extends ChangeNotifier {
       _setState(WidgetState.Done);
 
       print(res1);
+      int res = int.parse(res1.toString());
+      if (res.runtimeType == int) {
+        _setState(WidgetState.Done);
+
+        showGeneralDialog(
+          barrierLabel: "Label",
+          barrierDismissible: true,
+          barrierColor: Colors.black.withOpacity(0.5),
+          transitionDuration: Duration(milliseconds: 700),
+          context: context,
+          pageBuilder: (context, anim1, anim2) {
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 300,
+                child: SizedBox.expand(
+                    child: Material(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Image.asset("assets/done.gif"),
+                        Text("تم رفع الصور بنجاح"),
+                      ],
+                    ),
+                  ),
+                )),
+                margin: EdgeInsets.only(bottom: 50, left: 12, right: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(40),
+                ),
+              ),
+            );
+          },                                                              
+          transitionBuilder: (context, anim1, anim2, child) {
+            return SlideTransition(
+              position:
+                  Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
+              child: child,
+            );
+          },
+        );
+      }
     } on OdooSession {
       print("-------------SERVER EXCEPTION-----------");
       _setState(WidgetState.Error);

@@ -9,9 +9,11 @@ import 'package:jumaiah/utils/constants.dart';
 import 'package:jumaiah/utils/custom_transition.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Details extends StatefulWidget {
   int use_id;
+  final website;
   final String image,
       name,
       location,
@@ -30,7 +32,8 @@ class Details extends StatefulWidget {
       this.certificate_no,
       this.owner,
       this.property_status,
-      @required this.pt_id})
+      @required this.pt_id,
+      this.website})
       : super(key: key);
 
   @override
@@ -158,6 +161,11 @@ class _DetailsState extends State<Details> {
                   ),
                 ),
                 ListTile(
+                  onTap: () async {
+                    if (!await launch(
+                        "http://" + widget.website.toString().trim()))
+                      throw 'Could not launch ';
+                  },
                   title: Text(
                     "الموقع الجغرافي",
                     textDirection: TextDirection.rtl,

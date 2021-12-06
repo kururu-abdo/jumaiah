@@ -46,6 +46,7 @@ dependencies:
   odoo_rpc: ^0.4.5
   stacked:
   get_it:  
+  url_launcher: ^6.0.17
   
 
 

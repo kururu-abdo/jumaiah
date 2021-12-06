@@ -38,8 +38,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    print("EMAIL:-----" + "   " + sharedPrefs.getEmail());
-    print("PASSWORD:-----" + "   " + sharedPrefs.getUserPassword());
+    print("EMAIL:-----" + "   " + sharedPrefs.getEmail() ?? "");
+    print("PASSWORD:-----" + "   " + sharedPrefs.getUserPassword() ?? "");
     Future.microtask(() async {
       await context.read<HomeViewmode>().fetchContacts();
     });
@@ -145,6 +145,7 @@ class _HomeState extends State<Home> {
             CustomPageRoute(
               Details(record.id,
                   image: record.ptImage.toString(),
+                  website: record.website,
                   pt_id: record.id,
                   name: record.propertyName,
                   location: record.ptLocation,

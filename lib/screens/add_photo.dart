@@ -5,6 +5,7 @@ import 'package:jumaiah/controllers/add_photo_controller.dart';
 import 'package:jumaiah/enums/widget_state.dart';
 import 'package:jumaiah/utils/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:stacked/stacked.dart';
 
 class AddPhoto extends StatefulWidget {
   final int propertyId;
@@ -17,121 +18,126 @@ class AddPhoto extends StatefulWidget {
 class _AddPhotoState extends State<AddPhoto> {
   @override
   Widget build(BuildContext context) {
-    var controller = Provider.of<AddPhotoController>(context);
+    //var controller = Provider.of<AddPhotoController>(context);
 
-    return Directionality(
-        textDirection: TextDirection.rtl,
-        child: SafeArea(
-            child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            title: new Center(
-                child: new Text('إضافة صور', textAlign: TextAlign.center)),
+    return ViewModelBuilder<AddPhotoController>.reactive(
+      viewModelBuilder: () => AddPhotoController(),
+      builder: (context, controller, child) => Directionality(
+          textDirection: TextDirection.rtl,
+          child: SafeArea(
+              child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              title: new Center(
+                  child: new Text('إضافة صور', textAlign: TextAlign.center)),
 
-            backgroundColor: Colors.amber, // status bar color
-            brightness: Brightness.dark,
-            actions: [
-              IconButton(
-                  onPressed: () async {
-                    await controller.picImage(widget.propertyId);
-                  },
-                  icon: Icon(Icons.add_a_photo))
-            ],
-            leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(Icons.arrow_back, color: Colors.white),
+              backgroundColor: Colors.amber, // status bar color
+              brightness: Brightness.dark,
+              actions: [
+                IconButton(
+                    onPressed: () async {
+                      await controller.picImage(widget.propertyId);
+                    },
+                    icon: Icon(Icons.add_a_photo))
+              ],
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(Icons.arrow_back, color: Colors.white),
+              ),
+              // status bar brightness
             ),
-            // status bar brightness
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: controller.filesToShow.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return
-                          //Container();
-                          Stack(
-                        children: [
-                          Container(
-                            child: Center(
-                              child: Image.file(
-                                File(controller.filesToShow[index].path),
-                                height: 150,
-                                width: 150,
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: controller.filesToShow.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return
+                            //Container();
+                            Stack(
+                          children: [
+                            Container(
+                              child: Center(
+                                child: Image.file(
+                                  File(controller.filesToShow[index].path),
+                                  height: 150,
+                                  width: 150,
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                              right: 0.0,
-                              top: 8,
-                              child: IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  ),
-                                  onPressed: () {
-                                    controller.deletImage(context, index);
-                                  })),
-                        ],
-                      );
-                    },
+                            Positioned(
+                                right: 0.0,
+                                top: 8,
+                                child: IconButton(
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      controller.deletImage(context, index);
+                                    })),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(height: 10.0),
-                InkWell(
-                  onTap: () async {
-                    if (controller.photos.length > 0) {
-                      await controller.uploadPhotos();
-                    }
+                  SizedBox(height: 10.0),
+                  InkWell(
+                    onTap: () async {
+                      if (controller.photos.length > 0) {
+                        await controller.uploadPhotos(context);
+                      }
 
-                    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-                        content: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                          Text("الرجاء اختيار صورة"),
-                          Container(
-                              decoration: BoxDecoration(
-                                  // color: AppTheme.primaryColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15))),
-                              child: RaisedButton(
-                                onPressed: () {
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                },
-                                child: Text("حسناً"),
-                              ))
-                        ])));
-                  },
-                  child: Container(
-                      width: 250,
-                      padding: EdgeInsets.all(20),
-                      margin: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: Colors.amber,
-                          borderRadius: BorderRadius.all(Radius.circular(15))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("رفع الصور",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold)),
-                          Visibility(
-                              visible: controller.state == WidgetState.Loading,
-                              child: CircularProgressIndicator(
-                                  strokeWidth: 1.5, color: Colors.white))
-                        ],
-                      )),
-                )
-              ],
+                      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+                          content: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                            Text("الرجاء اختيار صورة"),
+                            Container(
+                                decoration: BoxDecoration(
+                                    // color: AppTheme.primaryColor,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15))),
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+                                  },
+                                  child: Text("حسناً"),
+                                ))
+                          ])));
+                    },
+                    child: Container(
+                        width: 250,
+                        padding: EdgeInsets.all(20),
+                        margin: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("رفع الصور",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold)),
+                            Visibility(
+                                visible:
+                                    controller.state == WidgetState.Loading,
+                                child: CircularProgressIndicator(
+                                    strokeWidth: 1.5, color: Colors.white))
+                          ],
+                        )),
+                  )
+                ],
+              ),
             ),
-          ),
-        )));
+          ))),
+    );
   }
 }

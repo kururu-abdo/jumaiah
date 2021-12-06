@@ -20,8 +20,9 @@ import 'package:intl/intl.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'package:odoo_rpc/odoo_rpc.dart';
+import 'package:stacked/stacked.dart';
 
-class NewPropertyController extends ChangeNotifier {
+class NewPropertyController extends BaseViewModel {
   final orpc = OdooClient('http://142.93.55.190:8069/');
   static String baseUrl = 'http://142.93.55.190:8069/';
   static OdooClient client = OdooClient(baseUrl);

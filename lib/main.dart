@@ -46,10 +46,18 @@ void main() async {
     MultiProvider(providers: [
       ChangeNotifierProvider.value(value: LoginController()),
       ChangeNotifierProvider.value(value: AttachmentScreenCOntroller()),
-      ChangeNotifierProvider.value(value: UploadFileControler()),
+      // ChangeNotifierProvider.value(value: UploadFileControler()),
       ChangeNotifierProvider.value(value: HomeViewmode()),
-      ChangeNotifierProvider.value(value: NewPropertyController()),
-      ChangeNotifierProvider.value(value: AddPhotoController()),
+      // InheritedProvider<NewPropertyController>(
+      //   create: (_) => NewPropertyController(),
+      //   dispose: (_, NewPropertyController provider) => provider.dispose(),
+      // ),
+      // ChangeNotifierProvider.value(value: NewPropertyController()),
+      // InheritedProvider<AddPhotoController>(
+      //   create: (_) => AddPhotoController(),
+      //   dispose: (_, AddPhotoController provider) => provider.dispose(),
+      // ),
+      // ChangeNotifierProvider.value(value: AddPhotoController()),
       ChangeNotifierProvider.value(value: PhotosPageViewModel())
     ], child: HomePage()),
   );

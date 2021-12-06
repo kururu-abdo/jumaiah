@@ -4,7 +4,7 @@
 // //   String pt_location;
 
 // //   String pt_certificte_date;
-  
+
 // //   String property_status;
 // //   String pt_certificte_no;
 // //   String pt_image;
@@ -28,9 +28,6 @@
 // //   Map<dynamic, dynamic> toJson() =>
 // //       {"id": this.id, "property_name": this.property_name  ,"property_type":this.property_type   , "pt_image":this.pt_image , "owner":this.owner , "property_status":this.property_status  , "pt_certificte_date":this.pt_certificte_date , "pt_certificte_no":this.pt_certificte_no  ,  "pt_location" :  this.pt_location };
 // // }
-
-
-
 
 // import 'dart:developer';
 
@@ -129,9 +126,9 @@ class Property {
   dynamic gallery;
   dynamic website;
   int contCount;
- dynamic propertyName;
+  dynamic propertyName;
   dynamic ptImage;
-dynamic  propertyType;
+  dynamic propertyType;
   String userName;
   String name;
   dynamic date;
