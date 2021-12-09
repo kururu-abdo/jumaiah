@@ -92,7 +92,10 @@ class _HomeState extends State<HomePage> implements WidgetsBindingObserver {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: const [const Locale('ar', 'SA')],
+      supportedLocales: const [
+        const Locale('ar', 'SA'),
+        const Locale('en', 'US')
+      ],
       scaffoldMessengerKey: scaffoldMessangerKey,
       title: "Al Jumaiah",
       theme:
