@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_full_pdf_viewer/full_pdf_viewer_scaffold.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class PdfScreen extends StatelessWidget {
-  String pathPDF = "";
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+  final String pathPDF;
   PdfScreen(this.pathPDF);
 
   @override
   Widget build(BuildContext context) {
-    return PDFViewerScaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text("Document"),
           actions: <Widget>[
@@ -17,6 +18,6 @@ class PdfScreen extends StatelessWidget {
             ),
           ],
         ),
-        path: pathPDF);
+        body: SfPdfViewer.asset(pathPDF));
   }
 }
