@@ -20,7 +20,8 @@ class AddPhotoController extends BaseViewModel {
   var subscription = client.sessionStream.listen(sessionChanged);
   // var loginSubscription = client.loginStream.listen(loginStateChanged);
   var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
-
+  double _percent = 0.0;
+  double get percent => _percent;
   List<PhotoItem> _photos = [];
   List<XFile> _filesToShow = [];
   List<XFile> get filesToShow => _filesToShow;
@@ -126,6 +127,12 @@ class AddPhotoController extends BaseViewModel {
     }
   }
 
+  _updatePercentage(double percent) {
+    print("PROGRESS...." + percent.toString());
+    _percent = percent;
+    notifyListeners();
+  }
+
   Future<String> convertToBase64(XFile file) async {
     var bytes = await file.readAsBytes();
     var strFile = base64Encode(bytes);
@@ -138,60 +145,63 @@ class AddPhotoController extends BaseViewModel {
 
     try {
       session = await getClient();
-      var res1 = await client.callKw({
-        'model': 'multi.images',
-        'method': 'create',
-        'args': _photos,
-        'kwargs': {},
-      });
+
+      for (var i = 0; i < _photos.length; i++) {
+        var res1 = await client.callKw({
+          'model': 'multi.images',
+          'method': 'create',
+          'args': [_photos[i]],
+          'kwargs': {},
+        });
+        _updatePercentage((i + 1) * 33.3333333);
+      }
       _setState(WidgetState.Done);
 
-      print(res1);
-      int res = int.parse(res1.toString());
-      if (res.runtimeType == int) {
-        _setState(WidgetState.Done);
-
-        showGeneralDialog(
-          barrierLabel: "Label",
-          barrierDismissible: true,
-          barrierColor: Colors.black.withOpacity(0.5),
-          transitionDuration: Duration(milliseconds: 700),
-          context: context,
-          pageBuilder: (context, anim1, anim2) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 300,
-                child: SizedBox.expand(
-                    child: Material(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Image.asset("assets/done.gif"),
-                        Text("تم رفع الصور بنجاح"),
-                      ],
-                    ),
+      // print(res1);
+      // int res = int.parse(res1.toString());
+      // if (res.runtimeType == int) {
+      //   _setState(WidgetState.Done);
+      _updatePercentage(0.0);
+      showGeneralDialog(
+        barrierLabel: "Label",
+        barrierDismissible: true,
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionDuration: Duration(milliseconds: 700),
+        context: context,
+        pageBuilder: (context, anim1, anim2) {
+          return Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 300,
+              child: SizedBox.expand(
+                  child: Material(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Image.asset("assets/done.gif"),
+                      Text("تم رفع الصور بنجاح"),
+                    ],
                   ),
-                )),
-                margin: EdgeInsets.only(bottom: 50, left: 12, right: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(40),
                 ),
+              )),
+              margin: EdgeInsets.only(bottom: 50, left: 12, right: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(40),
               ),
-            );
-          },                                                              
-          transitionBuilder: (context, anim1, anim2, child) {
-            return SlideTransition(
-              position:
-                  Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
-              child: child,
-            );
-          },
-        );
-      }
+            ),
+          );
+        },
+        transitionBuilder: (context, anim1, anim2, child) {
+          return SlideTransition(
+            position:
+                Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
+            child: child,
+          );
+        },
+      );
     } on OdooSession {
       print("-------------SERVER EXCEPTION-----------");
       _setState(WidgetState.Error);

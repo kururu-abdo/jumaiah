@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jumaiah/controllers/add_photo_controller.dart';
 import 'package:jumaiah/enums/widget_state.dart';
 import 'package:jumaiah/utils/theme.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
@@ -90,26 +91,27 @@ class _AddPhotoState extends State<AddPhoto> {
                     onTap: () async {
                       if (controller.photos.length > 0) {
                         await controller.uploadPhotos(context);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+                            content: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                              Text("الرجاء اختيار صورة"),
+                              Container(
+                                  decoration: BoxDecoration(
+                                      // color: AppTheme.primaryColor,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15))),
+                                  child: RaisedButton(
+                                    onPressed: () {
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+                                    },
+                                    child: Text("حسناً"),
+                                  ))
+                            ])));
                       }
-
-                      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-                          content: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                            Text("الرجاء اختيار صورة"),
-                            Container(
-                                decoration: BoxDecoration(
-                                    // color: AppTheme.primaryColor,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15))),
-                                child: RaisedButton(
-                                  onPressed: () {
-                                    ScaffoldMessenger.of(context)
-                                        .hideCurrentSnackBar();
-                                  },
-                                  child: Text("حسناً"),
-                                ))
-                          ])));
                     },
                     child: Container(
                         width: 250,
@@ -129,8 +131,21 @@ class _AddPhotoState extends State<AddPhoto> {
                             Visibility(
                                 visible:
                                     controller.state == WidgetState.Loading,
-                                child: CircularProgressIndicator(
-                                    strokeWidth: 1.5, color: Colors.white))
+                                child: CircularPercentIndicator(
+                                  radius: 60.0,
+                                  lineWidth: 5.0,
+                                  percent: controller.percent / 100.0,
+                                  center: new Text(
+                                      "${controller.percent.round()}%"),
+                                  progressColor: Colors.green,
+                                )
+                                //  LinearProgressIndicator(
+                                //     value: controller.percent,
+                                //     // strokeWidth: 1.5,
+
+                                //     color: Colors.white)
+
+                                )
                           ],
                         )),
                   )

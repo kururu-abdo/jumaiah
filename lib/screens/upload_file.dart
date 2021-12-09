@@ -208,12 +208,16 @@ class _FilePickerDemoState extends State<FilePickerDemo>
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: new Center(
-              child: new Text('الجميعة القابضة', textAlign: TextAlign.center)),
+              child: new Text('الجميعة ', textAlign: TextAlign.center)),
 
           backgroundColor: AppTheme.primaryColor, // status bar color
           brightness: Brightness.dark, // status bar brightness
+          leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(Icons.arrow_back, color: Colors.white)),
         ),
-        drawer: NavDrawer(),
+
+        // drawer: NavDrawer(),
         body: SingleChildScrollView(
           child:
               Consumer<UploadFileControler>(builder: (context, model, child) {

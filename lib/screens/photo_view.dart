@@ -69,7 +69,7 @@ class _PhotoPageState extends State<PhotoPage> {
                     ));
                   } else {
                     if (model.photos.length > 0) {
-                      return ListView.builder(
+                      return GridView.builder(
                           itemCount: model.photos.length,
                           itemBuilder: (context, index) {
                             return GalleryExampleItemThumbnail(
@@ -78,7 +78,12 @@ class _PhotoPageState extends State<PhotoPage> {
                                 open(context, model.photos, index);
                               },
                             );
-                          });
+                          },
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 4.0,
+                                  mainAxisSpacing: 4.0));
                     } else {
                       return Center(
                         child: EmptyWidget(),
@@ -274,8 +279,8 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
           ? AssetImage(item)
           : MemoryImage(controller.convertImageFromBase64(item)),
       initialScale: PhotoViewComputedScale.contained,
-      minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
-      maxScale: PhotoViewComputedScale.covered * 4.1,
+      // minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
+      // maxScale: PhotoViewComputedScale.covered * 4.1,
       heroAttributes: PhotoViewHeroAttributes(tag: item),
     );
   }

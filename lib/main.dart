@@ -46,7 +46,7 @@ void main() async {
     MultiProvider(providers: [
       ChangeNotifierProvider.value(value: LoginController()),
       ChangeNotifierProvider.value(value: AttachmentScreenCOntroller()),
-      // ChangeNotifierProvider.value(value: UploadFileControler()),
+      ChangeNotifierProvider.value(value: UploadFileControler()),
       ChangeNotifierProvider.value(value: HomeViewmode()),
       // InheritedProvider<NewPropertyController>(
       //   create: (_) => NewPropertyController(),
@@ -88,11 +88,11 @@ class _HomeState extends State<HomePage> implements WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: [const Locale('ar', 'SA'), const Locale('en', '')],
+      supportedLocales: const [const Locale('ar', 'SA')],
       scaffoldMessengerKey: scaffoldMessangerKey,
       title: "Al Jumaiah",
       theme:

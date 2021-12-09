@@ -116,20 +116,27 @@ class _PofilePageState extends State<ProfilePage> {
 
   Base64ToImage(String image) {
     print(image.runtimeType);
-    if(image=="false" || image ==null || image=="" ){
-setState(() {
-  try {
-            _bytesImage = base64Decode(DEFAULT_IMG);
-
-  } catch (e) {
-    
-  }
-      });
-    }
-    else{ 
+    if (sharedPrefs.getUserType() == "GUEST") {
       setState(() {
-        _bytesImage = base64Decode(image);
+        try {
+          _bytesImage = base64Decode(DEFAULT_IMG);
+        } catch (e) {}
       });
+    } else {
+      if (image == "false" || image == null || image == "") {
+        print("DEFAULT IMAGE");
+        setState(() {
+          try {
+            _bytesImage = base64Decode(DEFAULT_IMG);
+          } catch (e) {}
+        });
+      } else {
+        print("DATABASE  IMAGE");
+
+        setState(() {
+          _bytesImage = base64Decode(image);
+        });
+      }
     }
   }
 
@@ -144,18 +151,16 @@ setState(() {
           child: CircleAvatar(
             radius: 70,
             child: ClipOval(
-              child:
-                      _bytesImage== null  ||  sharedPrefs.getImage()==null || sharedPrefs.getImage()=="null"
-                      
+              child: _bytesImage == null ||
+                      sharedPrefs.getImage() == null ||
+                      sharedPrefs.getImage() == "null"
                   ? Image.asset(
                       "assets/logo.png",
                       height: 150,
                       width: 150,
                       fit: BoxFit.cover,
                     )
-                  :
-                 
-                   Image.memory(
+                  : Image.memory(
                       _bytesImage,
                       height: 150,
                       width: 150,

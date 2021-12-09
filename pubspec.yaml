@@ -37,7 +37,6 @@ dependencies:
   flutter_email_sender: 
   flutter_svg:
   hijri:
-  hijri_picker:  
   flutter_pdfview:
   path_provider: 
   flutter_spinkit: 
@@ -45,11 +44,12 @@ dependencies:
   intl:  
   odoo_rpc: ^0.4.5
   stacked:
-  get_it:  
+  get_it:
+  percent_indicator: ^3.4.0  
   url_launcher: ^6.0.17
   
 
-
+  hijri_picker: ^3.0.0
   photo_view: ^0.13.0 
   awesome_dialog: ^2.1.1
   file_picker: ^4.0.1

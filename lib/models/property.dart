@@ -129,8 +129,8 @@ class Property {
   dynamic propertyName;
   dynamic ptImage;
   dynamic propertyType;
-  String userName;
-  String name;
+  dynamic userName;
+  dynamic name;
   dynamic date;
   dynamic ptLocation;
   dynamic propLat;
@@ -138,16 +138,16 @@ class Property {
   dynamic owner;
   dynamic ptCertificteNo;
   dynamic ptCertificteDate;
-  String state;
-  String propertyStatus;
+  dynamic state;
+  dynamic propertyStatus;
   List<dynamic> multiImages;
   List<dynamic> createUid;
-  String createDate;
+  dynamic createDate;
   List<dynamic> writeUid;
-  String writeDate;
+  dynamic writeDate;
   int docCount;
-  String displayName;
-  String sLastUpdate;
+  dynamic displayName;
+  dynamic sLastUpdate;
 
   Property(
       {this.id,
@@ -178,6 +178,7 @@ class Property {
       this.sLastUpdate});
 
   Property.fromJson(Map<String, dynamic> json) {
+    print("EXCEPTION HERE");
     id = json['id'];
     gallery = json['gallery'];
     website = json['website'];

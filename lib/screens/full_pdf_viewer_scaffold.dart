@@ -24,13 +24,16 @@ class _ViewPDFState extends State<ViewPDF> {
     return Scaffold(
         //view PDF
         appBar: AppBar(
+          leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(Icons.arrow_back, color: Colors.white)),
           title: new Center(
-              child: new Text('الجميعة القابضة', textAlign: TextAlign.center)),
+              child: new Text('الجميعة ', textAlign: TextAlign.center)),
 
           backgroundColor: Colors.amber, // status bar color
           brightness: Brightness.dark, // status bar brightness
         ),
-        drawer: NavDrawer(),
+        // drawer: NavDrawer(),
         body: Stack(
           children: <Widget>[
             PDFView(

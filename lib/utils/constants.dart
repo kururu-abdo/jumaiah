@@ -10,13 +10,14 @@ const String USER_TYPE = "user_type";
 const String USER_EMAIL = "email";
 const String USER_PASSWORD = "password";
 
-const String DEFAULT_DB = "test";
+const String DEFAULT_DB = "Jumaiah";
 const String DEFAULT_USER = "demo@jumaiah.com";
 const String DEFAULT_USER2 = "admin";
+const String DEFAULT_PASSWORD2 = "123456";
 
 const String DEFAULT_PASSWORD = "bcool1984";
-const String DEFAULT_DB2 = "test";
-const String DEFAULT_DB3 = "jumaiah";
+const String DEFAULT_DB2 = "Jumaiah";
+const String DEFAULT_DB3 = "Jumaiah";
 const String GUEST = "GUEST";
 //jumaiah!@##@!
 

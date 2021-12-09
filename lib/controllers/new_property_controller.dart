@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hijri_picker/hijri_picker.dart';
 import 'package:jumaiah/enums/upload_file_state.dart';
 import 'package:jumaiah/enums/widget_state.dart';
 import 'package:jumaiah/main.dart';
@@ -29,6 +30,24 @@ class NewPropertyController extends BaseViewModel {
   var subscription = client.sessionStream.listen(sessionChanged);
   var loginSubscription = client.loginStream.listen(loginStateChanged);
   var inRequestSubscription = client.inRequestStream.listen(inRequestChanged);
+
+  HijriCalendar _hijriDate;
+
+  _setHijriDate(HijriCalendar date) {
+    _hijriDate = date;
+    print("FOMATTED........" + getFormatedHijri(_hijriDate).toString());
+    notifyListeners();
+  }
+
+  HijriCalendar get hijriDate {
+    if (_hijriDate != null) {
+      print("SETTER");
+      return _hijriDate;
+    } else {
+      return HijriCalendar.now();
+    }
+  }
+
   String fileName;
   bool isShow = true;
   setShow(bool value) {
@@ -433,28 +452,13 @@ class NewPropertyController extends BaseViewModel {
       String property_type,
       Uint8List fileBytes2,
       String ceriticateDate,
+      String address,
       String website) async {
     setShow(false);
     _setState(WidgetState.Loading);
-    print(owner);
     OdooSession session;
     try {
       session = await getClient();
-
-      print({
-        "company_id": 1,
-        "name": "New",
-        "user_name": 1,
-        'date': getFormattedDateOfToday(),
-        'pt_certificte_date': ceriticateDate,
-        'pt_location': pt_location.trim(),
-        'property_type': property_type,
-        'pt_certificte_no': pt_certificte_no.trim(),
-        'property_status': property_status.trim(),
-        'property_name': property_name,
-        'owner': ownerName,
-        'pt_image': base64Encode(fileBytes2),
-      });
 
       var res = await client.callKw({
         'model': 'property.base',
@@ -465,16 +469,18 @@ class NewPropertyController extends BaseViewModel {
             "name": "New",
             "user_name": 1,
             // 'date': getFormattedDateOfToday(),
-            'pt_certificte_date': ceriticateDate,
+            'pt_certificte_date': ceriticateDate != null && ceriticateDate != ""
+                ? ceriticateDate
+                : getFormattedDateOfToday2(HijriCalendar.now()),
             'pt_location': pt_location.trim(),
-            'property_type': property_type,
+            'property_type': property_type, //نوع الملكية
             'pt_certificte_no': pt_certificte_no.trim(),
             'property_status': property_status.trim(),
             'property_name': property_name,
             'owner': ownerName,
-            'pt_image': base64Encode(fileBytes2),
-            "website": website,
-            "prop_lat": pt_location
+            'pt_image': fileBytes2 != null ? base64Encode(fileBytes2) : "",
+            'prop_lat': address,
+            "website": website
           },
         ],
         'kwargs': {},
@@ -498,15 +504,36 @@ class NewPropertyController extends BaseViewModel {
       _setState(WidgetState.Error);
       _setException(MyTimeOutException(" انتهت مهلة الإتصال بالخادم"));
       setShow(false);
-    } on Exception {
+    } on Exception catch (e) {
+      print(e);
       _setState(WidgetState.Error);
       _setException(UnknownException());
       setShow(false);
     } catch (e) {
       _setState(WidgetState.Error);
+      print(e);
 
       _setException(UnknownException("خطأ غير متوقع"));
     }
+  }
+
+  Future shaowHijriPicker(BuildContext context) async {
+    final HijriCalendar picked = await showHijriDatePicker(
+        context: context,
+        initialDate: _hijriDate ?? HijriCalendar.now(),
+        lastDate: HijriCalendar()
+          ..hYear = 1450
+          ..hMonth = 9
+          ..hDay = 25,
+        firstDate: HijriCalendar()
+          ..hYear = 1438
+          ..hMonth = 12
+          ..hDay = 25,
+        initialDatePickerMode: DatePickerMode.day,
+        locale: new Locale("en", ""));
+    print("DATE......." + picked.toString());
+    _setHijriDate(picked);
+    return picked;
   }
 
   String fromHijriToGoergian() {
@@ -522,7 +549,20 @@ class NewPropertyController extends BaseViewModel {
   String getFormattedHijriDateOfToday() {
     // DateTime now = DateTime.now();
     // return DateFormat("yyyy-MM-dd").format(now);
+    var today = HijriCalendar.now();
 
+    HijriCalendar.setLocal("en_US").toFormat("yyyy/MM/dd");
+    print("JIJRI DATE");
+    print(today.toString());
+    return "today";
+  }
+
+  String getFormatedHijri(HijriCalendar date) {
+    // DateTime now = DateTime.now();
+    // return DateFormat("yyyy-MM-dd").format(now);
+    // DateFormat('yyyy-MM-dd').format(HijriCalendar.t);
+    //                   print(formattedDate); //formatted date output using intl package =
+    return date.toFormat("yyyy/mm/dd");
     return HijriCalendar.now().toFormat("yyyy/MM/dd");
   }
 
@@ -533,14 +573,6 @@ class NewPropertyController extends BaseViewModel {
     var mydate = g_date.hijriToGregorian(
         selectedHijri.hYear, selectedHijri.hMonth, selectedHijri.hDay);
 
-    return intl.DateFormat("yyyy-MM-dd").format(mydate);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    refresh();
-    _setException(null);
-    setShow(true);
+    return intl.DateFormat("yyyy/MM/dd").format(mydate);
   }
 }

@@ -30,17 +30,21 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
   var _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = new TextEditingController();
-  TextEditingController _CityController = new TextEditingController();
+  TextEditingController _CityController = new TextEditingController(text: "");
   TextEditingController _ownerController = new TextEditingController();
-  TextEditingController _typeController = new TextEditingController();
-  TextEditingController _websiteController = new TextEditingController();
+  TextEditingController _typeController = new TextEditingController(text: "");
+  TextEditingController _websiteController =
+      new TextEditingController(text: "");
+  TextEditingController _geoLocationController =
+      new TextEditingController(text: "");
 
   String owner;
   TextEditingController dateController = new TextEditingController();
   TextEditingController certificteDateController = new TextEditingController();
   TextEditingController _dateController = new TextEditingController();
 
-  TextEditingController certificteNoController = new TextEditingController();
+  TextEditingController certificteNoController =
+      new TextEditingController(text: "");
   bool isShow = false;
   var nameFocus = FocusNode();
   bool isVisible = true;
@@ -127,385 +131,451 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
     return ViewModelBuilder<NewPropertyController>.reactive(
       viewModelBuilder: () => NewPropertyController(),
       onModelReady: (model) {},
-      onDispose: (model) {
-        model.dispose();
-      },
-      builder: (context, model, child) => WillPopScope(
-        onWillPop: () {
-          model.refresh();
-          model.dispose();
-          return Future.value(false);
-        },
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Scaffold(
-            key: _scaffoldKey,
-            appBar: AppBar(
-              backgroundColor: AppTheme.primaryColor,
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.arrow_back, color: Colors.white)),
-              title: new Center(
-                  child: new Text('عقار جديد',
-                      style: TextStyle(color: Colors.white),
-                      textAlign: TextAlign.center)),
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      _formKey.currentState.reset();
-                      model.refresh();
-                      model.updateFile(null);
-                    },
-                    icon: Icon(
-                      Icons.refresh_rounded,
-                      color: Colors.white,
-                    ))
-              ],
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:
-                  Consumer<NewPropertyController>(builder: (context, model, _) {
-                if (model.state == WidgetState.Loading) {
-                  isVisible = false;
-
-                  return LoadingWidget();
-                }
-                if (model.state == WidgetState.Error) {
-                  isVisible = false;
-
-                  if (model.exception is OdooServerException) {
-                    return error(
-                        context, model.exception.message, "assets/server.png");
-                  } else if (model.exception is ConnectionException) {
-                    return error(
-                        context, model.exception.message, "assets/server.png");
-                  } else if (model.exception is MyTimeOutException) {
-                    return error(
-                        context, model.exception.message, "assets/server.png");
-                  }
-                  return error(
-                      context, model.exception.message, "assets/unknown.png");
-                }
-                if (model.state == WidgetState.Done) {
-                  isVisible = false;
-
-                  return done(context);
-                }
-                return Form(
-                    key: _formKey,
-                    child: ListView(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: model.file != null
-                                  ? FileImage(model.file)
-                                  : AssetImage("assets/add_pic2.png"),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 5.0),
-                        TextFormField(
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                          controller: nameController,
-                          //  focusNode: nameFocus,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(10.0),
-                              ),
-                            ),
-                            filled: true,
-                            suffixIcon: Icon(Icons.business),
-                            // enabledBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(color: Colors.black)),
-                            hintText: "اسم العقار",
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                          ),
-                          onSaved: (val) {
-                            // password = val;
-                          },
-
-                          validator: (val) {
-                            if (val == null || val == "") {
-                              return "هذا الحقل مطلوب";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 5.0),
-                        TextFormField(
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                          controller: _CityController,
-                          //  focusNode: nameFocus,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(10.0),
-                              ),
-                            ),
-                            suffixIcon: Icon(Icons.location_on),
-
-                            filled: true,
-                            // enabledBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(color: Colors.black)),
-                            hintText: "الموقع",
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                          ),
-                          onSaved: (val) {
-                            // password = val;
-                          },
-
-                          validator: (val) {
-                            if (val == null || val == "") {
-                              return "هذا الحقل مطلوب";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 5.0),
-                        TextFormField(
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                          //   focusNode: certificateNoFocus,
-                          controller: _ownerController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                            ),
-                            filled: true,
-                            // enabledBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(color: Colors.black)),
-                            hintText: " اسم المالك ",
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                          ),
-                          onSaved: (str) {
-                            setState(() {
-                              owner = str;
-                            });
-                          },
-                          onChanged: (str) {
-                            setState(() {
-                              owner = str;
-                            });
-                          },
-                          validator: (val) {
-                            if (val == null || val == "") {
-                              return "هذا الحقل مطلوب";
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 5.0),
-                        TextFormField(
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                          controller: _typeController,
-                          //   focusNode: certificateNoFocus,
-
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(10.0),
-                              ),
-                            ),
-                            filled: true,
-                            // enabledBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(color: Colors.black)),
-                            hintText: "نوع الملكية ",
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                          ),
-                          onSaved: (val) {
-                            // password = val;
-                          },
-                          validator: (val) {
-                            if (val == null || val == "") {
-                              return "هذا الحقل مطلوب";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 5.0),
-                        TextFormField(
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                          controller: certificteNoController,
-                          //   focusNode: certificateNoFocus,
-
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(10.0),
-                              ),
-                            ),
-                            filled: true,
-                            // enabledBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(color: Colors.black)),
-                            hintText: "رقم الصك ",
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                          ),
-                          onSaved: (val) {
-                            // password = val;
-                          },
-                          validator: (val) {
-                            if (val == null || val == "") {
-                              return "هذا الحقل مطلوب";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 5.0),
-                        DropdownButtonFormField<String>(
-                          items: model.status.entries
-                              .map<DropdownMenuItem<String>>((type) {
-                            return DropdownMenuItem<String>(
-                              value: type.key,
-                              child: Text(type.value),
-                            );
-                          }).toList(),
-                          onChanged: (property) {
-                            print(property);
-                            model.updateStatus(property);
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(10.0),
-                              ),
-                            ),
-
-                            filled: true,
-                            //  hintStyle: TextStyle(color: Colors.grey[800]),
-                            hintText: "حالة العقار",
-                            //  fillColor: Colors.blue[200]
-                          ),
-                          value: model.selectedStatus,
-                        ),
-                        SizedBox(height: 5.0),
-                        TextFormField(
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                          controller: _dateController,
-                          //   focusNode: certificateNoFocus,
-
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(10.0),
-                              ),
-                            ),
-                            filled: true,
-                            // enabledBorder: UnderlineInputBorder(
-                            //     borderSide: BorderSide(color: Colors.black)),
-                            hintText: "تاريخ الصك ",
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                          ),
-                          onSaved: (val) {
-                            // password = val;
-                          },
-                        ),
-                        SizedBox(height: 5.0),
-                        Container(
-                          height: 50,
-                          margin: EdgeInsets.all(8.0),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          child: RaisedButton(
-                            onPressed: () async {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //       builder: (context) => AttachScreen(
-                              //         pt_id: widget.pt_id.toString(),
-                              //       ),
-                              //     ));
-
-                              if (_formKey.currentState.validate() &&
-                                  model.file != null) {
-                                _formKey.currentState.save();
-                                print(owner);
-                                var proprty_name = await model
-                                    .savePropertyName(nameController.text);
-
-                                if (!proprty_name.error) {
-                                  await model.addPropery(
-                                      nameController.text,
-                                      owner,
-                                      _CityController.text,
-                                      model.selectedStatus,
-                                      certificteNoController.text,
-                                      //  dateController.text,
-
-                                      _typeController.text,
-                                      model.fileBytes2,
-                                      _dateController.text,
-                                      _websiteController.text);
-                                } else {}
-                              } else {
-                                if (model.file == null) {
-                                  _showScaffold("الرجاء إرفاق صورة");
-                                }
-                              }
-                            },
-                            color: Colors.amber,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Text(
-                              "إضافة",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ],
-                      //name
-
-                      //owner   /drowpdown
-
-                      //city  -- location
-
-                      // date   08/24/2021
-
-                      //type  dropdown
-
-                      //status  dropdown
-
-                      //pt_certificte_no  string
-
-                      //pt_certificte_date
-                    ));
-              }),
-            ),
-            floatingActionButton: Visibility(
-              visible: model.isShow,
-              child: FloatingActionButton.extended(
+      builder: (context, model, child) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          key: _scaffoldKey,
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            backgroundColor: AppTheme.primaryColor,
+            leading: IconButton(
                 onPressed: () {
-                  model.openFileExplorer();
+                  Navigator.pop(context);
                 },
-                backgroundColor: AppTheme.primaryColor,
-                icon: Icon(Icons.add_a_photo),
-                label: Text('إدراج صورة'),
-              ),
+                icon: Icon(Icons.arrow_back, color: Colors.white)),
+            title: new Center(
+                child: new Text('عقار جديد',
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center)),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    _formKey.currentState.reset();
+                    model.refresh();
+                    model.updateFile(null);
+                  },
+                  icon: Icon(
+                    Icons.refresh_rounded,
+                    color: Colors.white,
+                  ))
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child:
+                Consumer<NewPropertyController>(builder: (context, model, _) {
+              if (model.state == WidgetState.Loading) {
+                isVisible = false;
+
+                return LoadingWidget();
+              }
+              if (model.state == WidgetState.Error) {
+                isVisible = false;
+
+                if (model.exception is OdooServerException) {
+                  return error(
+                      context, model.exception.message, "assets/server.png");
+                } else if (model.exception is ConnectionException) {
+                  return error(
+                      context, model.exception.message, "assets/server.png");
+                } else if (model.exception is MyTimeOutException) {
+                  return error(
+                      context, model.exception.message, "assets/server.png");
+                }
+                return error(
+                    context, model.exception.message, "assets/unknown.png");
+              }
+              if (model.state == WidgetState.Done) {
+                isVisible = false;
+
+                return done(context);
+              }
+              return Form(
+                  key: _formKey,
+                  child: ListView(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: model.file != null
+                                ? FileImage(model.file)
+                                : AssetImage("assets/add_pic2.png"),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5.0),
+                      TextFormField(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        controller: nameController,
+                        //  focusNode: nameFocus,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          filled: true,
+                          suffixIcon: Icon(Icons.business),
+                          // enabledBorder: UnderlineInputBorder(
+                          //     borderSide: BorderSide(color: Colors.black)),
+                          hintText: "اسم العقار",
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                        ),
+                        onSaved: (val) {
+                          // password = val;
+                        },
+
+                        validator: (val) {
+                          if (val == null || val == "") {
+                            return "هذا الحقل مطلوب";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 5.0),
+                      TextFormField(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        controller: _typeController,
+                        //   focusNode: certificateNoFocus,
+
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          filled: true,
+                          // enabledBorder: UnderlineInputBorder(
+                          //     borderSide: BorderSide(color: Colors.black)),
+                          hintText: "نوع الملكية ",
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                        ),
+                        onSaved: (val) {
+                          // password = val;
+                        },
+                        // validator: (val) {
+                        //   if (val == null || val == "") {
+                        //     return "هذا الحقل مطلوب";
+                        //   }
+                        //   return null;
+                        // },
+                      ),
+                      SizedBox(height: 5.0),
+                      TextFormField(
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                        //   focusNode: certificateNoFocus,
+                        controller: _ownerController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
+                            ),
+                          ),
+                          filled: true,
+                          suffixIcon: Icon(Icons.person),
+
+                          // enabledBorder: UnderlineInputBorder(
+                          //     borderSide: BorderSide(color: Colors.black)),
+                          hintText: " اسم المالك ",
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                        ),
+                        onSaved: (str) {
+                          setState(() {
+                            owner = str;
+                          });
+                        },
+                        onChanged: (str) {
+                          setState(() {
+                            owner = str;
+                          });
+                        },
+                        validator: (val) {
+                          if (val == null || val == "") {
+                            return "هذا الحقل مطلوب";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 5.0),
+                      DropdownButtonFormField<String>(
+                        items: model.status.entries
+                            .map<DropdownMenuItem<String>>((type) {
+                          return DropdownMenuItem<String>(
+                            value: type.key,
+                            child: Text(type.value),
+                          );
+                        }).toList(),
+                        onChanged: (property) {
+                          print(property);
+                          model.updateStatus(property);
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+
+                          filled: true,
+                          //  hintStyle: TextStyle(color: Colors.grey[800]),
+                          hintText: "حالة العقار",
+                          //  fillColor: Colors.blue[200]
+                        ),
+                        value: model.selectedStatus,
+                      ),
+                      SizedBox(height: 5.0),
+                      TextFormField(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        controller: _CityController,
+                        //  focusNode: nameFocus,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          suffixIcon: Icon(Icons.location_city),
+
+                          filled: true,
+                          // enabledBorder: UnderlineInputBorder(
+                          //     borderSide: BorderSide(color: Colors.black)),
+                          hintText: "المدينة",
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                        ),
+                        onSaved: (val) {
+                          // password = val;
+                        },
+
+                        // validator: (val) {
+                        //   if (val == null || val == "") {
+                        //     return "هذا الحقل مطلوب";
+                        //   }
+                        //   return null;
+                        // },
+                      ),
+                      SizedBox(height: 5.0),
+                      TextFormField(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        controller: certificteNoController,
+                        //   focusNode: certificateNoFocus,
+
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          filled: true,
+                          // enabledBorder: UnderlineInputBorder(
+                          //     borderSide: BorderSide(color: Colors.black)),
+                          hintText: "رقم الصك ",
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                        ),
+                        onSaved: (val) {
+                          // password = val;
+                        },
+                        // validator: (val) {
+                        //   if (val == null || val == "") {
+                        //     return "هذا الحقل مطلوب";
+                        //   }
+                        //   return null;
+                        // },
+                      ),
+                      SizedBox(height: 5.0),
+                      TextFormField(
+                        // onTap: () {
+                        //   model.shaowHijriPicker(context).then((value) {
+                        //     _dateController.text =
+                        //         model.getFormatedHijri(value);
+                        //   });
+                        // },
+                        //  readOnly: true,
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        controller: _dateController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          suffixIcon: Icon(Icons.calendar_today),
+                          filled: true,
+                          labelText: "تاريخ الصك", //babel text
+                          hintText: "مثال : 1441/2/30",
+                          // hintText: "تاريخ الصك ",
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                        ),
+                        onSaved: (val) {
+                          // password = val;
+                        },
+                      ),
+                      SizedBox(height: 5.0),
+                      TextFormField(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        controller: _geoLocationController,
+                        //  focusNode: nameFocus,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          suffixIcon: Icon(Icons.location_on),
+
+                          filled: true,
+                          // enabledBorder: UnderlineInputBorder(
+                          //     borderSide: BorderSide(color: Colors.black)),
+                          hintText: "  رابط الموقع الجغرافي",
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                        ),
+                        onSaved: (val) {
+                          // password = val;
+                        },
+
+                        // validator: (val) {
+                        //   if (val == null || val == "") {
+                        //     return "هذا الحقل مطلوب";
+                        //   }
+                        //   return null;
+                        // },
+                      ),
+                      SizedBox(height: 5.0),
+                      TextFormField(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        controller: _websiteController,
+                        //  focusNode: nameFocus,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          suffixIcon: Icon(Icons.web_asset),
+
+                          filled: true,
+                          // enabledBorder: UnderlineInputBorder(
+                          //     borderSide: BorderSide(color: Colors.black)),
+                          hintText: "الموقع الإلكتروني",
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                        ),
+                        onSaved: (val) {
+                          // password = val;
+                        },
+
+                        // validator: (val) {
+                        //   if (val == null || val == "") {
+                        //     return "هذا الحقل مطلوب";
+                        //   }
+                        //   return null;
+                        // },
+                      ),
+                      SizedBox(height: 5.0),
+                      Container(
+                        height: 50,
+                        margin: EdgeInsets.all(8.0),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                        child: RaisedButton(
+                          onPressed: () async {
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (context) => AttachScreen(
+                            //         pt_id: widget.pt_id.toString(),
+                            //       ),
+                            //     ));
+
+                            if (_formKey.currentState.validate()
+
+                                //  &&
+                                //     model.file != null
+
+                                ) {
+                              _formKey.currentState.save();
+                              print(owner);
+                              var proprty_name = await model
+                                  .savePropertyName(nameController.text);
+
+                              if (!proprty_name.error) {
+                                await model.addPropery(
+                                    nameController.text,
+                                    owner,
+                                    _CityController.text,
+                                    model.selectedStatus ?? "",
+                                    certificteNoController.text,
+                                    _typeController.text,
+                                    model.fileBytes2,
+                                    _dateController.text,
+                                    _geoLocationController.text,
+                                    _websiteController.text);
+                              } else {}
+                            }
+                            // else {
+                            //   if (model.file == null) {
+                            //     _showScaffold("الرجاء إرفاق صورة");
+                            //   }
+                            // }
+                          },
+                          color: Colors.amber,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Text(
+                            "إضافة",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                    //name
+
+                    //owner   /drowpdown
+
+                    //city  -- location
+
+                    // date   08/24/2021
+
+                    //type  dropdown
+
+                    //status  dropdown
+
+                    //pt_certificte_no  string
+
+                    //pt_certificte_date
+                  ));
+            }),
+          ),
+          floatingActionButton: Visibility(
+            visible: model.isShow,
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                model.openFileExplorer();
+              },
+              backgroundColor: AppTheme.primaryColor,
+              icon: Icon(Icons.add_a_photo),
+              label: Text('إدراج صورة'),
             ),
           ),
         ),

@@ -70,7 +70,7 @@ class HomeViewmode extends ChangeNotifier {
     //jumaiah!@##@!
     if (sharedPrefs.getUserType() == GUEST) {
       session = await client.authenticate(
-          DEFAULT_DB, DEFAULT_USER2, DEFAULT_PASSWORD);
+          DEFAULT_DB, DEFAULT_USER, DEFAULT_PASSWORD2);
     } else {
       session = await client.authenticate(DEFAULT_DB,
           sharedPrefs.getEmail().trim(), sharedPrefs.getUserPassword().trim());
@@ -138,7 +138,7 @@ class HomeViewmode extends ChangeNotifier {
       // print("BEFORE");
       // if (sharedPrefs.getUserType() == "GUEST") {
       session = await getClient();
-     // session = await Auth(DEFAULT_DB, DEFAULT_PASSWORD);
+      // session = await Auth(DEFAULT_DB, DEFAULT_PASSWORD);
       // } else {
       //   session = await Auth(sharedPrefs.getEmail().trim(),
       //       sharedPrefs.getUserPassword().trim());
@@ -157,7 +157,7 @@ class HomeViewmode extends ChangeNotifier {
           'fields': [],
         },
       }) as List;
-      log(res1.toString());
+      //   log(res1.toString());
       //  print(res1);
       //  printWrapped(res1.toString());
       // print("this is the result" + res1.toString());

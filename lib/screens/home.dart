@@ -118,7 +118,7 @@ class _HomeState extends State<Home> {
                         // "",
                         //  record.propertyName.toString(),
 
-                        record.propertyName,
+                        record.propertyName.toString(),
 
                         // "",
                         //  record.propertyName.toString(),
@@ -146,6 +146,7 @@ class _HomeState extends State<Home> {
               Details(record.id,
                   image: record.ptImage.toString(),
                   website: record.website,
+                  prop_lat: record.propLat.toString ?? "",
                   pt_id: record.id,
                   name: record.propertyName,
                   location: record.ptLocation,
@@ -164,15 +165,16 @@ class _HomeState extends State<Home> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SafeArea(
+        // ignore: unnecessary_new
         child: new Scaffold(
           key: _scaffoldKey,
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: new Center(
-                child:
-                    new Text('الجميعة القابضة', textAlign: TextAlign.center)),
+            title: const Center(
+                child: Text('الجميعة', textAlign: TextAlign.center)),
 
             backgroundColor: Colors.amber, // status bar color
+            // ignore: deprecated_member_use
             brightness: Brightness.dark,
             actions: [
               IconButton(
