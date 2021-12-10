@@ -137,15 +137,17 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
           key: _scaffoldKey,
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: Colors.transparent, elevation: 0.0,
+
+            //AppTheme.primaryColor,
             leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.arrow_back, color: Colors.white)),
+                icon: Icon(Icons.arrow_back, color: Colors.black)),
             title: new Center(
                 child: new Text('عقار جديد',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                     textAlign: TextAlign.center)),
             actions: [
               IconButton(
@@ -156,7 +158,7 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
                   },
                   icon: Icon(
                     Icons.refresh_rounded,
-                    color: Colors.white,
+                    color: Colors.black,
                   ))
             ],
           ),
@@ -195,8 +197,9 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
                   child: ListView(
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 200,
+                        //width: MediaQuery.of(context).size.width,
+                        height: 180,
+                        width: 180,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             fit: BoxFit.fill,
@@ -214,11 +217,17 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
                         controller: nameController,
                         //  focusNode: nameFocus,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.none))
+
+                          // OutlineInputBorder(
+                          //   borderRadius: const BorderRadius.all(
+                          //     const Radius.circular(10.0),
+                          //   ),
+
+                          // )
+
+                          ,
                           filled: true,
                           suffixIcon: Icon(Icons.business),
                           // enabledBorder: UnderlineInputBorder(
@@ -246,11 +255,8 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
                         //   focusNode: certificateNoFocus,
 
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.none)),
                           filled: true,
                           // enabledBorder: UnderlineInputBorder(
                           //     borderSide: BorderSide(color: Colors.black)),
@@ -275,11 +281,8 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
                         //   focusNode: certificateNoFocus,
                         controller: _ownerController,
                         decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
-                            ),
-                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.none)),
                           filled: true,
                           suffixIcon: Icon(Icons.person),
 
@@ -319,11 +322,8 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
                           model.updateStatus(property);
                         },
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.none)),
 
                           filled: true,
                           //  hintStyle: TextStyle(color: Colors.grey[800]),
@@ -340,11 +340,8 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
                         controller: _CityController,
                         //  focusNode: nameFocus,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.none)),
                           suffixIcon: Icon(Icons.location_city),
 
                           filled: true,
@@ -374,11 +371,8 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
 
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.none)),
                           filled: true,
                           // enabledBorder: UnderlineInputBorder(
                           //     borderSide: BorderSide(color: Colors.black)),
@@ -409,11 +403,8 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
                         ),
                         controller: _dateController,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.none)),
                           suffixIcon: Icon(Icons.calendar_today),
                           filled: true,
                           labelText: "تاريخ الصك", //babel text
@@ -433,11 +424,8 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
                         controller: _geoLocationController,
                         //  focusNode: nameFocus,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.none)),
                           suffixIcon: Icon(Icons.location_on),
 
                           filled: true,
@@ -465,11 +453,8 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
                         controller: _websiteController,
                         //  focusNode: nameFocus,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.none)),
                           suffixIcon: Icon(Icons.web_asset),
 
                           filled: true,

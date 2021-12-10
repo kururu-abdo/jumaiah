@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:jumaiah/controllers/home_controller.dart';
 import 'package:jumaiah/enums/widget_state.dart';
@@ -12,9 +14,10 @@ import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:jumaiah/utils/theme.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:jumaiah/widgets/propertyItem.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:jumaiah/components/nav-drawer.dart';
+
 import 'package:jumaiah/screens/details.dart';
 import 'package:jumaiah/screens/signin.dart';
 import 'package:jumaiah/screens/details.dart';
@@ -171,9 +174,16 @@ class _HomeState extends State<Home> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: const Center(
-                child: Text('الجميعة', textAlign: TextAlign.center)),
-
-            backgroundColor: Colors.amber, // status bar color
+                child: Text('الجميعة',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black))),
+            leading: IconButton(
+                onPressed: () {
+                  _scaffoldKey.currentState.openDrawer();
+                },
+                icon: Icon(Icons.menu, color: Colors.black)),
+            backgroundColor: Colors.transparent,
+            elevation: 0.0, // status bar color
             // ignore: deprecated_member_use
             brightness: Brightness.dark,
             actions: [
@@ -181,20 +191,40 @@ class _HomeState extends State<Home> {
                   onPressed: () async {
                     await model.fetchContacts();
                   },
-                  icon: Icon(Icons.refresh))
+                  icon: Icon(Icons.refresh, color: Colors.black))
             ], // status bar brightness
           ),
           drawer: NavDrawer(),
           body: Column(
             children: [
-              Container(
+              Card(
                 margin: EdgeInsets.only(left: 10, right: 10),
+                elevation: 3.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
+                //padding: EdgeInsets.all(8.0),
                 child: TextField(
                   onChanged: (val) => model.filter(val),
                   decoration: InputDecoration(
-                      labelText: 'بحث', suffixIcon: Icon(Icons.search)),
+                      border: InputBorder.none,
+                      labelText: 'بحث',
+                      suffixIcon: Icon(Icons.search),
+                      prefixIcon: Icon(Icons.tune)),
                 ),
               ),
+              SizedBox(height: 20),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "العقارات",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          letterSpacing: 1.5),
+                    ),
+                  )),
               Container(
                   height:
 
@@ -215,9 +245,22 @@ class _HomeState extends State<Home> {
                     }
 
                     return ListView.builder(
+                      physics: BouncingScrollPhysics(),
                       itemCount: model.filteredproperties.length,
+                      // primary: false,
+                      // padding: const EdgeInsets.all(4),
+                      // crossAxisSpacing: 4,
+                      // mainAxisSpacing: 4,
+                      // crossAxisCount: 2,
+                      // children: model.filteredproperties
+                      //     .map((record) => PropertyWidget(
+                      //           record: record,
+                      //         ))
+                      //     .toList(),
                       itemBuilder: (BuildContext context, int index) {
-                        return buildListItem(model.filteredproperties[index]);
+                        return PropertyWidget(
+                          record: model.filteredproperties[index],
+                        );
                       },
                     );
                   })
@@ -242,6 +285,8 @@ class _HomeState extends State<Home> {
                   ),
             ],
           ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
               if (sharedPrefs.getUserType() == "GUEST") {
@@ -269,7 +314,7 @@ class _HomeState extends State<Home> {
               }
             },
             backgroundColor: AppTheme.primaryColor,
-            icon: Icon(Icons.add_a_photo),
+            icon: Icon(Icons.add_business_rounded),
             label: Text('اضافة عقار'),
           ),
         ),

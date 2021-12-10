@@ -39,9 +39,13 @@ class _PhotoPageState extends State<PhotoPage> {
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
               title: new Center(
-                  child: new Text('معرض الصور', textAlign: TextAlign.center)),
-
-              backgroundColor: Colors.amber, // status bar color
+                  child: new Text(
+                'معرض الصور',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black),
+              )),
+              elevation: 0.0,
+              backgroundColor: Colors.transparent, // status bar color
               brightness: Brightness.dark,
               leading: IconButton(
                 onPressed: () {

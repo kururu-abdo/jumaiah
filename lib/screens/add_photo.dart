@@ -30,22 +30,26 @@ class _AddPhotoState extends State<AddPhoto> {
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
               title: new Center(
-                  child: new Text('إضافة صور', textAlign: TextAlign.center)),
+                  child: new Text(
+                'إضافة صور',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black),
+              )),
 
-              backgroundColor: Colors.amber, // status bar color
-              brightness: Brightness.dark,
+              backgroundColor: Colors.transparent, // status bar color
+              elevation: 0.0,
               actions: [
                 IconButton(
                     onPressed: () async {
                       await controller.picImage(widget.propertyId);
                     },
-                    icon: Icon(Icons.add_a_photo))
+                    icon: Icon(Icons.add_a_photo, color: Colors.black))
               ],
               leading: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                icon: Icon(Icons.arrow_back, color: Colors.white),
+                icon: Icon(Icons.arrow_back, color: Colors.black),
               ),
               // status bar brightness
             ),

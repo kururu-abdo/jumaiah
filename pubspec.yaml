@@ -47,7 +47,7 @@ dependencies:
   get_it:
   percent_indicator: ^3.4.0  
   url_launcher: ^6.0.17
-  
+  unicons: ^2.0.2
 
   hijri_picker: ^3.0.0
   photo_view: ^0.13.0 

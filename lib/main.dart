@@ -100,6 +100,7 @@ class _HomeState extends State<HomePage> implements WidgetsBindingObserver {
       title: "Al Jumaiah",
       theme:
           ThemeData(fontFamily: 'Cairo', primaryColor: AppTheme.primaryColor),
+        
       debugShowCheckedModeBanner: false,
       routes: {Home.pageName: (context) => Home()},
       home: Splashscreen(),
