@@ -11,6 +11,7 @@ import 'package:jumaiah/controllers/upload_file_controller.dart';
 import 'package:jumaiah/enums/upload_file_state.dart';
 import 'package:jumaiah/utils/exceptions.dart';
 import 'package:jumaiah/utils/theme.dart';
+import 'package:jumaiah/widgets/upload_widget.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:provider/provider.dart';
@@ -208,56 +209,60 @@ class _FilePickerDemoState extends State<FilePickerDemo>
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: new Center(
-              child: new Text('الجميعة ', textAlign: TextAlign.center)),
+              child: new Text(
+            'رفع ملف ',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.black),
+          )),
 
-          backgroundColor: AppTheme.primaryColor, // status bar color
+          backgroundColor: Colors.transparent,
+          elevation: 0.0, // status bar color
           brightness: Brightness.dark, // status bar brightness
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back, color: Colors.white)),
+              icon: Icon(Icons.arrow_back, color: Colors.black)),
         ),
 
         // drawer: NavDrawer(),
-        body: SingleChildScrollView(
-          child:
-              Consumer<UploadFileControler>(builder: (context, model, child) {
-            if (model.state == UploadFileState.Initial) {
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Builder(
-                            builder: (context) => Center(
-                                  child: SlideTransition(
-                                      position: _animation,
-                                      transformHitTests: true,
-                                      textDirection: TextDirection.ltr,
-                                      child: Image.asset("assets/doc.png")),
-                                )),
-                      ),
+        body: Consumer<UploadFileControler>(builder: (context, model, child) {
+          if (model.state == UploadFileState.Initial) {
+            return initial(context);
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Builder(
+                          builder: (context) => Center(
+                                child: SlideTransition(
+                                    position: _animation,
+                                    transformHitTests: true,
+                                    textDirection: TextDirection.ltr,
+                                    child: Image.asset("assets/doc.png")),
+                              )),
+                    ),
 
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(15),
-                        child: TextFormField(
-                          controller: _textController,
-                          decoration: InputDecoration(
-                            hintText: "إسم الملف....",
-                            suffixIcon: Icon(Icons.file_copy_rounded),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(15),
+                      child: TextFormField(
+                        controller: _textController,
+                        decoration: InputDecoration(
+                          hintText: "إسم الملف....",
+                          suffixIcon: Icon(Icons.file_copy_rounded),
 
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(10.0),
-                              ),
+                          border: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
                             ),
-                            filled: true,
+                          ),
+                          filled: true,
 // focusedBorder: OutlineInputBorder(
 //                                 borderSide:
 //                                     BorderSide(color:    AppTheme.primaryColor, width: 3.0),
@@ -275,84 +280,82 @@ class _FilePickerDemoState extends State<FilePickerDemo>
 
 //       borderRadius:BorderRadius.circular(10.0)
 //     )
-                          ),
-                          validator: (val) {
-                            if (val.isEmpty || val.length < 0) {
-                              return "يجب لإدخال اسم الملف";
-                            }
-
-                            return null;
-                          },
                         ),
+                        validator: (val) {
+                          if (val.isEmpty || val.length < 0) {
+                            return "يجب لإدخال اسم الملف";
+                          }
+
+                          return null;
+                        },
                       ),
+                    ),
 
-                      // Container(
-                      //   decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(25) ,
+                    // Container(
+                    //   decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(25) ,
 
-                      //   )),
-                      // ),
+                    //   )),
+                    // ),
 
-                      Spacer(),
+                    Spacer(),
 
-                      Container(
-                        height: 50,
-                        margin: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: AppTheme.primaryColor,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                AppTheme.primaryColor),
-                          ),
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              model.openFileExplorer();
-                            }
-                          },
-                          child: Center(
-                              child: Text(
-                            "اختيار ملف",
-                            style: TextStyle(color: Colors.white),
-                          )),
+                    Container(
+                      height: 50,
+                      margin: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: AppTheme.primaryColor,
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              AppTheme.primaryColor),
                         ),
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            model.openFileExplorer();
+                          }
+                        },
+                        child: Center(
+                            child: Text(
+                          "اختيار ملف",
+                          style: TextStyle(color: Colors.white),
+                        )),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            }
+              ),
+            );
+          }
 
-            if (model.state == UploadFileState.Deployded) {
-              return deployed(context);
-            } else if (model.state == UploadFileState.Uploading) {
-              return uploading(context);
-            } else if (model.state == UploadFileState.Uploaded) {
-              return done(context);
-            } else {
-              if (model.exception is OdooServerException) {
-                return error(
-                    context, model.exception.toString(), "assets/server.png");
-              } else if (model.exception is ConnectionException) {
-                return error(
-                    context, model.exception.toString(), "assets/server.png");
-              } else if (model.exception is FileException) {
-                return error(context, model.exception.toString(),
-                    "assets/file_exception.png");
-              } else if (model.exception is ConnectionException) {
-                return error(
-                    context, model.exception.toString(), "assets/server.png");
-              } else if (model.exception is MyTimeOutException) {
-                return error(
-                    context, model.exception.toString(), "assets/server.png");
-              }
+          if (model.state == UploadFileState.Deployded) {
+            return Center(child: deployed(context));
+          } else if (model.state == UploadFileState.Uploading) {
+            return uploading(context);
+          } else if (model.state == UploadFileState.Uploaded) {
+            return done(context);
+          } else {
+            if (model.exception is OdooServerException) {
               return error(
-                  context, model.exception.toString(), "assets/unknown.png");
+                  context, model.exception.toString(), "assets/server.png");
+            } else if (model.exception is ConnectionException) {
+              return error(
+                  context, model.exception.toString(), "assets/server.png");
+            } else if (model.exception is FileException) {
+              return error(context, model.exception.toString(),
+                  "assets/file_exception.png");
+            } else if (model.exception is ConnectionException) {
+              return error(
+                  context, model.exception.toString(), "assets/server.png");
+            } else if (model.exception is MyTimeOutException) {
+              return error(
+                  context, model.exception.toString(), "assets/server.png");
             }
-          }),
-        ),
+            return error(
+                context, model.exception.toString(), "assets/unknown.png");
+          }
+        }),
       ),
     );
   }
@@ -360,53 +363,59 @@ class _FilePickerDemoState extends State<FilePickerDemo>
   Widget initial(BuildContext context) {
     var model = Provider.of<UploadFileControler>(context);
     final bottom = MediaQuery.of(context).viewInsets.bottom;
-
+    return Center(
+      heightFactor: 2,
+      child: Container(
+        child: UploadWidget(
+          onTap: () {
+            model.openFileExplorer();
+          },
+        ),
+      ),
+    );
     return Container(
       height: MediaQuery.of(context).size.height * 2 / 3,
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 45),
       child: Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          reverse: true,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: bottom),
-            child: Column(
-              children: [
-                Builder(
-                    builder: (context) => Center(
-                          child: SlideTransition(
-                              position: _animation,
-                              transformHitTests: true,
-                              textDirection: TextDirection.ltr,
-                              child: Image.asset("assets/doc.png")),
-                        )),
-                Spacer(),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  height: 50,
-                  padding: const EdgeInsets.only(top: 50.0, bottom: 20.0),
-                  decoration: BoxDecoration(
-                      color: AppTheme.primaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(15))),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          AppTheme.primaryColor),
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState.validate()) {
-                        _openFileExplorer();
-                      }
-                    },
-                    child: const Text("اختيار ملف"),
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottom),
+          child: Column(
+            children: [
+              Builder(
+                  builder: (context) => Center(
+                        child: SlideTransition(
+                            position: _animation,
+                            transformHitTests: true,
+                            textDirection: TextDirection.ltr,
+                            child: Image.asset("assets/doc.png")),
+                      )),
+              Spacer(),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                height: 50,
+                padding: const EdgeInsets.only(top: 50.0, bottom: 20.0),
+                decoration: BoxDecoration(
+                    color: AppTheme.primaryColor,
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(AppTheme.primaryColor),
                   ),
+                  onPressed: () async {
+                    if (_formKey.currentState.validate()) {
+                      _openFileExplorer();
+                    }
+                  },
+                  child: const Text("اختيار ملف"),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -429,71 +438,98 @@ class _FilePickerDemoState extends State<FilePickerDemo>
 
   Widget deployed(BuildContext context) {
     var model = Provider.of<UploadFileControler>(context);
-
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 120,
-              ),
-              Image.asset("assets/pdf.png"),
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // SizedBox(
+        //   height: 120,
+        // ),
+        Image.asset("assets/pdf.png"),
+        SizedBox(
+          height: 15,
+        ),
+        Text(model.fileName ?? ""),
+        Form(
+            key: _formKey,
+            child: Column(children: [
               SizedBox(
                 height: 15,
               ),
-              Text(model.fileName ?? ""),
-              Text(_textController.text),
-              Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 120,
-                    height: 60,
-                    margin: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        border: Border.all(width: 1.5, color: Colors.black),
-                        color: AppTheme.primaryColor),
-                    child: TextButton(
-                        onPressed: () async {
-                          model.fetchContacts(
-                              _textController.text,
-                              widget.res_model,
-                              widget.res_id,
-                              model.fileBytes2,
-                              _textController.text);
-                        },
-                        child: Text(
-                          "رفع الملف",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  ),
-                  Container(
-                      width: 120,
-                      height: 60,
-                      margin: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        border: Border.all(
-                            width: 1.5, color: AppTheme.primaryColor),
-                      ),
-                      child: TextButton(
-                          onPressed: () {
-                            model.initState();
-                          },
-                          child: Text(
-                            "تغيير الملف",
-                            style: TextStyle(color: Colors.black),
-                          ))),
-                ],
-              )
-            ],
-          ),
-        ));
+              Card(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                elevation: 3.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
+                //padding: EdgeInsets.all(8.0),
+                child: TextFormField(
+                    controller: _textController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusColor: AppTheme.primaryColor,
+                      labelText: 'اسم الملف',
+                      suffixIcon: Icon(Icons.file_present_outlined,
+                          color: AppTheme.primaryColor),
+                    ),
+                    validator: (val) {
+                      if (val == null || val == "" || val.length < 1) {
+                        return "هذا الحقل مطلوب";
+                      } else {
+                        return null;
+                      }
+                    }),
+              ),
+            ])),
+        //  Text(_textController.text),
+        Spacer(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 120,
+              height: 60,
+              margin: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  border: Border.all(width: 1.5, color: Colors.black),
+                  color: AppTheme.primaryColor),
+              child: TextButton(
+                  onPressed: () async {
+                    if (_formKey.currentState.validate()) {
+                      model.fetchContacts(
+                          _textController.text,
+                          widget.res_model,
+                          widget.res_id,
+                          model.fileBytes2,
+                          _textController.text);
+                    }
+                  },
+                  child: Text(
+                    "رفع الملف",
+                    style: TextStyle(color: Colors.white),
+                  )),
+            ),
+            Container(
+                width: 120,
+                height: 60,
+                margin: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  border: Border.all(width: 1.5, color: AppTheme.primaryColor),
+                ),
+                child: TextButton(
+                    onPressed: () {
+                      model.initState();
+                    },
+                    child: Text(
+                      "تغيير الملف",
+                      style: TextStyle(color: Colors.black),
+                    ))),
+          ],
+        )
+      ],
+    ));
   }
 
   Widget FileUploadedWidget(String name) {
@@ -546,6 +582,7 @@ class _FilePickerDemoState extends State<FilePickerDemo>
           SizedBox(
             height: MediaQuery.of(context).size.height / 3,
           ),
+
           Container(
             margin: EdgeInsets.all(10),
             width: double.infinity,

@@ -176,12 +176,22 @@ class _AttachScreenState extends State<AttachScreen> {
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
-                child: TextField(
-                  onChanged: (val) => model.filter(val),
-                  decoration: InputDecoration(
-                      labelText: 'بحث', suffixIcon: Icon(Icons.search)),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  margin: EdgeInsets.only(left: 10, right: 10),
+                  elevation: 3.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25)),
+                  child: TextField(
+                    onChanged: (val) => model.filter(val),
+                    decoration: InputDecoration(
+                        focusColor: AppTheme.primaryColor,
+                        border: InputBorder.none,
+                        labelText: 'بحث',
+                        suffixIcon:
+                            Icon(Icons.search, color: AppTheme.primaryColor)),
+                  ),
                 ),
               ),
 

@@ -195,7 +195,7 @@ class _HomeState extends State<Home> {
             ], // status bar brightness
           ),
           drawer: NavDrawer(),
-          body: Column(
+          body: ListView(
             children: [
               Card(
                 margin: EdgeInsets.only(left: 10, right: 10),
@@ -207,9 +207,12 @@ class _HomeState extends State<Home> {
                   onChanged: (val) => model.filter(val),
                   decoration: InputDecoration(
                       border: InputBorder.none,
+                      focusColor: AppTheme.primaryColor,
                       labelText: 'بحث',
-                      suffixIcon: Icon(Icons.search),
-                      prefixIcon: Icon(Icons.tune)),
+                      suffixIcon:
+                          Icon(Icons.search, color: AppTheme.primaryColor),
+                      prefixIcon:
+                          Icon(Icons.tune, color: AppTheme.primaryColor)),
                 ),
               ),
               SizedBox(height: 20),
@@ -243,7 +246,14 @@ class _HomeState extends State<Home> {
                         },
                       ));
                     }
-
+                    return GridView.count(
+                      crossAxisCount: 2,
+                      children: model.filteredproperties
+                          .map((e) => PropertyWidget(
+                                record: e,
+                              ))
+                          .toList(),
+                    );
                     return ListView.builder(
                       physics: BouncingScrollPhysics(),
                       itemCount: model.filteredproperties.length,
@@ -285,9 +295,8 @@ class _HomeState extends State<Home> {
                   ),
             ],
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton.extended(
+            heroTag: "floating",
             onPressed: () {
               if (sharedPrefs.getUserType() == "GUEST") {
                 _scaffoldKey.currentState.showSnackBar(SnackBar(

@@ -523,7 +523,7 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
                             //   }
                             // }
                           },
-                          color: Colors.amber,
+                          color: AppTheme.primaryColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           child: Text(
@@ -555,6 +555,7 @@ class _AddProperyScreenState extends State<AddProperyScreen> {
           floatingActionButton: Visibility(
             visible: model.isShow,
             child: FloatingActionButton.extended(
+              heroTag: "floating",
               onPressed: () {
                 model.openFileExplorer();
               },

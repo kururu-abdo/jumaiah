@@ -15,7 +15,7 @@ class CustomPageRoute<T> extends PageRoute<T> {
   bool get maintainState => true;
 
   @override
-  Duration get transitionDuration => Duration(milliseconds: 1500);
+  Duration get transitionDuration => Duration(milliseconds: 500);
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,

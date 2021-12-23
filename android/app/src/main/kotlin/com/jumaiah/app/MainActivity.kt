@@ -1,5 +1,4 @@
-package com.jumaiah_app.www
-
+package com.jumaiah.app
 import io.flutter.embedding.android.FlutterActivity
 
 class MainActivity: FlutterActivity() {

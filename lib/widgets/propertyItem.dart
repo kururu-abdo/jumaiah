@@ -20,6 +20,67 @@ class _PropertyItemState extends State<PropertyWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              CustomPageRoute(
+                Details(widget.record.id,
+                    image: widget.record.ptImage.toString(),
+                    website: widget.record.website,
+                    prop_lat: widget.record.propLat.toString ?? "",
+                    pt_id: widget.record.id,
+                    name: widget.record.propertyName,
+                    location: widget.record.ptLocation,
+                    certificate_no: widget.record.ptCertificteNo,
+                    certificate_date: widget.record.ptCertificteDate.toString(),
+                    owner: widget.record.owner,
+                    property_status: widget.record.propertyStatus),
+              ));
+        },
+        child: Container(
+          height: 221,
+          width: 194,
+          margin: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: MemoryImage(
+                    base64Decode(
+                        widget.record.ptImage.toString().trim() == "false"
+                            ? DEFAULT_IMG
+                            : widget.record.ptImage.toString()),
+                  ),
+                  fit: BoxFit.cover)),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Opacity(
+              opacity: 0.6,
+              child: Container(
+                width: double.infinity,
+                height: 221 / 3,
+                color: Colors.black,
+                child: Column(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        widget.record.propertyName.toString(),
+                        softWrap: true,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        widget.record.ptLocation.toString(),
+                        softWrap: true,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ));
+    return InkWell(
       onTap: () {
         Navigator.push(
             context,

@@ -11,6 +11,7 @@ import 'package:jumaiah/screens/signin.dart';
 import 'package:jumaiah/utils/constants.dart';
 import 'package:jumaiah/utils/custom_transition.dart';
 import 'package:jumaiah/utils/shared_prefs.dart';
+import 'package:jumaiah/utils/utils.dart';
 import 'package:jumaiah/widgets/anim_widget.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,14 +69,12 @@ class _DetailsState extends State<Details> {
               //         fontWeight: FontWeight.bold,
               //         fontSize: 30,
               //         color: Colors.white)), //Text
-              background: Hero(
-                  tag: widget.use_id.toString().trim(),
-                  child: Image.memory(
-                    base64Decode(widget.image.toString().trim() == "false"
-                        ? DEFAULT_IMG
-                        : widget.image),
-                    fit: BoxFit.cover,
-                  )), //Images.network
+              background: Image.memory(
+                base64Decode(widget.image.toString().trim() == "false"
+                    ? DEFAULT_IMG
+                    : widget.image),
+                fit: BoxFit.cover,
+              ), //Images.network
             ), //FlexibleSpaceBar
             expandedHeight: 200,
             // backgroundColor: Colors.greenAccent[400],
@@ -216,116 +215,119 @@ class _DetailsState extends State<Details> {
                       textDirection: TextDirection.rtl,
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        height: 50,
-                        //  margin: EdgeInsets.all(8.0),
-                        // width:80 ,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        child: RaisedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AttachScreen(
-                                    pt_id: widget.pt_id.toString(),
-                                  ),
-                                ));
-                          },
-                          color: Colors.amber,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Text(
-                            "المرفقات",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                  Container(
+                    margin: EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          height: 50,
+                          //  margin: EdgeInsets.all(8.0),
+                          // width:80 ,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          child: RaisedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AttachScreen(
+                                      pt_id: widget.pt_id.toString(),
+                                    ),
+                                  ));
+                            },
+                            color: AppTheme.primaryColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Text(
+                              "المرفقات",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        height: 50,
-                        // margin: EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        child: RaisedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                CustomPageRoute(
-                                  PhotoPage(widget.pt_id),
-                                ));
-                          },
-                          color: Colors.amber,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Text(
-                            "معرض الصور",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 50,
-                        // margin: EdgeInsets.all(8.0),
-                        // width: 50,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        child: RaisedButton(
-                          onPressed: () {
-                            if (sharedPrefs.getUserType() == "GUEST") {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      action: SnackBarAction(
-                                        label: 'حسنا',
-                                        onPressed: () {
-                                          sharedPrefs.setLogin(false);
-                                          sharedPrefs.saveUserType(null);
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      SignIn()));
-                                          preferences.clear();
-                                        },
-                                        textColor: Colors.white,
-                                        disabledTextColor: Colors.grey,
-                                      ),
-                                      duration: const Duration(seconds: 8),
-                                      content: Text(
-                                          "غير مصرح لك بإضافة عقار قم بالتسجيل ")));
-                            } else {
-                              ///TODO:  show snackbar
+                        Container(
+                          height: 50,
+                          // margin: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          child: RaisedButton(
+                            onPressed: () {
                               Navigator.push(
                                   context,
                                   CustomPageRoute(
-                                    AddPhoto(widget.pt_id),
+                                    PhotoPage(widget.pt_id),
                                   ));
-                            }
-                          },
-                          color: Colors.amber,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Text(
-                            "إضافة صور",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                            },
+                            color: AppTheme.primaryColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Text(
+                              "معرض الصور",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      )
-                    ],
+                        Container(
+                          height: 50,
+                          // margin: EdgeInsets.all(8.0),
+                          // width: 50,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          child: RaisedButton(
+                            onPressed: () {
+                              if (sharedPrefs.getUserType() == "GUEST") {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        action: SnackBarAction(
+                                          label: 'حسنا',
+                                          onPressed: () {
+                                            sharedPrefs.setLogin(false);
+                                            sharedPrefs.saveUserType(null);
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        SignIn()));
+                                            preferences.clear();
+                                          },
+                                          textColor: Colors.white,
+                                          disabledTextColor: Colors.grey,
+                                        ),
+                                        duration: const Duration(seconds: 8),
+                                        content: Text(
+                                            "غير مصرح لك بإضافة عقار قم بالتسجيل ")));
+                              } else {
+                                ///TODO:  show snackbar
+                                Navigator.push(
+                                    context,
+                                    CustomPageRoute(
+                                      AddPhoto(widget.pt_id),
+                                    ));
+                              }
+                            },
+                            color: AppTheme.primaryColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Text(
+                              "إضافة صور",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),

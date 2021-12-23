@@ -122,7 +122,7 @@ class _AddPhotoState extends State<AddPhoto> {
                         padding: EdgeInsets.all(20),
                         margin: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                            color: Colors.amber,
+                            color: AppTheme.primaryColor,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(15))),
                         child: Row(

@@ -92,15 +92,20 @@ class _HomeState extends State<HomePage> implements WidgetsBindingObserver {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: const [
-        const Locale('ar', 'SA'),
-        const Locale('en', 'US')
-      ],
+      supportedLocales: const [Locale('ar', 'SA'), Locale('en', 'US')],
+      locale: Locale('ar', 'SA'),
       scaffoldMessengerKey: scaffoldMessangerKey,
       title: "Al Jumaiah",
-      theme:
-          ThemeData(fontFamily: 'Cairo', primaryColor: AppTheme.primaryColor),
-        
+      theme: ThemeData(
+          fontFamily: 'Cairo',
+          primaryColor: AppTheme.primaryColor,
+          inputDecorationTheme: InputDecorationTheme(
+            labelStyle: TextStyle(color: AppTheme.primaryColor),
+            // focusedBorder: UnderlineInputBorder(
+            //   borderSide: BorderSide(
+            //       style: BorderStyle.solid, color: AppTheme.primaryColor),
+            // )
+          )),
       debugShowCheckedModeBanner: false,
       routes: {Home.pageName: (context) => Home()},
       home: Splashscreen(),
