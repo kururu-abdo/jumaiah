@@ -69,6 +69,7 @@ class HomeViewmode extends ChangeNotifier {
     var session;
     //jumaiah!@##@!
     if (sharedPrefs.getUserType() == GUEST) {
+      print("GUEST USER");
       session = await client.authenticate(
           DEFAULT_DB, DEFAULT_USER, DEFAULT_PASSWORD2);
     } else {
@@ -152,12 +153,14 @@ class HomeViewmode extends ChangeNotifier {
         'method': 'search_read',
         'args': [],
         'kwargs': {
-          'context': {'bin_size': false},
+          'context': {'bin_size': false },
           'domain': [],
           'fields': [],
         },
       }) as List;
-      //   log(res1.toString());
+      print("AFTER  REsponse");
+
+      log(res1.toString());
       //  print(res1);
       //  printWrapped(res1.toString());
       // print("this is the result" + res1.toString());

@@ -41,15 +41,15 @@ class _PropertyItemState extends State<PropertyWidget> {
           height: 221,
           width: 194,
           margin: const EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: MemoryImage(
-                    base64Decode(
-                        widget.record.ptImage.toString().trim() == "false"
-                            ? DEFAULT_IMG
-                            : widget.record.ptImage.toString()),
-                  ),
-                  fit: BoxFit.cover)),
+          // decoration: BoxDecoration(
+          //     image: DecorationImage(
+          //         image: MemoryImage(
+          //           base64Decode(
+          //               widget.record.ptImage.toString().trim() == "false"
+          //                   ? DEFAULT_IMG
+          //                   : widget.record.ptImage.toString()),
+          //         ),
+          //         fit: BoxFit.cover)),
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Opacity(

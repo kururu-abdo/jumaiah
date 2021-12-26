@@ -14,6 +14,7 @@ const String DEFAULT_DB = "Jumaiah";
 const String DEFAULT_USER = "demo@jumaiah.com";
 const String DEFAULT_USER2 = "admin";
 const String DEFAULT_PASSWORD2 = "123456";
+const String DEFAULT_PASSWORD3 = "bcool1984";
 
 const String DEFAULT_PASSWORD = "bcool1984";
 const String DEFAULT_DB2 = "Jumaiah";
