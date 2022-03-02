@@ -82,7 +82,8 @@ class _HomeState extends State<Home> {
   Widget buildListItem(Property record) {
     // var name = record['property_name'];
     // var image = base64Decode(record['pt_image']);
-
+    print('////////////////////////////////////////////////////////////');
+    print(record.ptImage.toString());
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
       title: new Card(
@@ -102,7 +103,7 @@ class _HomeState extends State<Home> {
                       child: Image.memory(base64Decode(
                           record.ptImage.toString().trim() == "false"
                               ? DEFAULT_IMG
-                              : record.ptImage.toString()))),
+                              : record.ptImage.toString().trim()))),
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: [

@@ -66,13 +66,14 @@ class _DetailsState extends State<Details> {
               centerTitle: true,
               // title: Text(widget.name,
               //     style: TextStyle(
-              //         fontWeight: FontWeight.bold,
+              //         
+              // : FontWeight.bold,
               //         fontSize: 30,
               //         color: Colors.white)), //Text
               background: Image.memory(
                 base64Decode(widget.image.toString().trim() == "false"
                     ? DEFAULT_IMG
-                    : widget.image),
+                    : widget.image.trim()),
                 fit: BoxFit.cover,
               ), //Images.network
             ), //FlexibleSpaceBar
