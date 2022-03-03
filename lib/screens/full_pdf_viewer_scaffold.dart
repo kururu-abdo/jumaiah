@@ -9,6 +9,7 @@ import 'package:jumaiah/components/nav-drawer.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ViewPDF extends StatefulWidget {
   final String blob;
@@ -62,77 +63,83 @@ class _ViewPDFState extends State<ViewPDF> {
   Future<void> send() async {
     final encodedStr = widget.blob;
     Uint8List bytes = base64.decode(encodedStr);
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = File(
-        "$dir/" + DateTime.now().millisecondsSinceEpoch.toString() + ".pdf");
+    var temp = await getTemporaryDirectory();
+        var path = '${temp.path}'+"/"+ DateTime.now().millisecondsSinceEpoch.toString() + ".pdf";
+
+    var file=File(path);
     await file.writeAsBytes(bytes);
+    await Share.shareFiles([path] ,text: 'documents');
+    // String dir = (await getApplicationDocumentsDirectory()).path;
+    // File file = File(
+    //     "$dir/" + DateTime.now().millisecondsSinceEpoch.toString() + ".pdf");
+    // await file.writeAsBytes(bytes);
 
-    final MailOptions mailOptions = MailOptions(
-      body: 'يرجي التكرم بمشاهدة المرفقات',
-      subject: 'مشاركة ملف',
-      attachments: [file.path],
-      recipients: ['info@jumaiah.com'],
-    );
+    // final MailOptions mailOptions = MailOptions(
+    //   body: 'يرجي التكرم بمشاهدة المرفقات',
+    //   subject: 'مشاركة ملف',
+    //   attachments: [file.path],
+    //   recipients: ['info@jumaiah.com'],
+    // );
 
-    String platformResponse;
+    // String platformResponse;
 
-    try {
-      final MailerResponse response = await FlutterMailer.send(mailOptions);
-      switch (response) {
-        case MailerResponse.saved:
-          platformResponse = 'mail was saved to draft';
-          break;
-        case MailerResponse.sent:
-          platformResponse = 'mail was sent';
-          break;
-        case MailerResponse.cancelled:
-          platformResponse = 'mail was cancelled';
-          break;
-        case MailerResponse.android:
-          platformResponse = 'intent was success';
-          break;
-        default:
-          platformResponse = 'unknown';
-          break;
-      }
-    } on PlatformException catch (error) {
-      platformResponse = error.toString();
-      print(error);
-      if (!mounted) {
-        return;
-      }
-      await showDialog<void>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          content: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                'Message',
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-              Text(error.message ?? 'unknown error'),
-            ],
-          ),
-          contentPadding: const EdgeInsets.all(26),
-          title: Text(error.code),
-        ),
-      );
-    } catch (error) {
-      platformResponse = error.toString();
-    }
+    // try {
+    //   final MailerResponse response = await FlutterMailer.send(mailOptions);
+    //   switch (response) {
+    //     case MailerResponse.saved:
+    //       platformResponse = 'mail was saved to draft';
+    //       break;
+    //     case MailerResponse.sent:
+    //       platformResponse = 'mail was sent';
+    //       break;
+    //     case MailerResponse.cancelled:
+    //       platformResponse = 'mail was cancelled';
+    //       break;
+    //     case MailerResponse.android:
+    //       platformResponse = 'intent was success';
+    //       break;
+    //     default:
+    //       platformResponse = 'unknown';
+    //       break;
+    //   }
+    // } on PlatformException catch (error) {
+    //   platformResponse = error.toString();
+    //   print(error);
+    //   if (!mounted) {
+    //     return;
+    //   }
+    //   await showDialog<void>(
+    //     context: context,
+    //     builder: (BuildContext context) => AlertDialog(
+    //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+    //       content: Column(
+    //         mainAxisAlignment: MainAxisAlignment.start,
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         mainAxisSize: MainAxisSize.min,
+    //         children: <Widget>[
+    //           Text(
+    //             'Message',
+    //             style: Theme.of(context).textTheme.subtitle1,
+    //           ),
+    //           Text(error.message ?? 'unknown error'),
+    //         ],
+    //       ),
+    //       contentPadding: const EdgeInsets.all(26),
+    //       title: Text(error.code),
+    //     ),
+    //   );
+    // } catch (error) {
+    //   platformResponse = error.toString();
+    // }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) {
-      return;
-    }
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text(platformResponse),
-    ));
+    // // If the widget was removed from the tree while the asynchronous platform
+    // // message was in flight, we want to discard the reply rather than calling
+    // // setState to update our non-existent appearance.
+    // if (!mounted) {
+    //   return;
+    // }
+    // Scaffold.of(context).showSnackBar(SnackBar(
+    //   content: Text(platformResponse),
+    // ));
   }
 }

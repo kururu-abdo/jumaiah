@@ -155,6 +155,7 @@ class HomeViewmode extends ChangeNotifier {
         'kwargs': {
           'context': {'bin_size': false},
           'domain': [],
+          //  'limit': 80,
           'fields': [
             // "id",
             // "gallery",
@@ -185,8 +186,9 @@ class HomeViewmode extends ChangeNotifier {
         },
       }) as List;
       print("AFTER  REsponse");
-
-      log(res1.toString());
+       
+     //   log(avatarUrl);
+      // log(res1.toString());
       //  print(res1);
       //  printWrapped(res1.toString());
       // print("this is the result" + res1.toString());
@@ -203,6 +205,7 @@ class HomeViewmode extends ChangeNotifier {
       //   print(result);
       //   print("//////////////////////////////////////////////");
       //  print(result.length);
+     print(res1[0]['pt_location'].toString());
       List<Property> properties =
           res1.map((p) => Property.fromJson(p)).toList();
       _setProperties(properties);

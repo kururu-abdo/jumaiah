@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:jumaiah/components/nav-drawer.dart';
+import 'package:jumaiah/main.dart';
 import 'package:jumaiah/screens/add_photo.dart';
 import 'package:jumaiah/screens/attachmentscreen.dart';
 import 'package:jumaiah/screens/photo_view.dart';
@@ -24,6 +26,7 @@ class Details extends StatefulWidget {
   final dynamic image,
       name,
       location,
+      ptLocation ,
       owner,
       property_status,
       certificate_no,
@@ -41,7 +44,7 @@ class Details extends StatefulWidget {
       this.property_status,
       @required this.pt_id,
       this.website,
-      this.prop_lat})
+      this.prop_lat, this.ptLocation})
       : super(key: key);
 
   @override
@@ -50,13 +53,14 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   bool isLoading = false;
-
+var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SafeArea(
         child: Scaffold(
+          key: scaffoldKey,
             body: CustomScrollView(slivers: <Widget>[
           SliverAppBar(
             snap: true,
@@ -122,7 +126,8 @@ class _DetailsState extends State<Details> {
                       ),
                     ),
                     subtitle: Text(
-                      widget.property_status.toString(),
+
+                     showStatsText( widget.property_status.toString().trim()),
                       textDirection: TextDirection.rtl,
                     ),
                   ),
@@ -164,24 +169,39 @@ class _DetailsState extends State<Details> {
                       ),
                     ),
                     subtitle: Text(
+                       widget.certificate_date.toString()=='false' ||  widget.certificate_date.toString()==''?
+                       'غير متوفر':
                       widget.certificate_date,
                       textDirection: TextDirection.rtl,
                     ),
                   ),
                   ListTile(
                     onTap: () async {
-                      if (widget.toString().startsWith("http")) {
-                        if (await launch(widget.website.toString().trim())) {
-                          launch(widget.website.toString().trim());
+               
+                      if (widget.website.toString().startsWith("http")) {
+                        if (await canLaunch(widget.website.toString().trim())) {
+                      await    launch(widget.website.toString().trim());
                         } else {
-                          throw 'Could not launch ';
+                          ScaffoldMessenger.of(context).showSnackBar(new SnackBar(content: Row(children: [
+                            Text('الرابط غير صالح') ,
+                            TextButton(onPressed: (){
+scaffoldMessangerKey.currentState.hideCurrentSnackBar();
+                            }, child: Text('حسنا'))
+                          ],)));
+                         // throw 'Could not launch ';
                         }
                       } else {
-                        if (await launch(
+                        
+                        if (await canLaunch(
                             "http://" + widget.website.toString().trim())) {
-                          launch("http://" + widget.website.toString().trim());
+                        await  launch("http://" + widget.website.toString().trim());
                         } else {
-                          throw 'Could not launch ';
+                          ScaffoldMessenger.of(context).showSnackBar(new SnackBar(content: Row(children: [
+                            Text('الرابط غير صالح') ,
+                            TextButton(onPressed: (){
+scaffoldMessangerKey.currentState.hideCurrentSnackBar();
+                            }, child: Text('حسنا'))
+                          ],)));
                         }
                       }
                     },
@@ -193,7 +213,11 @@ class _DetailsState extends State<Details> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    subtitle: Text(widget.website.toString(),
+                    subtitle: Text(
+                       widget.website==false ||  widget.website==''?
+                'غير متوفر':
+                      
+                      widget.website.toString(),
                         textDirection: TextDirection.rtl,
                         style: TextStyle(
                             decoration: TextDecoration.underline,
@@ -201,7 +225,7 @@ class _DetailsState extends State<Details> {
                   ),
                   ListTile(
                     onTap: () async {
-                      _launchMap(widget.prop_lat);
+                      _launchMap(widget.ptLocation);
                     },
                     title: Text(
                       "الموقع الجغرافي",
@@ -212,7 +236,9 @@ class _DetailsState extends State<Details> {
                       ),
                     ),
                     subtitle: Text(
-                      widget.location,
+                      widget.ptLocation==false ||widget.ptLocation==''?
+                      'غير متوفر':widget.ptLocation
+                       ,
                       textDirection: TextDirection.rtl,
                     ),
                   ),
@@ -339,12 +365,38 @@ class _DetailsState extends State<Details> {
       ),
     );
   }
+ String   showStatsText(String status) {
+     switch (status) {
+       case  'ok':
+         return 'غير مرهون';
+         break;
+         case 'cancel':
+          return 'شركاء';
 
+        case 'draft':
+        return 'مرهون';
+       default:
+       return '[غير معروف]';
+     }
+   }
   _launchMap(url) async {
+    print('///////////////////////////////////////////');
+    print(url);
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw "Couldn't launch URL";
+     ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        action: SnackBarAction(
+                                          label: 'حسنا',
+                                          onPressed: () {  
+
+                                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                          }  ) ,
+                                          content: Text('الرابط غير صالح'),
+
+                                    )
+                                    );
     }
   }
 }

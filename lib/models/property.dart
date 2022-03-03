@@ -178,7 +178,7 @@ class Property {
       this.sLastUpdate});
 
   Property.fromJson(Map<String, dynamic> json) {
-    print("EXCEPTION HERE");
+   
     id = json['id'];
     gallery = json['gallery'];
     website = json['website'];

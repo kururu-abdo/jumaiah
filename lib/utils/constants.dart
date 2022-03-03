@@ -1,3 +1,6 @@
+const String BASE_URL = "http://142.93.55.190:8069";
+
+
 const String USER_NAME = "user_name";
 const String USER_ID = "user_id";
 const String USER_LANG = "user_lang";

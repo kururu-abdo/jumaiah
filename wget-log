@@ -1,0 +1,5 @@
+--2022-03-03 11:27:00--  http://142.93.55.190:8069/web/image?model=property.base
+Connecting to 142.93.55.190:8069... connected.
+HTTP request sent, awaiting response... 404 NOT FOUND
+2022-03-03 11:27:00 ERROR 404: NOT FOUND.
+

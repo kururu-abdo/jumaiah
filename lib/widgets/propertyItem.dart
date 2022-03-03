@@ -17,6 +17,21 @@ class PropertyWidget extends StatefulWidget {
 }
 
 class _PropertyItemState extends State<PropertyWidget> {
+
+
+
+//    getImageUrl(Property record){
+//         var unique = record.sLastUpdate as String;
+//            unique = unique.replaceAll(RegExp(r'[^0-9]'), '');
+//  final avatarUrl =
+//         '${BASE_URL}/web/image?model=property.base&field=pt_image&id=${record.id}&unique=$unique';
+
+//         return avatarUrl;
+//    }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -34,6 +49,7 @@ class _PropertyItemState extends State<PropertyWidget> {
                     certificate_no: widget.record.ptCertificteNo,
                     certificate_date: widget.record.ptCertificteDate.toString(),
                     owner: widget.record.owner,
+                    ptLocation: widget.record.ptLocation,
                     property_status: widget.record.propertyStatus),
               ));
         },
@@ -43,11 +59,19 @@ class _PropertyItemState extends State<PropertyWidget> {
           margin: const EdgeInsets.all(10.0),
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: MemoryImage(
+                  image: 
+                // widget.record.ptImage.toString().trim() == "false" ||    widget.record.ptImage.toString().trim().length<7|| widget.record.ptImage.toString().trim()==''?  
+
+                // AssetImage('assets/logo.png'):
+                  MemoryImage(
                     base64Decode(
                         widget.record.ptImage.toString().trim() == "false"
                             ? DEFAULT_IMG
                             : widget.record.ptImage.toString()),
+
+
+
+//  getImageUrl(widget.record)
                   ),
                   fit: BoxFit.cover)),
           child: Align(
