@@ -247,8 +247,8 @@ class _HomeState extends State<Home> {
                         },
                       ));
                     }
-                    return GridView.count(
-                      crossAxisCount: 2,
+                    return ListView(
+                    //  crossAxisCount: 2,
                       children: model.filteredproperties
                           .map((e) => PropertyWidget(
                                 record: e,

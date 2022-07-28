@@ -153,10 +153,11 @@ class HomeViewmode extends ChangeNotifier {
         'method': 'search_read',
         'args': [],
         'kwargs': {
-          'context': {'bin_size': false},
+          'context': {'bin_size': true},
           'domain': [],
-          //  'limit': 80,
+            'limit': 80,
           'fields': [
+           
             // "id",
             // "gallery",
             // "website",
@@ -186,7 +187,6 @@ class HomeViewmode extends ChangeNotifier {
         },
       }) as List;
       print("AFTER  REsponse");
-       
      //   log(avatarUrl);
       // log(res1.toString());
       //  print(res1);

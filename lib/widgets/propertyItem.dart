@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:jumaiah/models/property.dart';
 import 'package:jumaiah/screens/details.dart';
 import 'package:jumaiah/utils/constants.dart';
 import 'package:jumaiah/utils/custom_transition.dart';
+import 'package:jumaiah/utils/helpers.dart';
+import 'package:mix/mix.dart';
 
 class PropertyWidget extends StatefulWidget {
   final Property record;
@@ -34,7 +37,64 @@ class _PropertyItemState extends State<PropertyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return
+    ClipRect(
+
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 20 ,sigmaY:20),
+        child: Container(
+          height: 150,
+          margin: EdgeInsets.only(bottom: 8 , left: 5,right: 5),
+   padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.05)
+          ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Image.asset('assets/icon.png' , width:80 ,height: 80,) ,
+          
+            Column(children: [
+               Text(widget.record.propertyName , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),)
+          
+              ,
+               Row(mainAxisSize: MainAxisSize.min ,
+              
+              children: [
+               Text(widget.record.ptLocation , style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),)
+        ,SizedBox(width: 10,) ,
+               Text(showStatsText(widget.record.propertyStatus) , style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),)
+          
+              ],
+              
+              )
+           ,
+          
+        Row(mainAxisSize: MainAxisSize.min ,
+              
+              children: [
+               Text(widget.record.date , style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),)
+        ,SizedBox(width: 10,) ,
+               Text(widget.record.id.toString() , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+          
+              ],
+              
+              )
+          
+            ],) ,
+          
+            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward))
+          ],
+        ),
+        
+        ),
+      ),
+    );
+    
+    
+    
+     InkWell(
         onTap: () {
           Navigator.push(
               context,
