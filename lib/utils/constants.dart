@@ -1,4 +1,4 @@
-const String BASE_URL = "http://142.93.55.190:8069";
+const String BASE_URL = "http://159.223.64.244:8069";
 
 
 const String USER_NAME = "user_name";

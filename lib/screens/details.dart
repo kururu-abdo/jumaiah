@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:jumaiah/components/nav-drawer.dart';
@@ -8,15 +7,12 @@ import 'package:jumaiah/main.dart';
 import 'package:jumaiah/screens/add_photo.dart';
 import 'package:jumaiah/screens/attachmentscreen.dart';
 import 'package:jumaiah/screens/photo_view.dart';
-import 'package:jumaiah/screens/searchview.dart';
 import 'package:jumaiah/screens/signin.dart';
 import 'package:jumaiah/utils/constants.dart';
 import 'package:jumaiah/utils/custom_transition.dart';
 import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:jumaiah/utils/utils.dart';
-import 'package:jumaiah/widgets/anim_widget.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Details extends StatefulWidget {
@@ -54,6 +50,26 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   bool isLoading = false;
 var scaffoldKey = GlobalKey<ScaffoldState>();
+ UriData imageData;
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  log(  widget.image.runtimeType.toString());
+
+  if (widget.image.length<20 || widget.image.toString()=="faslse") {
+ setState(() {
+   imageData=   Uri.parse(DEFAULT_IMG).data;
+ });
+  } else {
+setState(() {
+       imageData= Uri.parse(widget.image).data;
+
+});
+  }
+
+  }
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -75,21 +91,43 @@ var scaffoldKey = GlobalKey<ScaffoldState>();
               //         fontSize: 30,
               //         color: Colors.white)), //Text
               background: Image.memory(
-                base64Decode(widget.image.toString().trim() == "false"
-                    ? DEFAULT_IMG
-                    : widget.image.trim()),
+                base64Decode(
+                  DEFAULT_IMG
+                  // widget.image == "false"
+                  //   ? DEFAULT_IMG
+                  //   : widget.image
+                    // imageData.contentAsBytes(),
+                    ),
                 fit: BoxFit.cover,
               ), //Images.network
             ), //FlexibleSpaceBar
             expandedHeight: 200,
             // backgroundColor: Colors.greenAccent[400],
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              color: Colors.white,
-              onPressed: () {
+            leading:
+
+            InkWell(
+              onTap: (){
                 Navigator.of(context).pop();
               },
-            ), //IconButton
+              child: Container(
+                width: 70,
+                height:69 ,
+                margin: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryColor ,
+                  borderRadius: BorderRadius.circular(11)
+                ),
+                child: Center(child:Icon(Icons.arrow_back) ,),
+              ),
+            )
+            
+            //  IconButton(
+            //   icon: const Icon(Icons.arrow_back),
+            //   color: Colors.white,
+            //   onPressed: () {
+            //     Navigator.of(context).pop();
+            //   },
+            // ), //IconButton
             //<Widget>[]
           ),
           SliverFillRemaining(

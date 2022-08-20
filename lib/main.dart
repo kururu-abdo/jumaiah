@@ -107,7 +107,7 @@ class _HomeState extends State<HomePage> implements WidgetsBindingObserver {
             // )
           )),
       debugShowCheckedModeBanner: false,
-      routes: {Home.pageName: (context) => Home()},
+      // routes: {Home.pageName: (context) => Home()},
       home: Splashscreen(),
     );
   }

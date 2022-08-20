@@ -34,7 +34,7 @@ class AttachmentScreenCOntroller extends ChangeNotifier {
     notifyListeners();
   }
 
-  final orpc = OdooClient('http://142.93.55.190:8069/');
+  final orpc = OdooClient(BASE_URL);
 
   static const GMAIL_SCHEMA = 'com.google.android.gm';
   final Future<bool> gmailinstalled =

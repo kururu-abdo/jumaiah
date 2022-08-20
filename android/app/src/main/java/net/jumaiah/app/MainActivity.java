@@ -1,4 +1,4 @@
-package com.jumaiah.app;
+package net.jumaiah.app;
 
 import android.os.Bundle;
 

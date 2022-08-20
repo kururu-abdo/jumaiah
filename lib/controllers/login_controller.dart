@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -13,8 +12,8 @@ import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class LoginController extends ChangeNotifier {
-  final orpc = OdooClient('http://142.93.55.190:8069/');
-  static String baseUrl = 'http://142.93.55.190:8069/';
+  final orpc = OdooClient(BASE_URL);
+  static String baseUrl = BASE_URL;
   static OdooClient client = OdooClient(baseUrl);
   var subscription = client.sessionStream.listen(sessionChanged);
   // var loginSubscription = client.loginStream.listen(loginStateChanged);
@@ -134,7 +133,7 @@ class LoginController extends ChangeNotifier {
           'method': 'search_read',
           'args': [],
           'kwargs': {
-            'context': {'bin_size': false},
+            'context': {'bin_size': true},
             'domain': [
               ["id", "=", uid]
               // ['password', '=', password.trim() ,

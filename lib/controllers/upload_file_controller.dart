@@ -14,8 +14,8 @@ import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:stacked/stacked.dart';
 
 class UploadFileControler extends BaseViewModel {
-  final orpc = OdooClient('http://142.93.55.190:8069/');
-  static String baseUrl = 'http://142.93.55.190:8069/';
+  final orpc = OdooClient(BASE_URL);
+  static String baseUrl = BASE_URL;
   static OdooClient client = OdooClient(baseUrl);
 
   void initState() {

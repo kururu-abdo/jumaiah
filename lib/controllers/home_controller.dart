@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:jumaiah/enums/widget_state.dart';
-import 'package:jumaiah/main.dart';
-import 'package:jumaiah/models/owner.dart';
 import 'package:jumaiah/models/property.dart';
 import 'package:jumaiah/utils/constants.dart';
 import 'package:jumaiah/utils/exceptions.dart';
@@ -11,8 +9,8 @@ import 'package:jumaiah/utils/shared_prefs.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class HomeViewmode extends ChangeNotifier {
-  final orpc = OdooClient('http://142.93.55.190:8069/');
-  static String baseUrl = 'http://142.93.55.190:8069/';
+  final orpc = OdooClient(BASE_URL);
+  static String baseUrl = BASE_URL;
   static OdooClient client = OdooClient(baseUrl);
   // var subscription = client.sessionStream.listen(sessionChanged);
   // var loginSubscription = client..loginStream.listen(loginStateChanged);
@@ -153,9 +151,9 @@ class HomeViewmode extends ChangeNotifier {
         'method': 'search_read',
         'args': [],
         'kwargs': {
-          'context': {'bin_size': true},
+          // 'context': {'bin_size': false},
           'domain': [],
-            'limit': 80,
+            // 'limit': 80,
           'fields': [
            
             // "id",
@@ -205,7 +203,7 @@ class HomeViewmode extends ChangeNotifier {
       //   print(result);
       //   print("//////////////////////////////////////////////");
       //  print(result.length);
-     print(res1[0]['pt_location'].toString());
+  log(res1.toString());
       List<Property> properties =
           res1.map((p) => Property.fromJson(p)).toList();
       _setProperties(properties);
