@@ -2,8 +2,8 @@ class PhotoItem {
    int product_template_id;
 
   dynamic image;
-String title;
-String description;
+dynamic title;
+dynamic description;
   PhotoItem(
       {this.description , this.product_template_id ,this.title, this.image});
 

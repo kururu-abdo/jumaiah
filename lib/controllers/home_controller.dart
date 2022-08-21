@@ -151,9 +151,9 @@ class HomeViewmode extends ChangeNotifier {
         'method': 'search_read',
         'args': [],
         'kwargs': {
-          // 'context': {'bin_size': false},
+          'context': {'bin_size': false},
           'domain': [],
-            // 'limit': 80,
+          'limit': 1000000,
           'fields': [
            
             // "id",

@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:jumaiah/enums/widget_state.dart';
 import 'package:jumaiah/main.dart';
+import 'package:jumaiah/models/photoItem.dart';
 import 'package:jumaiah/utils/constants.dart';
 import 'package:jumaiah/utils/exceptions.dart';
 import 'package:jumaiah/utils/shared_prefs.dart';
@@ -21,8 +22,8 @@ class PhotosPageViewModel extends ChangeNotifier {
   WidgetState _state;
   WidgetState get state => _state;
 
-  List<String> _photos = [];
-  List<String> get photos => _photos;
+  List<PhotoItem> _photos = [];
+  List<PhotoItem> get photos => _photos;
   AppException _exception;
 
   AppException get exception => _exception;
@@ -32,7 +33,7 @@ class PhotosPageViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  _setPhotos(List<String> photos) {
+  _setPhotos(List<PhotoItem> photos) {
     _photos = photos;
     notifyListeners();
   }
@@ -91,10 +92,11 @@ class PhotosPageViewModel extends ChangeNotifier {
           'domain': [
             ["product_template_id", "=", id]
           ],
-          'fields': [],
+            'fields': ['image', 'title','description'],
+                   'limit': 1000000,
         },
       }) as List;
-      log(res1.runtimeType.toString());
+      log(res1.toString());
       //  print(res1);
       //  printWrapped(res1.toString());
       // print("this is the result" + res1.toString());
@@ -111,15 +113,12 @@ class PhotosPageViewModel extends ChangeNotifier {
       //   print(result);
       //   print("//////////////////////////////////////////////");
       //  print(result.length);
-      List<String> photos = [];
+      List<PhotoItem> photos = [];
 
       for (var i = 0; i < res1.length; i++) {
-        print("ooooooooooooooooooooooooooooooooooooooooooo");
-        print(res1[i]);
+       
 
-        print("ooooooooooooooooooooooooooooooooooooooooooo");
-
-        photos.add(res1[i]['image']);
+        photos.add(PhotoItem.fromJson(res1[i]));
       }
       _setPhotos(photos);
       _setState(WidgetState.Done);
@@ -135,7 +134,7 @@ class PhotosPageViewModel extends ChangeNotifier {
       print(e);
       _setState(WidgetState.Error);
     } catch (e) {
-      debugPrint("unexpected" + e.toString());
+      log("unexpected" + e.toString());
       _setState(WidgetState.Error);
 
       _setException(UnknownException("خطأ غير متوقع"));
@@ -146,6 +145,6 @@ class PhotosPageViewModel extends ChangeNotifier {
     print("IMGE");
     print(base64Image);
     return base64Decode(
-        (base64Image == "" || base64Image == null) ? DEFAULT_IMG : base64Image);
+        (base64Image == ""||base64Image.toString() == "false" || base64Image == null) ? DEFAULT_IMG : base64Image);
   }
 }

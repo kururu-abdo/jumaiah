@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'dart:developer';
+
 
 import 'package:flutter/material.dart';
 import 'package:jumaiah/components/nav-drawer.dart';
@@ -56,18 +55,7 @@ var scaffoldKey = GlobalKey<ScaffoldState>();
   void initState() {
     // TODO: implement initState
     super.initState();
-  log(  widget.image.runtimeType.toString());
-
-  if (widget.image.length<20 || widget.image.toString()=="faslse") {
- setState(() {
-   imageData=   Uri.parse(DEFAULT_IMG).data;
- });
-  } else {
-setState(() {
-       imageData= Uri.parse(widget.image).data;
-
-});
-  }
+  
 
   }
   @override
@@ -91,13 +79,18 @@ setState(() {
               //         fontSize: 30,
               //         color: Colors.white)), //Text
               background: Image.memory(
-                base64Decode(
-                  DEFAULT_IMG
-                  // widget.image == "false"
-                  //   ? DEFAULT_IMG
-                  //   : widget.image
-                    // imageData.contentAsBytes(),
-                    ),
+                // base64Decode(
+                  // DEFAULT_IMG
+            widget.image==null  ||      widget.image.toString() == "false" 
+                    ? 
+                    convertBase64Image(DEFAULT_IMG)
+                    
+                    :
+                    // : base64Decode(widget.image.toString().replaceAll("\s+", ''))
+                    
+                    convertBase64Image(widget.image.toString())
+                    ,
+                    // ),
                 fit: BoxFit.cover,
               ), //Images.network
             ), //FlexibleSpaceBar
@@ -110,14 +103,14 @@ setState(() {
                 Navigator.of(context).pop();
               },
               child: Container(
-                width: 70,
-                height:69 ,
+                width: 69,
+                height:71 ,
                 margin: EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: AppTheme.primaryColor ,
                   borderRadius: BorderRadius.circular(11)
                 ),
-                child: Center(child:Icon(Icons.arrow_back) ,),
+                child: Center(child:Icon(Icons.arrow_back ,size: 18,) ,),
               ),
             )
             
@@ -263,7 +256,9 @@ scaffoldMessangerKey.currentState.hideCurrentSnackBar();
                   ),
                   ListTile(
                     onTap: () async {
-                      _launchMap(widget.ptLocation);
+
+                      print(widget.prop_lat);
+                       _launchMap(widget.prop_lat);
                     },
                     title: Text(
                       "الموقع الجغرافي",
@@ -280,7 +275,18 @@ scaffoldMessangerKey.currentState.hideCurrentSnackBar();
                       textDirection: TextDirection.rtl,
                     ),
                   ),
-                  Container(
+               
+                ],
+              ),
+            ),
+          )
+        ] //S liverAppBar
+                ),
+                
+                bottomSheet: Container(
+                  height: 100,
+                  width: double.infinity,
+                  child:      Container(
                     margin: EdgeInsets.all(10.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -394,12 +400,12 @@ scaffoldMessangerKey.currentState.hideCurrentSnackBar();
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          )
-        ] //SliverAppBar
-                )),
+              
+            
+                ),
+                
+                
+                ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:jumaiah/screens/details.dart';
 import 'package:jumaiah/utils/constants.dart';
 import 'package:jumaiah/utils/custom_transition.dart';
 import 'package:jumaiah/utils/helpers.dart';
+import 'package:jumaiah/utils/utils.dart';
 
 
 class PropertyWidget extends StatefulWidget {
@@ -40,13 +42,17 @@ class _PropertyItemState extends State<PropertyWidget> {
     return
     InkWell(
       onTap: (){
+
+log(widget.record.toJson().toString());
+log(widget.record.propLat.toString());
+
          Navigator.push(
               context,
               CustomPageRoute(
                 Details(widget.record.id,
                     image: widget.record.ptImage.toString(),
                     website: widget.record.website,
-                    prop_lat: widget.record.propLat.toString ?? "",
+                    prop_lat: widget.record.propLat.toString() ?? "",
                     pt_id: widget.record.id,
                     name: widget.record.propertyName,
                     location: widget.record.ptLocation,
@@ -67,63 +73,74 @@ class _PropertyItemState extends State<PropertyWidget> {
           filter: ImageFilter.blur(sigmaX: 20 ,sigmaY:20),
           child: Container(
             height: 150,
+            width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.only(bottom: 8 , left: 5,right: 5),
    padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.grey.withOpacity(0.05)
             ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // widget.record.ptImage=='false'?
-              Image.asset('assets/icon.png' , width:80 ,height: 80,)
-              
-              
+          child: Center(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                widget.record.ptImage.toString()=='false'|| widget.record.ptImage ==null  
+               
+                 ?
+                Image.asset('assets/icon.png' , width:80 ,height: 80,)
+                
+                
 
-// :Image.memory(
-//   convertBase64Image(widget.record.ptImage),
-//   gaplessPlayback: true
-//   , width:80 ,height: 80,
-// )
+:Image.memory(
+  convertBase64Image(widget.record.ptImage.toString()),
+  gaplessPlayback: true
+  , width:80 ,height: 80,
+)
 
-                      //      Image.memory(base64Decode( widget.record.ptImage) , width:80 ,height: 80,)
+                        //      Image.memory(base64Decode( widget.record.ptImage) , width:80 ,height: 80,)
 
+                
+                 ,
               
+                SizedBox(
+                  width: 200,
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                    
+                    children: [
+                     Text(widget.record.propertyName ,
+                     maxLines: 1,overflow: TextOverflow.fade,
+                      style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),)
+              
+                    ,
+                     Row(mainAxisSize: MainAxisSize.min ,
+                    
+                    children: [
+                     Text(widget.record.ptLocation , style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15),)
+            ,SizedBox(width: 10,) ,
+                     Text(showStatsText(widget.record.propertyStatus) , style: TextStyle(fontWeight: FontWeight.w300, fontSize: 15),)
+              
+                    ],
+                    
+                    )
                ,
-            
-              Column(children: [
-                 Text(widget.record.propertyName ,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),)
-            
-                ,
-                 Row(mainAxisSize: MainAxisSize.min ,
-                
-                children: [
-                 Text(widget.record.ptLocation , style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),)
-          ,SizedBox(width: 10,) ,
-                 Text(showStatsText(widget.record.propertyStatus) , style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),)
-            
-                ],
-                
-                )
-             ,
-            
-          Row(mainAxisSize: MainAxisSize.min ,
-                
-                children: [
-                 Text(widget.record.date , style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),)
-          ,SizedBox(width: 10,) ,
-                 Text(widget.record.id.toString() , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
-            
-                ],
-                
-                )
-            
-              ],) ,
-            
-              IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward))
-            ],
+              
+            Row(mainAxisSize: MainAxisSize.min ,
+                    
+                    children: [
+                     Text(widget.record.date , style: TextStyle(fontWeight: FontWeight.w300, fontSize: 15),)
+            ,SizedBox(width: 10,) ,
+                     Text(widget.record.id.toString() , style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),)
+              
+                    ],
+                    
+                    )
+              
+                  ],),
+                ) ,
+              
+                IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward))
+              ],
+            ),
           ),
           
           ),

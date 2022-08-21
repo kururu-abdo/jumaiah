@@ -51,10 +51,13 @@ class AttachmentScreenCOntroller extends ChangeNotifier {
         'method': 'search_read',
         'args': [],
         'kwargs': {
+                'context': {'bin_size': false},
           'domain': [
             ['res_id', '=', pt_id]
           ],
           'fields': [],
+
+            //  'limit': 1000000,
           'limit': 80,
         },
       });

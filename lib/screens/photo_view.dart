@@ -1,6 +1,9 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jumaiah/controllers/photos_page_viewmodel.dart';
 import 'package:jumaiah/enums/widget_state.dart';
+import 'package:jumaiah/models/photoItem.dart';
 import 'package:jumaiah/utils/Empty_widget.dart';
 import 'package:jumaiah/utils/error_widget.dart';
 import 'package:jumaiah/utils/loader.dart';
@@ -38,21 +41,20 @@ class _PhotoPageState extends State<PhotoPage> {
         child: Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              title: new Center(
-                  child: new Text(
+              title: new Text(
                 'معرض الصور',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.black),
-              )),
+              ),
+              centerTitle: true,
               elevation: 0.0,
-              backgroundColor: Colors.transparent, // status bar color
-              brightness: Brightness.dark,
+              backgroundColor: Colors.transparent,
               leading: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
                 icon: Icon(Icons.arrow_back, color: Colors.black),
-              ),
+              ), systemOverlayStyle: SystemUiOverlayStyle.light,
               // status bar brightness
             ),
             body: Padding(
@@ -64,6 +66,7 @@ class _PhotoPageState extends State<PhotoPage> {
                       child: LoadingWidget(),
                     );
                   } else if (model.state == WidgetState.Error) {
+                 
                     return Center(
                         child: CustomErrorWidget(
                       error: model.exception,
@@ -77,7 +80,7 @@ class _PhotoPageState extends State<PhotoPage> {
                           itemCount: model.photos.length,
                           itemBuilder: (context, index) {
                             return GalleryExampleItemThumbnail(
-                              photo: model.photos[index],
+                              photo: model.photos[index].image.toString(),
                               onTap: () {
                                 open(context, model.photos, index);
                               },
@@ -219,7 +222,7 @@ class GalleryPhotoViewWrapper extends StatefulWidget {
   final dynamic maxScale;
   final int initialIndex;
   final PageController pageController;
-  final List<String> galleryItems;
+  final List<PhotoItem> galleryItems;
   final Axis scrollDirection;
 
   @override
@@ -276,7 +279,7 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
   }
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
-    final String item = widget.galleryItems[index];
+    final String item = widget.galleryItems[index].image;
     var controller = Provider.of<PhotosPageViewModel>(context, listen: false);
     return PhotoViewGalleryPageOptions(
       imageProvider: item.startsWith("assets")

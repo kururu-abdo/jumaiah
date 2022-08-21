@@ -112,7 +112,7 @@ class AddPhotoController extends BaseViewModel {
   }
 
   picImage(int id) async {
-    if (_photos.length < 3) {
+    if (_photos.length < 1) {
       final ImagePicker _picker = ImagePicker();
 
       final XFile image = await _picker.pickImage(source: ImageSource.gallery);
@@ -155,7 +155,11 @@ class AddPhotoController extends BaseViewModel {
         });
         _updatePercentage((i + 1) * 33.3333333);
       }
+      _photos=[];
+      _filesToShow=[];
+notifyListeners();
       _setState(WidgetState.Done);
+
 
       // print(res1);
       // int res = int.parse(res1.toString());
