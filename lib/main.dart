@@ -70,19 +70,14 @@ class HomePage extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<HomePage> implements WidgetsBindingObserver {
+class _HomeState extends State<HomePage>  {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
   }
 
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,61 +107,7 @@ class _HomeState extends State<HomePage> implements WidgetsBindingObserver {
     );
   }
 
-  @override
-  void didChangeAccessibilityFeatures() {
-    // TODO: implement didChangeAccessibilityFeatures
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-    } else if (state == AppLifecycleState.paused) {
-    } else {}
-  }
-
-  @override
-  void didChangeLocales(List<Locale> locales) {
-    // TODO: implement didChangeLocales
-  }
-
-  @override
-  void didChangeMetrics() {
-    // TODO: implement didChangeMetrics
-  }
-
-  @override
-  void didChangePlatformBrightness() {
-    // TODO: implement didChangePlatformBrightness
-  }
-
-  @override
-  void didChangeTextScaleFactor() {
-    // TODO: implement didChangeTextScaleFactor
-  }
-
-  @override
-  void didHaveMemoryPressure() {
-    // TODO: implement didHaveMemoryPressure
-  }
-
-  @override
-  Future<bool> didPopRoute() {
-    // TODO: implement didPopRoute
-
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> didPushRoute(String route) {
-    // TODO: implement didPushRoute
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
-    // TODO: implement didPushRouteInformation
-    throw UnimplementedError();
-  }
+ 
 }
 
 var navigatorKey = GlobalKey<NavigatorState>();

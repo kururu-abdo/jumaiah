@@ -279,10 +279,10 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
   }
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
-    final String item = widget.galleryItems[index].image;
+    final String item = widget.galleryItems[index].image.toString();
     var controller = Provider.of<PhotosPageViewModel>(context, listen: false);
     return PhotoViewGalleryPageOptions(
-      imageProvider: item.startsWith("assets")
+      imageProvider: item.startsWith("assets") || item=="false" || item =="null"
           ? AssetImage(item)
           : MemoryImage(controller.convertImageFromBase64(item)),
       initialScale: PhotoViewComputedScale.contained,

@@ -186,7 +186,7 @@ var scaffoldKey = GlobalKey<ScaffoldState>();
                       ),
                     ),
                     subtitle: Text(
-                      widget.certificate_no,
+                      getCertificationNo(widget.certificate_no),
                       textDirection: TextDirection.rtl,
                     ),
                   ),
@@ -258,7 +258,7 @@ scaffoldMessangerKey.currentState.hideCurrentSnackBar();
                     onTap: () async {
 
                       print(widget.prop_lat);
-                       _launchMap(widget.prop_lat);
+                      //  _launchMap(widget.prop_lat);
                     },
                     title: Text(
                       "الموقع الجغرافي",
@@ -282,9 +282,24 @@ scaffoldMessangerKey.currentState.hideCurrentSnackBar();
           )
         ] //S liverAppBar
                 ),
-                
+              
+                floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+                floatingActionButton: Container(
+                  margin: EdgeInsets.all(10),
+                  child: FloatingActionButton(
+                    backgroundColor: Color(0xFF1CD6CE),
+child: Center(
+  child: Icon(Icons.location_on_outlined ,
+  
+  ),
+),
+                    onPressed: () {
+_launchMap(widget.prop_lat);
+                    },
+                   ),
+                ),
                 bottomSheet: Container(
-                  height: 100,
+                  height: 80,
                   width: double.infinity,
                   child:      Container(
                     margin: EdgeInsets.all(10.0),
@@ -441,6 +456,18 @@ scaffoldMessangerKey.currentState.hideCurrentSnackBar();
 
                                     )
                                     );
+    }
+  }
+
+  String getCertificationNo(dynamic certificate_no) {
+    if (
+      
+      certificate_no==false || certificate_no==null ||
+      certificate_no
+      .toString()=="false") {
+      return 'غير متوفر' ;
+    }else {
+      return certificate_no.toString();
     }
   }
 }

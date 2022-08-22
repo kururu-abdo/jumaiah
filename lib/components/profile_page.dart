@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jumaiah/utils/constants.dart';
 import 'package:jumaiah/utils/shared_prefs.dart';
 
@@ -47,8 +48,7 @@ class _PofilePageState extends State<ProfilePage> {
           title: new Center(
               child: new Text('البروفايل', textAlign: TextAlign.center)),
 
-          backgroundColor: Colors.amber, // status bar color
-          brightness: Brightness.dark, // status bar brightness
+          backgroundColor: Colors.amber, systemOverlayStyle: SystemUiOverlayStyle.light, // status bar brightness
         ),
         body: Container(
             decoration: BoxDecoration(
@@ -151,9 +151,14 @@ class _PofilePageState extends State<ProfilePage> {
           child: CircleAvatar(
             radius: 70,
             child: ClipOval(
-              child: _bytesImage == null ||
+              child:
+              
+              
+              
+               _bytesImage == null ||
                       sharedPrefs.getImage() == null ||
-                      sharedPrefs.getImage() == "null"
+                      sharedPrefs.getImage() == "null" || sharedPrefs.getImage() == "false"
+                      ||  sharedPrefs.getImage() == false
                   ? Image.asset(
                       "assets/logo.png",
                       height: 150,
